@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Serverless Backend</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/menustyle.css" />
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.222.1.min.js"></script>
+    <script src="./js/amazon-cognito-identity.min.js"></script>
+    <script src="./config/env.js"></script>
+    <script>
+     const COGNITO_POOL_ID = env.COGNITO_POOL_ID
+     const COGNITO_CLIENT_ID = env.COGNITO_CLIENT_ID
+     const baseUrl = env.baseUrl
+     let userPool
+     let cognitoUser
+     let idToken
+     let sessionStatus
+
+    function init() {
+        const poolData = {
+            UserPoolId: COGNITO_POOL_ID,
+            ClientId: COGNITO_CLIENT_ID
+        }
+        userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
+        cognitoUser = userPool.getCurrentUser()
+        if (cognitoUser !== null) {
+            cognitoUser.getSession((err, session) => {
+                if (err) {
+                    alert(err)
+                    return
+                }
+                idToken = session.idToken.jwtToken
+                sessionStatus = session.isValid()
+                console.log('idToken: ' + idToken)
+                console.log('session validity: ' + session.isValid())
+            })
+        }
+    }
+    init()
+
+    const logout = (e) => {
+        e.preventDefault()
+        if (cognitoUser !== null) {
+            cognitoUser.signOut()
+            console.log('user signed out')
+            window.location.replace("./index.html")
+        }
+    }
+    const login = () => {
+        window.location.replace("./index.html")
+    }
+    </script>
+</head>
+<body>
+        <div class="topnav">
+                <a class="active" href="#home">Home</a>
+              </div>
+        <div id="welcome-message" align="center">            
+            <p id="sessionStatus" style="font-weight: bold; font-size:20px;"></p>
+            <p id="logout" style="text-decoration: underline; cursor: pointer;"></p>
+        </div>
+        <div align="center" style="margin-top: 100px">
+            <h1 id="mainMessage"></h1>
+            <p id="message"></p>
+            <p id="username"></p>
+            <p id="cognitoEmail"></p>
+            <p id="verifiedEmail"></p>
+        </div>
+        <script>
+        if (sessionStatus === true) {
+            document.getElementById('sessionStatus').innerHTML = 'You are logged in!'
+            document.getElementById('logout').innerHTML = 'Logout'
+            document.getElementById('logout').onclick = logout
+        } else {
+            document.getElementById('sessionStatus').innerHTML = 'Please log in in order to access your content!'
+            document.getElementById('logout').innerHTML = 'Login'
+            document.getElementById('logout').onclick = login
+        }
+        fetch('https://7tmqr6nww9.execute-api.us-east-1.amazonaws.com/dev/backend', {
+            headers: {
+                "Authorization": idToken
+            }
+        })
+        .then(response => response.json())
+        .then(response => {
+            document.getElementById('mainMessage').innerHTML = 'Here is Your Cognito User Data'
+            document.getElementById('message').innerHTML = response.message
+            document.getElementById('username').innerHTML = 'Your Cognito User Name: ' + response.input.requestContext.authorizer.claims["cognito:username"]
+            document.getElementById('cognitoEmail').innerHTML = 'Your Email: ' + response.input.requestContext.authorizer.claims.email
+            document.getElementById('verifiedEmail').innerHTML = 'Email verfied: ' + response.input.requestContext.authorizer.claims.email_verified
+        })
+        .catch(err => console.error(err))
+        </script>
+</body>
+</html>

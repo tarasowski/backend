@@ -1,0 +1,36 @@
+# to upload client use following command
+# serverless client deploy
+# serverless client remove
+service: cognito-test # NOTE: update this with your service name
+
+plugins:
+  - serverless-finch
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: us-east-1
+  stage: dev
+
+functions:
+  backend:
+    handler: handler.hello
+    events:
+      - http:
+          path: backend
+          method: GET
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:us-east-1:012276481874:userpool/us-east-1_3tnkrvbVE
+
+resources:
+  Resources:
+    StaticSite:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: PublicRead
+        BucketName: ${self:custom.client.bucketName}
+
+custom:
+  client:
+    bucketName: com.claudiacrm-cognito-test-dev
