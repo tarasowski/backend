@@ -24,10 +24,10 @@
     <script type="text/javascript" src="./js/apigateway-sdk/lib/apiGatewayCore/utils.js"></script>
     <script type="text/javascript" src="./js/apigateway-sdk/apigClient.js"></script>
     <script>
-     const COGNITO_POOL_ID = env.COGNITO_POOL_ID
-     const COGNITO_CLIENT_ID = env.COGNITO_CLIENT_ID
-     const FEDERATED_IDENTITY_POOL_ID = env.FEDERATED_IDENTITY_POOL_ID
-     const FEDERATED_IDENTITY_USER_POOL = env.FEDERATED_IDENTITY_USER_POOL
+     const COGNITO_POOL_ID = env.cognito_pool_id
+     const COGNITO_CLIENT_ID = env.cognito_client_id
+     const FEDERATED_IDENTITY_POOL_ID = env.federated_identity_pool_id
+     const FEDERATED_IDENTITY_USER_POOL = env.federated_identity_user_pool
      let userPool
      let cognitoUser
      let idToken
@@ -54,11 +54,13 @@
                 
                 AWS.config.region ='us-east-1'
                 creds = new AWS.CognitoIdentityCredentials({
-                IdentityPoolId: 'us-east-1:38199c66-28ac-4b3b-9ef3-150ebf190099',
+                IdentityPoolId: FEDERATED_IDENTITY_POOL_ID,
                 Logins: {
-                    'cognito-idp.us-east-1.amazonaws.com/us-east-1_3tnkrvbVE': session.getIdToken().getJwtToken()
+                    [FEDERATED_IDENTITY_USER_POOL]: session.getIdToken().getJwtToken()
                 }
             })
+                console.log(creds)
+                console.log(session.getIdToken().getJwtToken())
                 creds.refresh((err, data) => {
                     if (err) {
                         console.error(err)
@@ -111,7 +113,7 @@
             console.log('access token : ' + result.getAccessToken().getJwtToken())
             idToken = result.idToken.jwtToken
             console.log('idToken : ' + idToken)
-            //window.location.replace("./backend.html")
+            window.location.replace("./backend.html")
           },
           onFailure: function(err) {
             console.log(err.message)
