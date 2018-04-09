@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Serverless Authentication with Cognito</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.222.1.min.js"></script>
+    <script src="./js/amazon-cognito-identity.min.js"></script>
+    <script src="./config/env.js"></script>
+    <script type="text/javascript" src="./js/apigateway-sdk/lib/axios/dist/axios.standalone.js"></script>
+    <script type="text/javascript" src="./js/apigateway-sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="./js/apigateway-sdk/lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="./js/apigateway-sdk/lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="./js/apigateway-sdk/lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="./js/apigateway-sdk/lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="./js/apigateway-sdk/lib/apiGatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="./js/apigateway-sdk/lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="./js/apigateway-sdk/lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="./js/apigateway-sdk/lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="./js/apigateway-sdk/apigClient.js"></script>
+    <script>
+     const COGNITO_POOL_ID = env.COGNITO_POOL_ID
+     const COGNITO_CLIENT_ID = env.COGNITO_CLIENT_ID
+     const FEDERATED_IDENTITY_POOL_ID = env.FEDERATED_IDENTITY_POOL_ID
+     const FEDERATED_IDENTITY_USER_POOL = env.FEDERATED_IDENTITY_USER_POOL
+     let userPool
+     let cognitoUser
+     let idToken
+     let sessionStatus
+     let creds
+
+    function init() {
+        const poolData = {
+            UserPoolId: COGNITO_POOL_ID,
+            ClientId: COGNITO_CLIENT_ID
+        }
+        userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
+        cognitoUser = userPool.getCurrentUser()
+        if (cognitoUser !== null) {
+            cognitoUser.getSession((err, session) => {
+                if (err) {
+                    alert(err)
+                    return
+                }
+                idToken = session.idToken.jwtToken
+                sessionStatus = session.isValid()
+                console.log('idToken: ' + idToken)
+                console.log('session validity: ' + session.isValid())
+                
+                AWS.config.region ='us-east-1'
+                creds = new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: 'us-east-1:38199c66-28ac-4b3b-9ef3-150ebf190099',
+                Logins: {
+                    'cognito-idp.us-east-1.amazonaws.com/us-east-1_3tnkrvbVE': session.getIdToken().getJwtToken()
+                }
+            })
+                creds.refresh((err, data) => {
+                    if (err) {
+                        console.error(err)
+                    } else {
+                        console.log('NEW CREDENTIALS HERE', creds)
+                    }
+                })
+                
+            })
+        }
+    }
+    init()
+
+    const signUpForm = (e) => {
+        e.preventDefault()
+        const email = document.getElementById('register-email').value
+        const password = document.getElementById('register-password').value
+
+        userPool.signUp(email, password, null, null, (err, result) => {
+            if (err) {
+                alert(err.message || JSON.stringify(err))
+                return
+            }
+            cognitoUser = result.user
+            alert('You are now registered. Please login!')
+            console.log('user name is:' + cognitoUser.getUsername())
+        })
+    }
+
+    const authenticate = (e) => {
+        e.preventDefault()
+        const email = document.getElementById('login-email').value
+        const password = document.getElementById('login-password').value
+
+        const authenticationData = {
+            Email: email,
+            Password: password
+        }
+
+        const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData)
+
+        const userData = {
+            Username: email,
+            Pool: userPool
+        }
+        
+        cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData)
+        cognitoUser.authenticateUser(authenticationDetails, {
+          onSuccess: function (result) {
+            console.log('access token : ' + result.getAccessToken().getJwtToken())
+            idToken = result.idToken.jwtToken
+            console.log('idToken : ' + idToken)
+            //window.location.replace("./backend.html")
+          },
+          onFailure: function(err) {
+            console.log(err.message)
+            alert(err.message)
+          }
+        });
+    }
+
+    const logout = (e) => {
+        e.preventDefault()
+        if (cognitoUser !== null) {
+            cognitoUser.signOut()
+            console.log('user signed out')
+            location.reload()
+        }
+    }
+
+    </script>
+</head>
+<body>
+    <div id="navigation" style="position:absolute; top:0; right:20px; font-weight: bold;">
+       <span style="display: block;"> <p id="sessionStatus"></p> <p id="logout" style="text-decoration: underline; cursor: pointer;" ></p></span>
+    </div>
+    <div class="login-page">
+        <div class="form">
+          <form class="register-form">
+            <input type="text" placeholder="email address" id="register-email"/>
+            <input type="password" placeholder="password" id="register-password" />
+            <button onclick="signUpForm(event)">create</button>
+            <p class="message">Already registered? <a href="#">Sign In</a></p>
+          </form>
+          <form class="login-form">
+            <input type="text" placeholder="email" id="login-email" />
+            <input type="password" placeholder="password" id="login-password" />
+            <button onclick="authenticate(event)">login</button>
+            <p class="message">Not registered? <a href="#">Create an account</a></p>
+          </form>
+        </div>
+      </div>
+      <script>
+        $('.message a').click(function () {
+                $('form').animate({ height: "toggle", opacity: "toggle" }, "slow");
+            });
+        </script>
+</body>
+</html>
