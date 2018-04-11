@@ -1,0 +1,13 @@
+// if you want to check data types in javascript you can do it with TypeScript
+{
+    "compilerOptions": {
+      "target": "es2017",
+      "checkJs": true,
+      "moduleResolution": "node"
+    },
+    "include": [
+      "*"
+    ]
+}
+
+  
