@@ -1,0 +1,29 @@
+{
+  "name": "big-mouth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "integration-test": "./node_modules/.bin/mocha tests/test_cases --reporter spec"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws4": "^1.6.0",
+    "awscred": "^1.4.1",
+    "bluebird": "^3.5.1",
+    "cheerio": "^1.0.0-rc.2",
+    "co": "^4.6.0",
+    "lodash": "^4.17.5",
+    "mustache": "^2.3.0",
+    "superagent": "^3.8.2",
+    "superagent-promise": "^1.1.0"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.209.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.4",
+    "serverless-pseudo-parameters": "^1.4.2"
+  }
+}

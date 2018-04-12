@@ -1,0 +1,69 @@
+
+service: big-mouth 
+
+plugins:
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: ${opt:stage, 'dev'}
+  stackName: big-mouth-${self:provider.stage}
+  region: eu-central-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:scan
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/restaurants
+    - Effect: Allow
+      Action: execute-api:Invoke
+      Resource: arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:*/*/GET/restaurants
+      # arn:aws:execute-api:{region}:{account-id}:{api-id}/{stage}/{method}/{resource}
+
+
+functions:
+  get-index: # function name
+    handler: functions/get-index.handler
+    events:
+      - http:
+          path: /
+          method: get
+    environment:
+      restaurants_api: https://8q60zqmdze.execute-api.eu-central-1.amazonaws.com/dev/restaurants
+      cognito_user_pool_id: eu-central-1_wPJERpdfz
+      cognito_client_id: 5oj91tdo1u9qhfe1uk9g2e5ljl
+  get-restaurants:
+    handler: functions/get-restaurants.handler
+    events:
+      - http:
+          path: /restaurants
+          method: get
+          authorizer: aws_iam
+    environment:
+      restaurants_table: restaurants
+  
+  search-restaurants:
+    handler: functions/search-restaurants.handler
+    events:
+      - http:
+          path: /restaurants/search
+          method: post
+          authorizer:
+            arn: arn:aws:cognito-idp:eu-central-1:012276481874:userpool/eu-central-1_wPJERpdfz
+    environment:
+      restaurants_table: restaurants
+
+resources:
+  Resources:
+    restaurantTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: restaurants
+        AttributeDefinitions:
+          - AttributeName: name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: name
+            KeyType: HASH
+        ProvisionedThroughput: 
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1 
