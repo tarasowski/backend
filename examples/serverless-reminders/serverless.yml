@@ -1,0 +1,22 @@
+service: serverless-remainders
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  iamRoleStatements:
+    -  Effect: "Allow"
+       Action:
+         - "ses:*"
+       Resource:
+         - "*"
+functions:
+  dailyReminder:
+    handler: handler.sendReminderDaily
+    events:
+      # Invoke the Lambda function everyday
+      - schedule: rate(1 day)
+  weekendReminder:
+    handler: handler.sendReminderWeekend
+    events:
+      # Invoke the Lambda function every weekend at 1pm US/Eastern Time
+      - schedule: cron(30 22 ? * SUN,SAT *)

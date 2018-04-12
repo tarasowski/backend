@@ -1,0 +1,10 @@
+{
+  "name": "serverless-node-rest-api",
+  "version": "1.0.0",
+  "description": "Serverless REST HTTP API for CRUD operations on DynamoDB",
+  "author": "Fernando Medina Corey",
+  "license": "MIT",
+  "dependencies": {
+    "uuid": "^2.0.3"
+  }
+}

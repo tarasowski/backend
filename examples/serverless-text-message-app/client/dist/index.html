@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link href="main.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.1/fetch.js"></script>
+</head>
+
+<!-- There are two values to replace in the file below -->
+<!-- YOUR_RECAPTCHA_SITE_KEY in the HTML form below and -->
+<!-- YOUR_API_ENDPOINT_URL in the script section below that -->
+
+<body>
+  <!-- Start HTML for form -->
+  <div class="container">  
+    <form id="contact">
+      <div id='logo'>
+        <img src="http://thewoofgarden.com/img/projects/riley_and_bella.jpg" />
+        <img src="https://s3-us-west-2.amazonaws.com/assets.site.serverless.com/blog/twilio-logo.jpg" />
+        <img src="http://thewoofgarden.com/img/projects/judo_and_terry.jpg" />
+      </div>
+      <h3>Woof Garden Text Reminders</h3>
+      <h4>Fill out this form to send a text message to a client.</h4>
+      <div id='error-message'></div>
+      <div id='success-message'></div>
+      <fieldset>
+        <input id="phone-number" placeholder="Client Phone Number" type="tel" tabindex="3" required>
+      </fieldset>
+      <fieldset>
+        <textarea id="message" placeholder="Message to client here...." tabindex="5" required></textarea>
+      </fieldset>
+      <!-- Replace YOUR_RECAPTCHA_SITE_KEY with yours -->
+      <!-- It should look something like this: -->
+      <!-- 7LSAAUACSAAD5PZ_MYQAiC7cNDuDPesw3MUljI -->
+      <div class="g-recaptcha" data-sitekey="6LfnNUwUAAAAAIgn6mGz7Sme8fDerZooERqZE2Cc"></div>
+      <fieldset>
+        <button name="submit" type="submit" id="send-text" data-submit="...Sending">Send Message</button>
+      </fieldset>
+      <p class="copyright">Design inspired by <a href="https://colorlib.com" target="_blank" title="Colorlib">Colorlib</a></p>
+    </form>
+  </div>
+  <!-- End HTML for form -->
+
+
+  <!-- Start JS for form submission -->
+  <script>
+    // Replace the YOUR_API_ENDPOINT_URL with yours
+    // It should look something like this:
+    // https://qw324asdasd.execute-api.us-east-1.amazonaws.com/dev/api/sendSms
+    const API_ENDPOINT = 'https://ce19f8goo5.execute-api.us-east-1.amazonaws.com/dev/api/sendSms';
+    var errorDiv = document.getElementById('error-message')
+    var successDiv = document.getElementById('success-message')
+    // Handle public api call
+    document.getElementById('send-text').addEventListener('click', function (event) {
+      // Prevents the page reloading
+      event.preventDefault()
+
+      const captchtaResponse = grecaptcha.getResponse() || false
+      const textMessage = document.getElementById('message').value
+      const phoneNumber = document.getElementById('phone-number').value
+
+      if (!textMessage) {
+        errorDiv.innerHTML = 'Remember to enter a message!'
+        return false
+      }
+
+      if (!phoneNumber) {
+        errorDiv.innerHTML = 'Don\'t forget to enter a phone number!'
+        return false
+      }
+
+      if (!captchtaResponse) {
+        errorDiv.innerHTML = 'Complete the Captcha please!'
+        return false
+      }
+
+      const data = JSON.stringify({
+        to: phoneNumber,
+        message: textMessage,
+        captcha: captchtaResponse
+      })
+
+      // post to API with native browser Fetch
+      const getdata = fetch(API_ENDPOINT, {
+        headers: {
+          "Content-type": "application/json"
+        },
+        method: 'POST',
+        body: data,
+        mode: 'cors'
+      });
+
+      getdata.then(function(response) {
+        response.json().then(function(data) {
+          console.log('Response:', data);
+          const body = JSON.parse(data.body);
+          errorDiv.textContent = '';
+          if (body.status === 'success') {
+            successDiv.textContent = (body && body.message) ? body.message : '';
+          } else {
+            errorDiv.textContent = (body && body.message) ? body.message : '';
+          };
+        });
+      }).catch(function(err) {
+        console.log(err)
+      });
+    });
+  </script>
+  <!-- End JS for form submission -->
+</body>
+
+</html>
