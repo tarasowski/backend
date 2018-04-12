@@ -2,7 +2,7 @@
 
 This list doesn't contain everything about serverless. Mainly this is my personal collection (I went down the rabbit hole). The courses I've done and stuff I've read about serverless. Stuff that I would recommend for everyone to read. It's not just a bunch of links form the web! There will be also many typos and grammar mistakes. Under /apps you can find also some code examples to play around. If you like it and would like to see more similar stuff, hit star ⭐️ and help to spread this collection among other GitHub geeks!
 
-## Follow them or die!
+## Some Nice Guys
 
 * Yan Cui - [All my posts on Serverless & AWS Lambda](https://medium.com/theburningmonk-com/all-my-posts-on-serverless-aws-lambda-43c17a147f91) - [Yan's Blog](https://theburningmonk.com/)
 * Gojko Adzic - [Blog Articles Archive](https://gojko.net/posts.html)
