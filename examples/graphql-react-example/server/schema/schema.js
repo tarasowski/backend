@@ -17,25 +17,10 @@ const { GraphQLObjectType,
     GraphQLSchema,
     GraphQLID,
     GraphQLInt,
-    GraphQLList
+    GraphQLList,
+    GraphQLNonNull
     } = graphql
 
-// dummy data 
-
-const dummyBooks = [
-    { name: 'The first book in the list', genre: 'Fantasy', id: 1, authorId: 1 },
-    { name: 'The second book in the list', genre: 'Action', id: 2, authorId: 2 },
-    { name: 'Just another XYZ book', genre: 'Action', id: 2, authorId: 2 },
-    { name: 'Random books for the second author', genre: 'Action', id: 2, authorId: 2 },
-    { name: 'The third book in the list', genre: 'Fantasy', id: 3, authorId: 3 }
-]
-
-const dummyAuthors = [
-    { name: 'Patrick 1', age: 33, id: 1 },
-    { name: 'Patrick 2', age: 48, id: 2 },
-    { name: 'Patrick 3', age: 55, id: 3 }
-
-]
 
 const BookType = new GraphQLObjectType({
     name: 'Book',
@@ -45,7 +30,7 @@ const BookType = new GraphQLObjectType({
         genre: { type: GraphQLString },
         author: {
             type: AuthorType,
-            async resolve(parent, args) {
+            resolve(parent, args) {
                 const params = {
                     TableName: 'graphql-authors',
                     Key: {
@@ -53,14 +38,10 @@ const BookType = new GraphQLObjectType({
                     }
                 }
                 
-               const result = await docClient.get(params, (err, data) => {
-                    if (err) console.log(err)
-                    else return data.Item
-                }).promise()
-                .then(data => {
-                    return data.Item
-                })
-                
+               const result = docClient.get(params).promise()
+                .then(data => data.Item)
+                .catch(err => err)
+
                 return result
             }
         }
@@ -76,21 +57,21 @@ const AuthorType = new GraphQLObjectType({
         name: { type: GraphQLString },
         books: {
             type: new GraphQLList(BookType),
-            async resolve(parent, args) {
+            resolve(parent, args) {
                 const params = {
-                    TableName: 'graphql-books',
-                    Key: {
-                        authorId: parent.id
-                    }
+                    "TableName": "graphql-books",
+                    "IndexName": "authorId-index",
+                    "KeyConditionExpression": "authorId = :authorId",
+                    "ExpressionAttributeValues": {
+                        ":authorId": parent.id
+                    },
+                    "ScanIndexForward": false,
+                    "ReturnConsumedCapacity": "TOTAL"
                 }
                 
-               const result = await docClient.get(params, (err, data) => {
-                    if (err) console.log(err)
-                    else return data.Item
-                }).promise()
-                .then(data => {
-                    return data.Item
-                })
+               const result = docClient.query(params).promise()
+                .then(data => data.Items)                    
+                .catch(err => console.error(err))
                 
                 return result
             }
@@ -120,7 +101,6 @@ const RootQuery = new GraphQLObjectType({
                     }
                 }).promise()
                 .then(data => {
-                    console.log(data)
                     return data.Item
                 })
                 
@@ -130,7 +110,7 @@ const RootQuery = new GraphQLObjectType({
         getAuthor: {
             type: AuthorType,
             args: { id: { type: GraphQLID } },
-            async resolve(parent, args) {
+            resolve(parent, args) {
                 
                 const params = {
                     TableName: 'graphql-authors',
@@ -139,7 +119,7 @@ const RootQuery = new GraphQLObjectType({
                     }
                 }
                 
-                const result = await docClient.get(params, (err, data) => {
+                const result = docClient.get(params, (err, data) => {
                     if (err) {
                         console.error(err)
                     } else {
@@ -147,7 +127,6 @@ const RootQuery = new GraphQLObjectType({
                     }
                 }).promise()
                 .then(data => {
-                    console.log(data)
                     return data.Item
                 })
                 
@@ -157,13 +136,13 @@ const RootQuery = new GraphQLObjectType({
         getBooks: {
             type: new GraphQLList(BookType),
             resolve(parent, args) {
-                return dummyBooks
+                
             }
         },
         getAuthors: {
             type: new GraphQLList(AuthorType),
             resolve(parent, args) {
-                return dummyAuthors
+                
             }
         }
     }
@@ -175,10 +154,10 @@ const Mutation = new GraphQLObjectType({
         addAuthor: {
             type: AuthorType,
             args: {
-                name: {type: GraphQLString},
-                age: {type: GraphQLInt}
+                name: {type: new GraphQLNonNull(GraphQLString)},
+                age: {type: new GraphQLNonNull(GraphQLInt)}
             },
-            async resolve (parent, args) {
+            resolve (parent, args) {
                 const id = uuidv4()
                 let params = {
                     TableName: 'graphql-authors',
@@ -189,7 +168,7 @@ const Mutation = new GraphQLObjectType({
                     }
                 }
                 
-                const response = await docClient.put(params, (err, data) => {
+                const response = docClient.put(params, (err, data) => {
                     if (err) {
                         console.log(err, 'There was something wrong with adding new iteam to db')
                         throw new Error('Something is wrong with saving to db')
@@ -210,11 +189,11 @@ const Mutation = new GraphQLObjectType({
         addBook: {
             type: BookType,
             args: {
-                name: {type: GraphQLString},
-                genre: {type: GraphQLString},
-                authorId: {type: GraphQLID}
+                name: {type: new GraphQLNonNull(GraphQLString)},
+                genre: {type: new GraphQLNonNull(GraphQLString)},
+                authorId: {type: new GraphQLNonNull(GraphQLID)}
             },
-            async resolve (parent, args) {
+            resolve (parent, args) {
                 const id = uuidv4()
                 
                 let params = {
@@ -226,7 +205,7 @@ const Mutation = new GraphQLObjectType({
                     authorId: args.authorId
                 }
             }
-            const response = await docClient.put(params, (err, data) => {
+            const response = docClient.put(params, (err, data) => {
                 if (err) {
                     console.log(err, 'There was something wrong with adding new iteam to db')
                     throw new Error('Something is wrong with saving to db')
