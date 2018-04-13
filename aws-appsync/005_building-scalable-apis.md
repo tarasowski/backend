@@ -127,6 +127,9 @@ query TestQuery {   // selection set
 
 4. To access the node e.g. `github` we need to add another sub-selection set. Inside that selection-set we see other fields we can access. We want to access `user` field or `user` object in that case. Therefore we need to add another subselection. Inside that we can now choose some scalar value that don't need any subselection anymore. 
 
+**Here is an example from another test project**
+![Nodes](https://github.com/mittyo/serverless/raw/master/aws-appsync/images/graphql-graph.png)
+
 **Note:** Error: Expected Name means type any field name inside the sub-selection or selection-set. 
 
 **Note:** We didn't need a sub-selection for a `graphQLHub` field cause that's field value was a scalar one (just a string). The `user`string represents an object, not a scalar value. If we ask a server about an object we need to be explicit of what properties of that object we are interested in.
@@ -138,9 +141,9 @@ query TestQuery {   // selection set
 ![Sample Queries](./images/graphql-sample-queries.png)
 
 **Diferent types of fields in GraphQL**
-* Scalar fields - Int, String, Boolean (no selection sets needed) -> String self-descriptive
-* Complex fields - Objects (sub-selections needed) -> Name self-descriptive
-        + Collections - Arrays (no selection sets needed) -> [Name] self-descriptive
+* Scalar fields - Int, String, Boolean (no selection sets needed) -> String (self-descriptive means there is no description in the schema available. Make sure to describe all fields with a short 1-sentence.)
+* Complex fields - Objects (sub-selections needed) -> Name self-descriptive (no description evailable)
+        + Collections - Arrays (no selection sets needed) -> [Name] self-descriptive (no description available)
 
 ### GraphQL Fields
 
@@ -191,25 +194,7 @@ The fields that represent objects, usually have a custom type e.g. the `user` fi
 
 ### GraphQL Variables
 
-A variable needs it's scope. You can add e.g. to arguments a variable to make the fetching more flexible. 
-
-```js
-query QueryName {
-	graphQLHub
-  github {
-    user(username: $currentUserName) {
-      id
-      company
-      avatar_url
-     	repos {
-        name
-        id
-      }
-    }
-  }
-}
-``` 
-Now instead of hardcoding a `username` we can use a varible for that. But like everything in GraphQL it also needs a type. We also  need to define the variable as an argument of the operation. To define a type for that operation we simply need to add following as an argument:
+A variable needs it's scope. You can add e.g. to arguments a variable to make the fetching more flexible. Now instead of hardcoding a `username` we can use a varible for that. But like everything in GraphQL it also needs a type. We also  need to define the variable as an argument of the operation. To define a type for that operation we simply need to add following as an argument:
 
 ```js
 query QueryName($userName: String!) {
@@ -353,7 +338,7 @@ query QueryName(
 
 ### GraphQL Fragments
 
-Fragments are what makes GraphQL composable. A fragment is just a partial operation, we can't use it on it's own, but we can use it and reuse inside a full operation. To use a fragment inside a full operation we prefix it's name wit `...FragmentName`
+Fragments are what makes GraphQL composable. A fragment is just a partial operation, we can't use it on it's own, but we can use it and reuse inside a full operation. To use a fragment inside a full operation we prefix it's name with `...FragmentName`
 
 ```js
 query QueryName($userName1: String!, $userName2: String!) {
@@ -441,3 +426,4 @@ mutation {
 
 ## GraphQL Runtime (GraphQL Server)
 
+This part starts with some examples. We are writing GraphQL server with NodeJS. 
