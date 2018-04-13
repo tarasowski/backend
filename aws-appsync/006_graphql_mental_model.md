@@ -117,3 +117,7 @@ So you can apply GraphQL result caching. There are different approaches for that
 
 In the figure below you can see the query and the **traversal path**. If someone fires the query the data will be returned and cached by the server. If you fire the query twice the second query will be actually be able to resolve from the cache instead of having to hit the server. 
 ![Traversal Path](./images/app-data-graph-traversal-path.png)
+
+
+Assumption #1: If you have the same traversal path it will lead you to the same object
+Assumption #2: If you have two objects with the same id, they represent the same object
