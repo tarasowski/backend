@@ -427,3 +427,37 @@ mutation {
 ## GraphQL Runtime (GraphQL Server)
 
 This part starts with some examples. We are writing GraphQL server with NodeJS. 
+
+In the example we have created a `MeType``
+
+```js
+const {
+    GraphQLObjectType,
+    GraphQLID,
+    GraphQLNonNull,
+    GraphQLString
+} = require('graphql')
+
+module.exports = new GraphQLObjectType({
+    name: 'MeType',
+    fields: {
+        id: {type: new GraphQLNonNull(GraphQLID)},
+        firstName: {type: GraphQLString},
+        lastName: {type: GraphQLString},
+        fullName: {type: GraphQLString, 
+            resolve: (obj, args, ctx, { fieldName }) => {
+                // console.log('what we are getting back', obj)
+                // console.log('the args we are getting back', args)
+                // console.log('context we are getting back', ctx)
+                // console.log('something else as a 4th argument', fieldName)
+                return `${obj.firstName} ${obj.lastName}`
+        }
+    },
+        email: {type: new GraphQLNonNull(GraphQLString)},
+        createdAt: {type: GraphQLString}
+        
+    }
+})
+```   
+
+We are using this `MeType` as a starting point in our data graph. 
