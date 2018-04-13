@@ -56,7 +56,7 @@ varibales: { body: "Nice" }
 variables: { body: "+1" }
 ```
 
-We write GraphQL operations in documents on the client side, then if we use an interface to send these documents to GraphQL server. For that reason we can use HTTP as a transport to the GraphQL endpoint with a body data parameter like `query=...&variables=...`. The server can use HTTP to respond us back in JSON Format. But we can also use sockets, SSH protocol or CLI. GraphQL doesn't depend on HTTP statuses or vers as other protocols do. 
+We write GraphQL operations in documents on the client side, then if we use an interface to send these documents to GraphQL server. For that reason we can use HTTP as a transport to the GraphQL endpoint with a body data parameter like `query=...&variables=...`. The server can use HTTP to respond us back in JSON Format. But we can also use sockets, SSH protocol or CLI. GraphQL doesn't depend on HTTP statuses or verb as other protocols do. 
 
 ### GraphQL Document
 
@@ -82,7 +82,7 @@ As in other language the receiver will not understand the GraphQL language. This
 
 The GraphQL schema is the API of the GraphQL server. The clients can fetch the information according to the schema. GraphQL has its own type language that’s used the write GraphQL schemas: The Schema Definition Language (SDL). In its simplest form, GraphQL SDL can be used to define types, inputs, interfaces etc.
 
-![Decoupling](./graphql-decoupling.png)
+![Decoupling](./images/graphql-decoupling.png)
 
 **Note:** This approach decouples clients from servers and allows both of them to evolve and scale independently. 
 
