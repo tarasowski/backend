@@ -104,7 +104,7 @@ query Name { // this is called a RootQuery
 ![Root Query](./images/app-data-graph-root-query.png)
 
 **What is traversing?**
-The "DOM" stands for the Document Object Model, which is the standard structure that represents nested HTML elements on a page. To "traverse the DOM" means to explore the different nodes in an HTML page (for example, to find the <body> tag, then its child, the <table> tag, than its child, the <tr> tag, then its child, the <td> tag). [Source](https://www.quora.com/What-does-it-mean-to-traverse-the-DOM)
+The "DOM" stands for the Document Object Model, which is the standard structure that represents nested HTML elements on a page. To "traverse the DOM" means to explore the different nodes in an HTML page. [Source](https://www.quora.com/What-does-it-mean-to-traverse-the-DOM)
 
 Traversing is important becuase each GraphQL query tells the clients what is being fetched. The advantage of doing this is **caching** of GraphQL queries. Because client knows what information will be fetched and can make very careful assumption what things it will need in the future. 
 
