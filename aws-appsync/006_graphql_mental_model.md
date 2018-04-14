@@ -119,5 +119,5 @@ In the figure below you can see the query and the **traversal path**. If someone
 ![Traversal Path](./images/app-data-graph-traversal-path.png)
 
 
-Assumption #1: If you have the same traversal path it will lead you to the same object
-Assumption #2: If you have two objects with the same id, they represent the same object
+* Assumption #1: If you have the same traversal path it will lead you to the same object
+* Assumption #2: If you have two objects with the same id, they represent the same object
