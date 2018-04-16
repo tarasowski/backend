@@ -4,9 +4,9 @@ Disclaimer: There will be many typos since these are my notes from the courses.
 
 * In this series we'll be creating, from scratch, a full-stack application, including a GraphQL server on Node.js, a React front-end (with Apollo) and MongoDB to store all of our data. [GraphQL Tutorial - Introduction to GraphQL - 30 Step-by-Step Tutorials](https://www.youtube.com/watch?v=Y0lDGjwRYKw&list=PL4cUxeGkcC9iK6Qhn-QLcXCXPQUov1U7f)
 
-* Very good introduction how to build GraphQL w/ NodeJS stack [Building Scalable APIs with GraphQL](https://github.com/tarasowski/serverless/blob/master/aws-appsync/005_building-scalable-apis.md)
+* A very good introduction how to build GraphQL w/ NodeJS stack [Building Scalable APIs with GraphQL](https://github.com/tarasowski/serverless/blob/master/aws-appsync/005_building-scalable-apis.md)
 
-* A Deep understanding about how GraphQL is structured [GraphQL Mental Model](https://github.com/tarasowski/serverless/blob/master/aws-appsync/006_graphql_mental_model.md)
+* A deep understanding about how GraphQL is structured [GraphQL Mental Model](https://github.com/tarasowski/serverless/blob/master/aws-appsync/006_graphql_mental_model.md)
 
 * If you want to understand how the request/resolve mapping templates in AppSync work. You'll get a general overview about Apache VTL. There are some examples [Resolver Mapping Template Programming Guide](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-mapping-template-reference-programming-guide.html)
 
