@@ -64,7 +64,7 @@ Primary Key = Partition Key (single primary key) OR Partition and Sort Key (comp
     + List: can stored an ordered collection of values ["Cookies", "Coffee", 3.144354] = is similar to JSON array
     + Map: an unordered collection of name/value pairs {Day: "Monday", Emails: 42} = is similar to JSON object
 
-## Capacity Units
+### Capacity Units
 
 Predefined the throughput at table level for reads and writes separately. Behind the scenes DynamoDb will use this information to reserver sufficient hardware resources to ensure it will make your requirements. Trorughput in DynamoDb is broken down into two controls:
 
@@ -72,3 +72,258 @@ Predefined the throughput at table level for reads and writes separately. Behind
 * Write Capacity Units (WCUs)
 
 **Note:** RCUs and WCUs can be updated anytime.
+
+### What is a partition?
+
+Partitions are the underlying storage mechanism in DynamoDb. It's critical to understand how data is partioned and stored. Partition is where the table is divided into multple smaller parts. By splitting a large table into smaller individual partitions, queries that access only a fraction of the data can run faster, cause there is less data to work with. It also makes it easier to manage smaller sets of data. 
+
+![Partitions])(./images/dynamodb-partitions.png)
+
+There are 3 drivers for database partitioning.
+
+1. Manageability:
+2. Performance:
+3. Availability:
+
+Partitioning can assist with one or more of these attrbiutes. There are couple of different types of database partitioning methods. 
+
+* Vertical partitioning (by attributes): is where a table is split by columns. In this case the first 3 columns are in partition 1. And columns 4 and 5 are in partition 2. 
+
+* Horizontal partitioning (by items): is where a table is split by rows. DynamoDb leverages this horizontal partitioning method. This is handled entirely by AWS. 
+
+**Note:** DynamoDb doesn't partition until it needs to scale for performance or storage. 
+
+![Partition](./images/dynamodb-partition-examaple.png)
+
+We see here an example how the items can be stored in different partitions. ABC in partition 1, XYZ, XYZ in partition 2, DEF in partition 3. These partitioning impacts quering on the database.
+
+#### There are 2 types of queries DynamoDb can perform
+
+* Queries where we have a known partition key: DynamoDb knows which partition to access.
+    + When the partition key is knows the request goes to Dynamodb and DynamoDb knows which partition to access to perform a read. This significantly optimizes the performnace on queries as it only needs to work on a subset of data.
+
+* Queries where we have a unkonwn partition key: DynamoDb doesn't know which partition to access. 
+    + When a partition key is unkonwn the request cannot target a specific partition and must scan all partions which is the entire table. This means performing a lot more work and consuming a lot more capacity units. 
+
+#### Consistency Models
+
+**Note:** A very important part of quering of DynamoDb is understanding the consistency model it provides. It can significantly impact your application and also costs. There are two models available when performing read operations on DynamoDb. This can be specified in the API call when performing the query. 
+
+**Important:** For distributed databases such as DynamoDb (eventually consistent - reads may not return the latest results) to be highly available data needs to be replicated to multiple locations, this is done asynchronously and hence may take up to 1 second to reach all replicas. If the read operation is performed before the data is copied to all replicas, it may receive stale data. 
+
+![Consistency Models](./images/dynamodb-consistency-models.png)
+
+### Capacity Units
+
+Capacity units are predefined throughput requirements for a Table. In the background DynamoDb will provision the required hardware to support our throughput. Throughput is specified in two ways:
+
+* Read capacity units (RCUs): Two models of reads we can perform and each read is rounded of the closes 4kb
+    + Strongly consistent (needs to be activated during the API call): 1 RCU = 4kb / second. Formula: item size / 4kb = round up. To read 20kb we need 5 RCUs. Another example 2kb / 4kb = 1 RCU (round up to 4kb)
+    + Eventuelly consistent (default): 0.5 RCU = 4kb / second. Formula: (item size / 4kb) / 2 = round up. To read 20kb we need 2.5 RCUs. Another example (2kb / 4kb) / 2 = 0.5 RCU
+
+* Write capacity units (WCUs): 1 WCU = up to 1kb of data / second (each write opertion is rounded up to closes 1kb). Formula: item size / 1 kb. This will gives us the amount of WCUs required to complete the operation. Example: 5kb of data 5kb / 1kb = 5 WCUs. To write 5kb of data we need to write 5 WCUs. If we want to write 500 bytes of data it means 0.5kb / 1kb = 1 WCU (round up). 
+
+
+## Creation our Tables
+
+![Workflow](./images/dynamodb-example-workflow.png)
+
+We can simplify our logic and enhance our entities into 3 types:
+
+1. Job: A vacant position that needs to be filled within a company. 
+    + Job id: String (UUID) (DynamoDb doesn't support incremental unique identifier such as in RDB)
+    + Country id: String
+    + Job Title: String
+    + Job Desc: String
+    + Closing time: Number (epoch time)
+
+**Important:** We are going to setup as a partition key the `Country Id`. Typically in relational databases we'll setup `Job Id` as a primary key as it is also an unique key. For DynamoDb the partition key is how the data will be partitioned. This is very important as we typically don't want to query across partition. A good separation for our data would be a separation by `Country Id` as we do not expect users to query jobs across countries at this stage. To ensure the uniques, we'll use `Job Id` as a sort key.
+
+2. User: a person who can apply to fill a job - User cannot submit a job application before he hasn't created an account
+    + User id: String (UUID)
+    + Firstname: String
+    + Lastname: String
+
+**Important:** For users we'll use the `User Id`as a primary key which is the universal unique identifier. 
+
+3. Jobs application: the application that represents the application for the job. Is a set of information the user can submit for open job vacancy. 
+    + Job Id: String (UUID) - the application if for
+    + User Id: String (UUID) - the user that's applying for the job
+    + Job Title: String
+    + Time Applied: Number (epoch time)
+    + Applicaiton Form: String - set of questions the user must answer to apply for the job itself - typically in json format
+    + Resume: String - simplify into a json format
+
+**Important:** For job application we'll use as a partition key the `Job Id` and as a sort key the `User Id`. A typical case for querying will be seeing all job applications within a job, hence the `Job Id` as a partition makes sense.
+
+![Partitions](./images/dynamodb-keys-partitions.png)
+
+**Note:** When we provision a new DynamoDb table we need to define the RANGE + SORT key, but also we need to define the data types. Under KeySchema you can define the keys and under AttributeDefinitions you can define the data types. Keep in mind that DynamoDb is schema-less and the AttributeDefenition section is only for key attributes.
+
+![Attribute Definitions](./images/dynamodb-cloudformation.png)
+
+
+### Administrative APIs
+
+* ListTables: allows us to return available tables within account and a region
+* DescribeTables: gives us information about specified table > key schema, RCUs/WCUs, data types for keys, items counts etc.
+* UpdateTable: allows you to update the settings on a table. It allows to perform operations such as:
+    + Updating the RCUs/WCUs
+    + Enable/Disable Streams
+    + Create/Remove Global Secondary Indexes
+
+```js
+console.log('Increasing RCUs/WCUs to 2: ')
+
+const params = {
+    ProvisionedThroughput: {
+        ReadCapacityUnits: 2,
+        WriteCapacityUnits: 2
+    },
+    TableName: 'PL.Job'
+}
+
+dynamoDb.updateTable(params).promise()
+    .then(() => {
+        const params = { TableName: 'PL.Job'}
+        console.log('Waiting for update to finish...')
+        return dynamoDb.waitFor('tableExists', params).promise()
+    })
+    .then(res => console.dir(res, {depth: null, colors: true}))
+    .catch(err => console.error(err))
+``` 
+You can see here above an example how to update a table. We know that increasing RCUs/WCUs is an async function, which means it may take up to 30 seconds. In the example above we can see `dynamoDb.waitFor('talbeExists', params)` which enables us to encode wait until the table is in the final state. Once it is we simply print the output. 
+
+**Note:** Conditional requests allows you perform a put operation based on certain conditions. 
+
+### AWS SDK
+
+**Note:** AWS SDK is an abstraction over low-level DynamoDb APIs. Which takes a lot of tidious work away, such a serializing requests, basic retry logic and generating signatures for each request. [Link to AWS SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html)
+
+Whithin SDK you can can have different level of interaction with the APIs. We'll focus on Low-level interface model rather than High-level or Document interface. The main reason for this is to make sure we learn how DynamoDb works. 
+
+![Low-Level](./images/aws-sdk-low-level.png)
+
+### DynamoDb JSON Item Schema
+
+Typically when interacting with items we need to specify value of keys or attributes. This is done through a standard DynamoDb JSON format. Which follows the scheme:
+
+```json
+{
+    "<AttributeName>": {
+        "<DataType>": "<AttributeValue" }
+}
+``` 
+
+![Scalar](./images/scalar-data-types.png)
+
+**Note:** Numbers have also "" (double-quotes) similar to the strings. Also see the value of true in "" (double-quores). This is the standard JSON definition format.
+
+**Lists Data Types**
+```json
+{
+    "SampleList": {
+        "L": ["Your Name", 5 ]
+    }
+}
+``` 
+
+Note: Lists can store any type of data in comparison to String set it's an unordered set of unique strings. 
+
+**String Set Data Types**
+```json
+{
+    "StringSetExample": {
+        "SS": ["First Name", "Second Name" ]
+    }
+}
+``` 
+{"AttributeName": {"DataType": AttributeValue}}
+
+**Map Data Types**
+```json
+{
+    "MapExample": {
+        "M": {
+            "FirstName": "Name",
+            "NoOfLogins": 0
+        }
+    }
+}
+```
+
+**Note:** Elements in the map don't have to be of the same type. There are no restrictions how the elements are stored on a map
+
+### Main API Methods
+
+* PutItem: Creates a new item, or replaces an old item with a new item otherweise the item will be created. If you are trying to use the same partition key and just change some key/values, the old key/values will be replaced with the new ones.
+
+* UpdateItem: Edit an existing item's attributes or add a new item to the table if it doesn't already exist.
+
+```js
+const params = {
+    "TableName": "PL.User",
+    "Key": {
+        "UserId": {"S": "001"}
+    },
+    "ReturnConsumedCapacity": "TOTAL",
+    "UpdateExpression": "SET #LN = :t, #NOL = :n",
+    "ExpressionAttributeNames": {
+        "#LN": "LastName",
+        "#NOL": "NoOfLogins"
+
+    },
+    "ExpressionAttributeValues": {
+        ":t": {"S": "Tyrson"},
+        ":n": {"N": "1"}
+    }
+}
+```
+
+`UpdateExpression` is the expression which drives which attributes will be updated. It looks unsual simply because it's made up of keywords and tokens. In this case we use the keyword `SET` which allows us to create or update attributes. `ExpressionAttributeNames` and `ExpressionAttributeValues` are substitued for the tokens in the `UpdtaeExpression`. For example `#LN` will be replaced with `LastName` and `#NOL` will be replaced with number of `NoOfLogins`. The same will be happening with `:t and :n`. 
+
+Another keyword we can us in `UpdateExpression`is `ADD` which allows us to increment a number datatype by the number specified. We have here also a `ConditionExpression` which allows us to specify a condition that must be specified in order to perform an update. 
+
+```js
+const params = {
+    "TableName": "PL.User",
+    "Key": {
+        "UserId": {"S": "001"}
+    },
+    "ReturnConsumedCapacity": "TOTAL",
+    "UpdateExpression": "ADD #NOL :n",
+    "ExpressionAttributeNames": {
+        "#NOL": "NoOfLogins"
+
+    },
+    "ExpressionAttributeValues": {
+        ":n": {"N": "1"},
+        ":max": {"N": "5"}
+    },
+    "ConditionExpression": "#NOL < :max"
+}
+``` 
+
+* DeletItem: Deletes a single item in a table by providing a primary key. The parameters for the API, are table name and primary key. This operation will not inform you if the item has not been found. If you want to be notified if the item has been found, please use conditional expression to check if the item exists. 
+
+**Note:** More information [Working with Items can be found here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithItems.html)
+
+* GetItem: Enables you to retrieve a single item given the Primary Key. This enables us to solve use cases such as getting a specific job a specific user or a job application. The primary key would be the partition key and the sort key depending on the tables key schema. If you've got a sort key, you need to specify a sort key as well. 
+
+* GetQuery: It's much more powerful API than the `GetItem` API, it allows you to retrieve items based on a primary key values. It allows you to query within a partition key, it allows you to scope down by filtering on a sort key. The filter on the sort key is very powerful. Range of comparison operators available on the Sort key. 
+
+* Scan API: Allows you to return one or more items by accessing every item in the table. It scans every item. It's the least favorable way to access data in DynamoDb due to that expensive behaviour. It's typically used when your keys and indexes not allow you to use `getItem` or the `query` API's. This is why designing your keys and indexes is so important. 
+
+Here is a good example why `Scan` operation is very bad and costly:
+
+```js
+   "Count": 5,
+    "ScannedCount": 100,
+    "ConsumedCapacity": {
+        "TableName": "PL.Job",
+        "CapacityUnits": 89
+    }
+}
+"Size of data: 36.0 KB"
+``` 
+This small operation has consumed 89 Read Capacity Units and just found 5 items that we were looking for. The size of the data was only 36kb / 4kb /2 = 4,5 Read Capacity Units. So by using `scan` we literally overpaying by 20 times. If we would use `query` we would only consume 4,5 RCUs, but by using `scan` we have used `89` RCUs.
