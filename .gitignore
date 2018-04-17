@@ -59,6 +59,6 @@ typings/
 .DS_Store
 
 # configuration
-/config
+config
 /node_modules
 .serverless
