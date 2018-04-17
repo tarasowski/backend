@@ -1,12 +1,10 @@
 const graphql = require('graphql')
 const AWS = require('aws-sdk')
-const { accessKeyId, secretAccessKey } = require('../../config/env')
 
+// fix the callbacks -> promises
 AWS.config.update({
     region: 'us-east-1',
-    //endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
-    accessKeyId,
-    secretAccessKey
+    // add accessKeyId + other key to log in to DynamoDb
 })
 
 const docClient = new AWS.DynamoDB.DocumentClient()
