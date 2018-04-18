@@ -204,6 +204,14 @@ Whithin SDK you can can have different level of interaction with the APIs. We'll
 
 ![Low-Level](./images/aws-sdk-low-level.png)
 
+[Programmatic Interfaces](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.SDKs.Interfaces.html)
+
+**Low-Level Interfaces:** Every language-specific AWS SDK provides a low-level interface for DynamoDB, with methods that closely resemble low-level DynamoDB API requests. In some cases, you will need to identify the data types of the attributes using Data Type Descriptors, such as S for string or N for number.
+
+**Document Interfaces:** Many AWS SDKs provide a document interface, allowing you to perform data plane operations (create, read, update, delete) on tables and indexes. With a document interface, you do not need to specify Data Type Descriptors; the data types are implied by the semantics of the data itself. These AWS SDKs also provide methods to easily convert JSON documents to and from native DynamoDB data types.
+
+**Object Persistence Interface:** Some AWS SDKs provide an object persistence interface where you do not directly perform data plane operations. Instead, you create objects that represent items in DynamoDB tables and indexes, and interact only with those objects. This allows you to write object-centric code, rather than database-centric code.
+
 ### DynamoDb JSON Item Schema
 
 Typically when interacting with items we need to specify value of keys or attributes. This is done through a standard DynamoDb JSON format. Which follows the scheme:
@@ -327,3 +335,29 @@ Here is a good example why `Scan` operation is very bad and costly:
 "Size of data: 36.0 KB"
 ``` 
 This small operation has consumed 89 Read Capacity Units and just found 5 items that we were looking for. The size of the data was only 36kb / 4kb /2 = 4,5 Read Capacity Units. So by using `scan` we literally overpaying by 20 times. If we would use `query` we would only consume 4,5 RCUs, but by using `scan` we have used `89` RCUs.
+
+## DynamoDb Batch Operations
+
+* BatchGetItem: Enables you to perform one or more GetItem calls in one request. The API returns the attributes of 1 or more items from 1 or more tables based on the primary key. Each operation can retrieve up to 16mb of data or 100 items. The batch call is not atomic: you may receive unprocessed keys in the response which indicates partial success. The batch operation works in parallel and hence results are not ordered. 
+
+* BatchWriteItem: Enables you to perform multiple puts or deletes in one request. A single call can write up to 16mb, or up to 25 PUTs and DELETE requests. Cannot not update items (partial attribute operation). Batch call is not atomic each PUT or DELETE operation within the batch is atomic, it can return unprocessed items in the response, which means those needs to be resend. Works in parallel and only saves time (in terms of latency and roundtrips) but not WCUs. 
+
+**Note:** Entire Batch API calls are not atomic
+
+## Working with DynamoDb Streams & Triggers
+
+* DynamoDb streams is a feature avialable at a table level and it allows us to track changes. It allows us to access the database transaction log for 24h period. Every successful put, delete or update request on the table is available. DynamoDb streams is a strem of ordered events which capture all data changes.
+
+* DynamoDb triggers is code that is executed automatically when certain events occur. Communly these triggers are on insert, update or delete events on a table. It's used for auditing data changes. DynamoDb triggers are pieces of code that respond to events in DynamoDb Streams.
+
+![Triggers](./images/dynamodb-triggers.png)
+
+Some use cases for streams & triggers:
+
+* Real-time analytics
+* Build and update caches
+* Run business processes on table based events
+* Replication & Backups
+* ETL for data warehousing
+* Publishing events to a messsage bus
+

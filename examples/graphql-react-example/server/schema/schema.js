@@ -4,7 +4,6 @@ const AWS = require('aws-sdk')
 // fix the callbacks -> promises
 AWS.config.update({
     region: 'us-east-1',
-    // add accessKeyId + other key to log in to DynamoDb
 })
 
 const docClient = new AWS.DynamoDB.DocumentClient()
