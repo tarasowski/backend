@@ -66,7 +66,7 @@ Primary Key = Partition Key (single primary key) OR Partition and Sort Key (comp
 
 **Note:** A document database, also called document store or document-oriented database, is a subset of a type of NoSQL database. Some document stores may also be key-value databases. The term "document" refer to a block of XML or JSON data. Instead of columns with names and data types that are used in relational database, a document contains a description of the data type and the value for that description. Each document can have the same or different structure. To add additional types of data to a document database, there is no need to modify the entire database schema as there is a with relational database. Data can simply added as objects to the database. [Source](http://basho.com/resources/document-databases/)
 
-**Note:** The primary key uniquely identifies each item in the table, so that no two items can have the same key. In a table that has only a partition key, no two items can have the same partition key value. The partition key of an item is also known as its hash attribute. The term hash attribute derives from the use of an internal hash function in DynamoDB that evenly distributes data items across partitions, based on their partition key values. [Source](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
+**Note:** The primary key uniquely identifies each item in the table, so that no two items can have the same key. In a table that has only a partition key, no two items can have the same partition key value. But if there is a sort key, the primary key doesn't need to be unique. The partition key of an item is also known as its hash attribute. The term hash attribute derives from the use of an internal hash function in DynamoDB that evenly distributes data items across partitions, based on their partition key values. [Source](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
 
 ### Capacity Units
 
@@ -324,6 +324,22 @@ const params = {
 
 **Note:** More information [Working with Items can be found here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithItems.html)
 
+### Expressions
+
+Expressions are strings that use DynamoDB's domain-specific expression logic to check for the validity of a described statement. With expressions, you can use comparator symbols, such as "=" (equals), ">" (greater than), or ">=" (greater than or equal to).
+
+For example, a comparator symbol could be used as follows: `"Age >= 21"` to ensure that the Item being manipulated has an Age greater than or equal to 21.
+
+
+
+* **Condition expressions** are used when manipulating individual items to only change an item when certain conditions are true.
+* **Projection expressions** are used to specify a subset of attributes you want to receive when reading Items. 
+* **Update expressions** are used to update a particular attribute in an existing Item.
+* **Key condition expressions** are used when querying a table with a composite primary key to limit the items selected.
+* **Filter expressions** allow you to filter the results of queries and scans to allow for more efficient responses.
+
+[Source](https://www.dynamodbguide.com/expression-basics)
+
 * GetItem: Enables you to retrieve a single item given the Primary Key. This enables us to solve use cases such as getting a specific job a specific user or a job application. The primary key would be the partition key and the sort key depending on the tables key schema. If you've got a sort key, you need to specify a sort key as well. 
 
 * GetQuery: It's much more powerful API than the `GetItem` API, it allows you to retrieve items based on a primary key values. It allows you to query within a partition key, it allows you to scope down by filtering on a sort key. The filter on the sort key is very powerful. Range of comparison operators available on the Sort key. 
@@ -368,4 +384,148 @@ Some use cases for streams & triggers:
 * Replication & Backups
 * ETL for data warehousing
 * Publishing events to a messsage bus
+
+### Local Secondary Index (LSI)
+
+* Is an index you can create on a table
+* It allows you to create another sort key with the same partition key as the base table
+* Maximum of 5 LSI on each table
+* LSI can be only created at table creation time. You cannot add LSI after the table has been created.
+* WCU & RCU are shared with the base table
+
+
+### Global Secondary Index (GSI)
+
+* An index you can create on a table
+* Enables you to create different key schemas for your table (partition + sort keys)
+* Maximum of 5 Global Secondary Indexes
+* GSI can be created at any time and they are not bound to the table creation (dynamodb will dupliate the data using they new key structure)
+* GSI's have their own dedicated WCU's and RCU's
+* GSI is only eventually consistent, when an item is written to the base table the global secondary index is written async in the background
+* Partition key and the sort key don't need to be unique (unline in the LSI)
+
+**Note:** The sort key is used to store all the items of the same partition key value physically close together and sorted in ascending order by default (i.e. important point is data is not sorted across the partition key). In other words, the data is sorted in ascending order by default for the same partition key. [Source](https://stackoverflow.com/questions/43595126/dynamodb-sorting-data-with-sort-key-not-working)
+
+### Capabilities in DynamoDb - Time to Live
+
+* Time to Live also known as TTL
+* Allows us to define when an item wille expire
+* Expiry time is stored as an attribute of the item
+* The attribute value must be in epoch time 
+* TTL is enbaled on a per table basis, by defining attribute name of TTL
+* The item removal is done by a background service of DynamoDb
+* Removal occurs typically within of 48 hours of the expiration (depending on the load and the size of the table)
+
+![Time To Live](./images/dynamodb-timetolive.png)
+
+1. TTL is going to watch for expiration date
+2. TTL will remove the item when it expires (doesn't consume any capacity)
+3. When the item is removed a Dynamodb stream event will appear (event name will be removed)
+4. This will then picked up by the Lambda function 
+5. Lambda function will perform a put operation on a closed job table to create a item (moving the job to the closed jobs table)
+
+**Note:** This approach will solve the problem with consuming a lot of RCUs and 10GB issue per partition key. It helps to clean up tables in order to increase the performance and to save consts, since we don't need to query so many items.
+
+### Capabilities in DynamoDb - Auto-Scaling
+
+DynamoDb provides a model where you need to think about RCU/WCU upfront. This can be difficult at the best of times. And this is the problem DynamoDb tries to solve with auto-scaling. 
+
+* Helps automate capacity management for DynamoDb
+* It works for RCU/WCU for:
+    + Tables
+    + Global Secondary Indexes
+* By default Auto-Scaling will be turned on. 
+* When turning on Auto-Scaling you need to define following options:
+    + For each RCU/WCU you need to specify the percent autolization when the scaling will trigger. 
+    + Min & Max. RCU/WCU boundaries and maximum capacity to provision
+* Auto-Scaling is not immediate. Your application will still be throttled if there is a burst of usage. May take up to 10-15 minutes to trigger.
+* Auto-Scaling doesn't really help with sudden burst. 
+* Auto-Scaling solves sustained increase in usage. 
+
+### Capabilities in DynamoDb - DAX
+
+* DAX, also knows as DynaoDb accelerator is a fully managed in-memory cache
+* It's designed to reduce response time from ms to microseconds
+* It sits between your application and DynamoDb as a write-through-cache (means app talks directly to DAX and DAX will relay writes and reads which aren't cached through to DynamoDb  and cache result on the way back. )
+* DAX strives for complete compactability with DynamoDb, which means there should be minimal code changes required to use the DAX API.
+* As a benefit it will reduce the RCU/WCUs on DynamoDb by leveraging DAX
+
+**Note:** Before using, it is worth understanding the changes in the consistency model for your application. [Read more here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.consistency.html)
+
+## Avoiding Common Pitfalls
+
+If you need a checklist for your next use case, you can use this chapter. This is a compilation of authors own checklist.
+
+### Data Modeling
+
+The most important by far undertake before using DynamoDb. If the things listed below are important for your project,you can use DynamoDb.
+
+* Keep in mind DynamoDb is a key-value store
+    + With document database capabilities
+    + It's not designed for complex queries or very bursty loads
+    + It's designed for predictable access patterns
+    + Single digit millisecond latency
+    + Scales with your needs
+
+[DynamoDb Design Patterns](https://www.youtube.com/watch?v=PDQ3jbDyTQ4&feature=youtu.be)
+
+A large part of data modeling is understanding your data, so some questions to ask are: What are your access pattern to be like?
+
+**Basic Data Modeling**
+* Is it a predictable load? If yes is great, you can scale at fixed schedules. If not how often does it change and how will you handle throttling? Can we isolate unpredictable loads into own table?
+
+![Data Modeling](./images/dynamodb-data-modeling.png)
+
+**Querying**
+* What are your most run queries?
+* Can you execute them without Scan operations? Leverage as much as possible sort keys
+* Can the application handle eventually consistent queries? Forcing consistent queries can be terribly inefficient.
+* What for adhoc queries do you expect. Can you isolate adhoc queries to non-production tables or perhaps just scale up when required 
+
+**Writing Data**
+* Keep in mind WCU is more expensive than RCU
+    + 1 RCU gives you 4kb per second
+    + 1 WCU gives you 1kb per second
+    + Pricing: 1 WCU is around 5 times more expensive than 1 RCU
+* Is the data static or volatile? Is the subset of the data modified
+* Isolate volatile data to separate tables or use  UpdateItem API. Save WCUs by updating only changed data. You can use separate table or leverage the UpdateItem API that does partial data update
+* Each operation is atomic. Do you need transactions? There is no cross-operation transaction available. Batch requests are also non-atomic, but each operation within the Batch is atomic. 
+
+![Data Modeling](./images/dynamodb-data-modeling2.png)
+
+* Data Modeling is simply trying to predict real usage. The next best thing to do is monitor your real usage. Leverage Cloudwatch which provides metrics and alarms. 
+* Avoid situations when you need to change RCU/WCU regularly it's a sign that your data model is not correct. 
+
+**Note:** Accept that your first data model is a guess and can be wrong. Don't be afraid and remodel your data after it's live in production by adding Local Secondary Indexes and changing the key schemas. This is absolutely normal that a team realises that a selected a key schema isn't a good fit. Or they recognised a need for a Local Secondary Index. **Leveraging DynamoDb Streams and Lambda to remodel data as needed.** To remodel your data is a nice way to leverage DynamoDb triggers.
+
+![Remodeling](./images/dynamodb-remodeling.png)
+
+Your application points to the Original Table. If you need to remodel it you need first create a New Table. Then you need to enable DynamoDb streams and associated to a Lambda function. Cycle through each item in the table and update each item with a migration flag, which sends it to the DynamoDb Stream. Using the `UpdateItem` API ensures you that you don't lose any items while you are updating the items. An event appears in DynamoDb Stream this is picked up by the Lambda, it trims of the migration flag and pushes it into the New Table structure. As times goes on the New Table will be a replica of your Original Table, so all you need to do is to repoint your application to the New Table. 
+
+![Remodeling 2](./images/dynamodb-remodeling2.png)
+
+### Pricing
+
+The pricing depends on the factors described below. Each factor can play a significant role for pricing.
+
+* Provision Capacity: If you are writing to DynamoDb make sure your WCUs are optimized. For example if you updating a large JSON document which is static, consider separate it into another attribute using the `UpdateItem` or separate the table so you don't need to waste WCUs. 
+
+* Index Data Storage: You are charged for the amount of data you store in DynamoDb. It's worth considering if you have large documents or files stored in your data or have no archiving plans for your data and simply grows over time. There are couple of solutions leverages S3 and DynamoDb to save on the storage costs. 
+
+* Data Transfer: You will be charged for the data transfered in and out of the service. This is typically a non-issue if you transfering the data within a region for example if your backend is hosted in AWS. It's worth keeping in mind for scenarios where you use cross-region replication of the tables.
+
+* DynamoDb Streams: There is no charge for enabling DynamoDb streams or the data store within, but you can be charged for a number of read request send to DynamoDb Streams. 
+
+* DynamoDb Triggers: Lambda charges on the number of requests and the duration. You will not be charged for the number of times the Lambda reads the stream. 
+
+**Note:** You can only increase/decrease RCU/WCUs 4 times a day. Partition data key limit is 10GB. The maximal item size is 400kb
+
+![Identifiers](./images/dynamodb-identifiers.png)
+
+
+
+
+
+
+
 
