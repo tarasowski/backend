@@ -64,6 +64,10 @@ Primary Key = Partition Key (single primary key) OR Partition and Sort Key (comp
     + List: can stored an ordered collection of values ["Cookies", "Coffee", 3.144354] = is similar to JSON array
     + Map: an unordered collection of name/value pairs {Day: "Monday", Emails: 42} = is similar to JSON object
 
+**Note:** A document database, also called document store or document-oriented database, is a subset of a type of NoSQL database. Some document stores may also be key-value databases. The term "document" refer to a block of XML or JSON data. Instead of columns with names and data types that are used in relational database, a document contains a description of the data type and the value for that description. Each document can have the same or different structure. To add additional types of data to a document database, there is no need to modify the entire database schema as there is a with relational database. Data can simply added as objects to the database. [Source](http://basho.com/resources/document-databases/)
+
+**Note:** The primary key uniquely identifies each item in the table, so that no two items can have the same key. In a table that has only a partition key, no two items can have the same partition key value. The partition key of an item is also known as its hash attribute. The term hash attribute derives from the use of an internal hash function in DynamoDB that evenly distributes data items across partitions, based on their partition key values. [Source](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
+
 ### Capacity Units
 
 Predefined the throughput at table level for reads and writes separately. Behind the scenes DynamoDb will use this information to reserver sufficient hardware resources to ensure it will make your requirements. Trorughput in DynamoDb is broken down into two controls:
@@ -93,7 +97,7 @@ Partitioning can assist with one or more of these attrbiutes. There are couple o
 
 **Note:** DynamoDb doesn't partition until it needs to scale for performance or storage. 
 
-![Partition](./images/dynamodb-partition-examaple.png)
+![Partition](./images/dynamodb-partition-example.png)
 
 We see here an example how the items can be stored in different partitions. ABC in partition 1, XYZ, XYZ in partition 2, DEF in partition 3. These partitioning impacts quering on the database.
 
@@ -289,6 +293,10 @@ const params = {
 ```
 
 `UpdateExpression` is the expression which drives which attributes will be updated. It looks unsual simply because it's made up of keywords and tokens. In this case we use the keyword `SET` which allows us to create or update attributes. `ExpressionAttributeNames` and `ExpressionAttributeValues` are substitued for the tokens in the `UpdtaeExpression`. For example `#LN` will be replaced with `LastName` and `#NOL` will be replaced with number of `NoOfLogins`. The same will be happening with `:t and :n`. 
+
+**Note:** An expression in a programming language is a combination of one or more explicit values, constants, variables, operators, and functions that the programming language interprets (according to its particular rules of precedence and of association) and computes to produce ("to return", in a stateful environment) another value. This process, as for mathematical expressions, is called evaluation. [Source](https://en.wikipedia.org/wiki/Expression_(computer_science))
+
+**Important:** The following keywords are reserved for use by DynamoDB. Do not use any of these words as attribute names in expressions. [Source](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html)
 
 Another keyword we can us in `UpdateExpression`is `ADD` which allows us to increment a number datatype by the number specified. We have here also a `ConditionExpression` which allows us to specify a condition that must be specified in order to perform an update. 
 

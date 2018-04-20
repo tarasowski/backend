@@ -15,3 +15,5 @@ Disclaimer: There will be many typos since these are my notes from the courses a
 * Here is an example how to build a simple GraphQL API (AppSync + DynamoDb, Elastic + Lambda) [Running a scalable & reliable GraphQL endpoint with Serverless Framework](https://hackernoon.com/running-a-scalable-reliable-graphql-endpoint-with-serverless-24c3bb5acb43)
 
 * You can find here information about how to access your GraphQL API. Currently there are 3 methods supported: API Key, IAM, Cognito User Pools [App Sync Security](https://docs.aws.amazon.com/appsync/latest/devguide/security.html)
+
+* Ultimately, you want to automate your deployments. This article is about how you can automate your AWS AppSync deployments. [Deploy an AWS AppSync GraphQL API with Amazon CloudFormation] (https://medium.com/@FizzyInTheHall/deploy-an-aws-appsync-graphql-api-with-amazon-cloudformation-9a783fdd8491)
