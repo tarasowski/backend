@@ -92,6 +92,8 @@ Keep big data away from the small data
 
 ### Extended Composite Key
 
+You can combine more attributes into one single composite key, by doing so you can create complex queries.
+
 ![Key 1](./images/design-pattern-composite-key.png)
 ---
 
