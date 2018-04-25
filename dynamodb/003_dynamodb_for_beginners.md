@@ -472,6 +472,39 @@ One of the important points is the data growth over time. And we can assume that
 
 **Note:** Author is going to use counter table architecture. This should be avoided at any costs. 
 
+## Working with Items (CRUD)
+
+* **PutItem** command will either add an item into a table, or replaces an item entirely if one exists with the same keys. It can be configured not to overwrite existing items if you desire that behavior. But this command offers no way to update something either you put a new item or replace an item, if you want to update specific attributes use `UpdateItem`.
+
+* **UpdateItem** command updates an existing item or adds a new item to the table if it doesn't exist. If you want to take an item that is currently exists and update that item, then you should use this command in one operation. Where if you use `PutItem` you need to read it from the table, analyse it, change or add existing attributes and than use `PutItem` to write that back to the table. Potentially it's half as efficient as `UpdateItem` command. Either adds or updates depending on the expression we use!
+
+* **DeleteItem** can delete items and you only need to provide a key. If the table has a composite key you need to provide both keys. This is not optional! You don't have to check before you direct DynamoDb to delete it, but you need to understand that the `DelteItem` operation still consumes capacity. If you are running operations on items that are not in the database, DynamoDb will not error out it will just do the operation.
+
+`--update-expression "SET windspeed=:windspead" --expression-attribute-values '{":windspead" : {"N": 100}}'` 
+
+**Note:** In the command above we can set a variable for the update expression and colomn `:` before windspead makes it to a variable that we can assign later under expression attribute values.
+
+* **GetItem** operation is the simpliest data retrieval operation. To use it you provide it with a value partition or composite key. If your table has both, you need to use both. It get's 1 item it returns all or a subset of attributes for that particular item. Otherwise it returns nothing, it doesn't error. It's default is eventually consistency. `GetItem` cannot be used against an index. 
+
+* **Query** it offers significant enhancements over `GetItem`namely it allows as an input a partition key value or a partition key and composite key, or a *range of values*. Based on these values that the table is analysed either all or the subset of attributes will be returned for all the items that are matched. If no items get matched we still get a response but it's an empty one. The `Query` command can filter on non-key values, but the important thing to understand that any discarded values are still charged from a capacity point of view. Query can be used on local and global indexes. The key thing to understand about query is that you can specify a single partition key value and it can return all items that has a partition key which maybe many instances of items and many items with sort keys or you can a specify a single sort key to return a single item or a range of sort keys to return multiple items. **Important:** We can only use partition key for querying w/o sort key. You can also use `filter` to filter other attributes on an item. 
+
+**Note:** use as a sort key date and time, so you can filter your partition keys based on the date that is specified as the sort key. Query operation gives the possiblity to do that. 
+
+![Query](./images/dynamodb-query-operation.png)
+
+`aws dynamodb query --table-name weatherstation_data --key-condition-expression "station_id=:id" --filter-expression "temperature>:desiredtemp" --expression-attribute-values '{ ":id" : { "S": "1"},":desiredtemp" : {"N" : "25"}}' --profile loadmin --return-consumed-capacity TOTAL`
+
+You can find more examples [here](https://github.com/ACloudGuru/DynamoDB-B2P/blob/master/04-retrieving-items/COMMANDS_USED.txt) or [here](https://media.acloud.guru/aws-dynamodb/resource/aaf58181-32d4-2a3f-1b84-b7da9a7175fa_3f8bf20f-2ef1-1f62-262f-d679a86934b1/aws-dynamodb-54cdac16-d108-4407-ac68-140434f240ae.txt?Expires=1524802430&Signature=Sr37GZnbN5XF+9Y0FgMKTip8BD46nxn6M8AhAEYnbej/rZAXre/s320R0DAqU9SAb3/SPzA+rpZo4iYBsmF50EJm+hGOfyWbI0fTkd5uIB0BctGoh0qB0+1E7vXUIihsjFASnZqoT8o3xy4kMm/EYfdPczsSpLDAJd38GXjC9oPCNKz8zUdacZQKh+0Cnafvzd6j6ZZ2tuM0AMMHvp2r24e2Rh5mHRw3u3TR1Bgv89HNoH3RiJEXuksA0np/Tau0NqGHBMt/8axPLLpaxL5CqBFW+smNYrMrqm8TGVjKbHGa98UhKHNOstgmQjjGQhlpi5Jxueh9tczmVu5A1/EzSQ==&Key-Pair-Id=APKAISLU6JPYU7SF6EUA)
+
+**Note:** `Count` represents the number of items returned and `ScannedCount` represents a number of items read and those billed. Normally those are the same with `Query` and only differ when you use `filter`. Even when we filter the results down, we'll be charged for the `ScannedCount`. 
+
+* **Scan** is the least ideal operation within DynamoDb. The input for this command is a table name. Unlike `GetItem` or `Query` you don't specify any of the keys. The command returns **all items and attributes** within a table. You can filter on any specific condition on an attribute, you are paying for the entire capacity, while you only receive a subset if you filter. If you want to imporove the performance while scanning huge tables, you can split them and run scan in parallel. But the power comes from filtering on non keys. So you can simply use scan to filter on attributes without creating additional indexes and other stuff. 
+
+**Note:** If you are using scan assume that you have a problem. Try to avoid this command at any costs - only when you need to search on Non key / index attributes (only on occasional cases). Scans are expensive and shouldn't be used, you will always billed for full table scans
+
+
+
+
 
 
 
