@@ -500,7 +500,7 @@ You can find more examples [here](https://github.com/ACloudGuru/DynamoDB-B2P/blo
 
 * **Scan** is the least ideal operation within DynamoDb. The input for this command is a table name. Unlike `GetItem` or `Query` you don't specify any of the keys. The command returns **all items and attributes** within a table. You can filter on any specific condition on an attribute, you are paying for the entire capacity, while you only receive a subset if you filter. If you want to imporove the performance while scanning huge tables, you can split them and run scan in parallel. But the power comes from filtering on non keys. So you can simply use scan to filter on attributes without creating additional indexes and other stuff. 
 
-**Note:** If you are using scan assume that you have a problem. Try to avoid this command at any costs - only when you need to search on Non key / index attributes (only on occasional cases). Scans are expensive and shouldn't be used, you will always billed for full table scans
+**Note:** If you are using scan assume that you have a problem. Try to avoid this command at any costs - only when you need to search on Non key / index attributes (only on occasional cases). Scans are expensive and shouldn't be used, you will always billed for full table scans.
 
 
 
