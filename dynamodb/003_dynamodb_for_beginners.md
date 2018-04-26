@@ -539,7 +539,8 @@ In the example we have the partition keys indicated in green, orange, and blue a
 
 ![Start](./images/partitioning-start.png)
 ---
-![Finish](./images/partitioning finish.png)
+
+![Finish](./images/partitioning-finish.png)
 
 
 ## Batch Operations (Read/Write)
