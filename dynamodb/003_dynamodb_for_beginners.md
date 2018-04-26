@@ -502,6 +502,81 @@ You can find more examples [here](https://github.com/ACloudGuru/DynamoDB-B2P/blo
 
 **Note:** If you are using scan assume that you have a problem. Try to avoid this command at any costs - only when you need to search on Non key / index attributes (only on occasional cases). Scans are expensive and shouldn't be used, you will always billed for full table scans.
 
+## Introductin to DynamoDb Partitions
+
+The partitions are the underyling storage and performance delivery structure of DynamoDb. 
+
+#### What is an partition? 
+
+Partition is a single unit, which includes compute, storage and any attached componentents required to receive data from or deliver data to you as the user via DynamoDb endpoint. 
+
+* Underlying storage and processing nodes of DynamoDb
+* **Initially ONE table equals ONE partition** (and performance demanded by that table is delivered by that partition)
+* You can't directly see the number of partitions (they are opequa to the database admins)
+* You can't directly control the number of partitions (but the number of partitions can be influenced through carefull configuration of the platform). Since partitions have impact you should learn how to control them and which impact they have on your overall performance.
+* A partition can store 10GB of data
+* A partition can deliver 3000 RCU or 1000 WCU
+* When > 10GB or > 3000 RCU OR > 1000WCU required a new partition is added and the data is spread between them over time. 
+
+**Important:** There is relationship between performance required by the table, the data stored in that table and the number of partitions DynamoDb requires to deliver.
+
+You can't set or control the number, but you know that a partition can store 10GB of data and you know that a partition can deliver 3000 RCU or 1000 WCU, if your table stores more than 10GB or you request more then 3000RCU/1000WCU the DynamoDb will in the background adjust the number of partitions.
+
+![Partitions](./images/partitioning-intro.png)
+
+In the example above you can see how the partitioning mechanism works. We have a table each row/item goes through a hashing and goes directly into a single partition if we have only 1 table under 10GB and under 3000RCU/1000WCU. If we having a table that is bigger than the describe limits the data will be stored in different partitions 1, 2, 3. Each partition can hold items with different partition keys. So the partition 3 could hold student id 100, 7007, 34786. The hashing function will select the correct partition to use based on a hash of the partition key and that's why partition keys were previously known as hash keys. **Records with the same partition key will be grouped in the same partition but ordered by the sort key value.** In the example above you can see it in the Table X - Partition 1. 
+
+### Repartitioning (Partition Split)
+
+In the example we have the partition keys indicated in green, orange, and blue and grey are the sort keys. We are starting out with 5RCU/5WCU and 500mb of data. Imagine the app becomes popular and you need to increase the performance to 4000 RCU/500WCU and still consuming 500mb of capacity. While all metrics are still within a single partition, while RCU are above a single partition limit. So what happens?
+
+1. Behind the scenes DynamoDb creates two new partitions P1/P2
+2. In the background the data from P is migrated to those new partitions (using the hashing function)
+3. The orginal table partition P is deallocated from the table X
+4. The performance allocation for RCU/WCU is split across two new partitions
+5. Now the read performance and write performance is split through all partitions belonging to the table (see new partitions)
+6. This leads to a case where max performance that can be achieved 2000 RCU and 250 WCU per partition and not for the whole table
+
+![Start](./images/partitioning-start.png)
+---
+![Finish](./images/partitioning finish.png)
+
+
+## Batch Operations (Read/Write)
+
+`BatchGetItem`
+* is a command that allows to retrieve between 1 or max 100 items, from 1 or more tables of max. 16MB per operation
+* you need to provide either partition key or a partition/short key - composite key (if the table has composite key you need to provide both keys)
+* ValidationExpresssion occurs if you ask for more than 100 itmes
+* You receive this error ProvisionThroughputExceededException if all ITEMS fail in the request
+* More than 16MB of data will return part & unprocessed keys are returned alone with the response json object (you can retrieve the remaining data)
+* ITEMS are atomic, the batch is not (if individual items fail within the batch, the batch will not fail)
+* ITEMS retrieved in parallel - but also **unordered**!!! (if you are using the `GetItem` operation you can only achieve a certain level of performance and this is because each individual items is retrieved one by one and it suffers from a performance limit of a single db partition limit, this operation is extremely efficient when you retrieving items with many different partition keys)
+* Non-existent items consume 1 or 0.5 RCU (batch operation doesn't error)
+* AttributesToGet - allows filtering of results (you are still billed)
+* Generally used in a loop wihtin a software application
+
+**Note:** The batch is a collection of individual items within a batch that can succeed or fail as one of those item retrieval operation works than the `BatchGetItem` request will work. It can cope with failure of individual items without failing the whole request.
+
+`PutItem` - single item add very inefficient, each request is rounded to 1kb minimum, each request has a transaction time (separete command or API goal), no multi-threading. Instead of `PutItem` we can use a `BatchWriteItem` command.
+
+`BatchWriteItem``
+* Up to 25 Items, 400KB Item limit, 16MB total request limit
+* Each item within batch request is written separately (each item is rounded to 1kb)
+* Each write is atomic, you can't have a partially completed operation
+* BatchWriteItem isn't atomic, if some of the items fails the operation as a whole doesn't fail
+* Any unprocessed items are returned
+* If all items in a batch fail, the whole operation will fail
+* BatchWriteItem is used when you have large quantity of data to write to a table and that data is spread over many different partition key values. The writes are written in parallel, there is no guarantee for the order, but there is a parallel processing occuring within the batch and that means the performance of the writes is not limited to the performance of per partition level?
+* BatchWriteItem is generally used in loops, and they are also handle performance throttling as part of the operation. So batch operation in a boto3 sdk can be generally done and will handle exponentially backoff to avoid performance issues. 
+* Single batch request can add data to 1 or more tables
+* BatchWriteItem can use both - PUT and DELETE operations 
+* Parallel - lower latency/better performance
+* Deletes costs you 1WCU even if you attempt to delete a non-existent item (it doesn't error if the key doesn't exist)
+* If KEY attributes don't match - entire operation will fail
+* if > 25 items - entire operation fails
+
+
 
 
 
