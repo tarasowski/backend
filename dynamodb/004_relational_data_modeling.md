@@ -8,7 +8,9 @@
 
 **Note:** If you create a system for a university, you should talk about students. If you create a system for a company, start with employees.
 3. Once your nouns are highlighted, identify the tables. Focus on core functionality of the system first (you don't have to model everything from the beginning)
-4. When you have the tables figure out the relationships between the tables. This step might lead to new intermediate tables (aggregate/junction) tables.
+4. When you have the tables figure out the relationships between the tables (verbs). This step might lead to new intermediate tables (aggregate/junction) tables.
+    + What is the minimum amount of e.g. orders a customer can have?
+    + What is the maximum amount of e.g. orders a customer can have? [Part 1](https://www.youtube.com/watch?v=QpdhBUYk7Kk), [Part 2](https://www.youtube.com/watch?v=-CuY5ADwn24)
 5. Add the columns to the tables
 
 **Note:** Creating a database model is an iterative process. Don't try to model everything at once. Start with the core entities of your system. You can add more details later. [Source](https://www.vertabelo.com/blog/technical-articles/how-to-create-a-database-model-from-scratch)
@@ -19,7 +21,7 @@
 * If you are registering a customer, does this customer needs to have an address? No (we add 0). Does this customer can have multiple addresses, Yes (we add M) -> 0,M
 * Does the address needs to have a customer? Yes. (we add 1) Can an address have multiple customers? (we add M) Yes -> 1,M
 
-**Note:** If both entities have both X,M and X,M you can use as a pattern an aggregation table (lookup table). In the examples above it's `CustomerAddresses`. 
+**Note:** If both entities have both X,M and X,M you can use as a pattern an aggregation table (bridge table). In the examples above it's `CustomerAddresses`. 
 
 0 = is not required (minimum)
 1 = is required
@@ -65,12 +67,7 @@ It's a type of flowchart that illustrates how "entities" objects, people, or con
 
 * Cardinality: Defines the numerical attributes of the relationship between two entities or entity sets. The three main cardinal relationships are one-to-one, one-to-many, and many-many. A one-to-one example would be one student associated with one mailing address. A one-to-many example (or many-to-one, depending on the relationship direction): One student registers for multiple courses, but all those courses have a single line back to that one student. Many-to-many example: Students as a group are associated with multiple faculty members, and faculty members in turn are associated with multiple students.
 
-![0 to 1](https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/seo/ERD/discovery/erd-symbols-11.svg)
-![Many](https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/seo/ERD/discovery/erd-symbols-12.svg)
-![One](https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/seo/ERD/discovery/erd-symbols-13.svg)
-![Only one](https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/seo/ERD/discovery/erd-symbols-14.svg)
-![Zero to many](https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/seo/ERD/discovery/erd-symbols-15.svg)
-![One or many](https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/seo/ERD/discovery/erd-symbols-16.svg)
+![Cardinality](./images/er-cardinality.png)
 
 You can find here different ERD symbols and notations [Source](https://www.lucidchart.com/pages/er-diagrams)
 
