@@ -6,12 +6,13 @@
     + Attributes: are properties associated with a primary entity. They will become columns
     + Examples: they help you to understand datatypes of certain attributes and they help you to understand relationship between different entities
 
-**Note:** If you create a system for a university, you should talk about students. If you create a system for a company, start with employees.
 3. Once your nouns are highlighted, identify the tables. Focus on core functionality of the system first (you don't have to model everything from the beginning)
 4. When you have the tables figure out the relationships between the tables (verbs). This step might lead to new intermediate tables (aggregate/junction) tables.
     + What is the minimum amount of e.g. orders a customer can have?
     + What is the maximum amount of e.g. orders a customer can have? [Part 1](https://www.youtube.com/watch?v=QpdhBUYk7Kk), [Part 2](https://www.youtube.com/watch?v=-CuY5ADwn24)
 5. Add the columns to the tables
+
+**Note:** If you create a system for a university, you should talk about students. If you create a system for a company, start with employees.
 
 **Note:** Creating a database model is an iterative process. Don't try to model everything at once. Start with the core entities of your system. You can add more details later. [Source](https://www.vertabelo.com/blog/technical-articles/how-to-create-a-database-model-from-scratch)
 
