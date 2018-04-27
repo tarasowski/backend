@@ -86,6 +86,10 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [ ] [Cloudformation (production deployment / partial deployment)](https://acloud.guru/learn/aws-cloudformation)
     + CI/CD (github push, automation etc.)
 * [ ] [Storage Layer -Databases RDS, NoSQL, Warehousing (when to use aurora, dynamodb or redshift)](https://acloud.guru/learn/aws-dynamodb)
+    + [Database Design and Relational Theory](https://www.amazon.com/Database-Design-Relational-Theory-Normal-ebook/dp/B007VRKQBS/ref=mt_kindle?_encoding=UTF8&me=)
+    + [Database Design for Mere Mortals](https://www.amazon.com/Database-Design-Mere-Mortals-Hands/dp/0321884493/ref=sr_1_1?ie=UTF8&qid=1524835143&sr=8-1&keywords=database+for+mere+mortals)
+    + [Six-Step Relational Database Design](https://www.amazon.com/Six-Step-Relational-Database-DesignTM-development/dp/1481942727)
+    + [Domain Driven Design Patterns](https://www.amazon.de/Domain-Driven-Design-Reference-Definitions-Summaries/dp/1457501198/ref=sr_1_1?ie=UTF8&qid=1524835319&sr=8-1&keywords=eric+evans+domain+driven+design)
 * [ ] [Migration from Monolith to Serverless](https://www.youtube.com/watch?v=i2gEbw_jzfY)
     + [Yan Cui - All Posts](https://medium.com/theburningmonk-com/all-my-posts-on-serverless-aws-lambda-43c17a147f91)
 
