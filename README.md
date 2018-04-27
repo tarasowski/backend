@@ -83,10 +83,10 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [Everything you need to know about CloudFormation](https://github.com/mittyo/javascript-pocketguide/blob/master/serverless/015_cloudformation.md)
 
 ## Todo (need to read / check the stuff below)
-* [Cloudformation (production deployment / partial deployment)](https://acloud.guru/learn/aws-cloudformation)
+* [ ] [Cloudformation (production deployment / partial deployment)](https://acloud.guru/learn/aws-cloudformation)
     + CI/CD (github push, automation etc.)
-* [Storage Layer -Databases RDS, NoSQL, Warehousing (when to use aurora, dynamodb or redshift)](https://acloud.guru/learn/aws-dynamodb)
-* [Migration from Monolith to Serverless](https://www.youtube.com/watch?v=i2gEbw_jzfY)
+* [ ] [Storage Layer -Databases RDS, NoSQL, Warehousing (when to use aurora, dynamodb or redshift)](https://acloud.guru/learn/aws-dynamodb)
+* [ ] [Migration from Monolith to Serverless](https://www.youtube.com/watch?v=i2gEbw_jzfY)
     + [Yan Cui - All Posts](https://medium.com/theburningmonk-com/all-my-posts-on-serverless-aws-lambda-43c17a147f91)
 
 
