@@ -12,9 +12,7 @@
     + What is the maximum amount of e.g. orders a customer can have? [Part 1](https://www.youtube.com/watch?v=QpdhBUYk7Kk), [Part 2](https://www.youtube.com/watch?v=-CuY5ADwn24)
 5. Add the columns to the tables
 
-**Note:** If you create a system for a university, you should talk about students. If you create a system for a company, start with employees.
-
-**Note:** Creating a database model is an iterative process. Don't try to model everything at once. Start with the core entities of your system. You can add more details later. [Source](https://www.vertabelo.com/blog/technical-articles/how-to-create-a-database-model-from-scratch)
+**Note:** If you create a system for a university, you should talk about students. If you create a system for a company, start with employees. Creating a database model is an iterative process. Don't try to model everything at once. Start with the core entities of your system. You can add more details later. [Source](https://www.vertabelo.com/blog/technical-articles/how-to-create-a-database-model-from-scratch)
 
 
 ![Customer](./images/CustomerAddress.png)
@@ -57,7 +55,7 @@ It's a type of flowchart that illustrates how "entities" objects, people, or con
 
 * Relationship: How entities act upon each other or are associated with each other. Think of relationships as verbs. For example, the named student might register for a course. The two entities would be the student and the course. Relationships are typically shown as diamonds or labels directly on the connecting lines.
 
-¡[Rel 1](https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/seo/ERD/discovery/erd-symbols-09.svg)
+![Rel 1](https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/seo/ERD/discovery/erd-symbols-09.svg)
 ![Rel 2](https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/seo/ERD/discovery/erd-symbols-10.svg)
 
 * Attribute: A property or characteristic of an entity. Often shown as an oval or circle.
