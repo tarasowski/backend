@@ -186,6 +186,67 @@ There are two problem here. In the first row the cell doesn't hold a single valu
 
 #### A Foreign Key - Relationships Between Tables
 * A table may be related to other tables
+    + For example
+        - An Employee works in a Department
+        - A Manager controls a Project
+* To establish relationships, we need to implement a foreign key
+* A foreign key is a primary key from one table that is placed into another table for the purpose of linking the records of the table together
+* Referential integrity states that every value of a foreign key must match a value of an existing primary key (RDBMS forces it)
+
+![Foreign Key](./images/foreign-key.png)
+
+#### Null Values
+* A Null value means that no data exists
+    + You can thin of a null value as an empty cell in the table
+* This is different from a zeor, space, character, empty string, or tab character
+* A Null is often ambiguous. It could mean...
+    + The column value is not appropriate for the specific row
+    + The column value has not been decided
+    + The column value is unknown or missing
+
+#### Functional Dependency
+* A relationship between attributes in which one attribute (or group of attributes) determines the value of another attribute in the same table
+* Illustration...
+    + The price of one delicious Girl Scout cookie can determine the price of a box of 12 cookies. (CookiePrice, Qty) -----> BoxPrice
+* Determinant are the atributes that we use as the starting point (the variable on the left side of the equation) is called a determinant (CookiePrice, Qty), because we can use these value to determine the values of other attributes in the table such as `BoxPrice``
+* By definition...
+    + A candidate key (will eventually selected and promoted to the primary key) of a relation will functionally determine all other non-key attributes in the row
+* Likewise, by definition...
+    + A primary key of a relation will functionally determine all other non-key attributes in the row
+
+![Dependency](./images/dependency.png)
+
+If we know the `EmployeeId` by definition we should find another attributes that are associated with that employee. In this case we have two additional attributes `(EmpLastName, EmpPhone)`. Therefore `EmployeeId` is the determinant since we can use it to find other attributes that are associated with this particular employee.
+
+### Data Normalization
+
+* A process of analyzing a relation to ensure that it is `well formed`
+    + not susceptible for 3 types of data anomalies: 
+        - deletion anomalies
+        - update anomalies
+        - insertion anomalies
+* Normalization involves decomposing relations with anomalities to produce smaller, well-structured relations
+* More specifically, if a relation is normalized (well-formed), rows can be inserted, deleted, or modified without creating anomalies.
+
+Data normalization process is that we are attempting to create relations in which we can insert new data, delete existing data, or modify existing data without creation one of these anamolies
+
+![Anomalies](./images/anomalies.png)
+
+#### Data Normalization Process Design Principles
+* Relational design principles for normalized relations:
+    * To be a well-formated relation, every determinant must be a candidate key
+    * Any relation that is not well-formed should be broken into two or more well-formed relations!
+* TIP: As a general rule, a well-formed relation will not encompass more than one business concept (An employee, a department, a project can be a single busines concept). If you have non-key attributes that contain more than one business concept, then it's not a well formed relation. We need to break it down...
+
+![Example](./images/normalization-example.png)
+----
+![Example2](./images/normalization-example.png)
+----
+![Normalization Steps](./images/normalization-steps.png)
+
+
+
+
 
 
 
