@@ -277,5 +277,20 @@ We are using here the circular symbol
 
 ![Relationship](./images/sub-super-rel.png)
 
+### Recursive Relationships
+
+- It's possbile for an entity to have a (unary) relationship to itself - this is called a recursive relationship
+- Recursion can be used to implement heirarchical relationships
+
+In the example we need to remember that the mamagerId is the employeeId it just have a different key here in order to allows a specific type of relationship between employees. This types of relationships can be very useful for tracking e.g. customer referrals, another great use is to implement hierarchies
+
+![One to One](./images/recursive.png)
+
+Another example shows we have here an `employeeId: 1` we have the value of `managerId: null` it tells us that the employee 1 has no manager e.g. it's the CEO of the company. 
+
+In the next layer of the hierarchy we see employees with a managerId 1, they all are direct reports of the CEO. In the next layer we see employees 5, 6 and they are all managed by the employee 3. 
+
+![Example](./images/recursive-ex.png)
+
 
 3. Implementation of database design: as a real world functioning database
