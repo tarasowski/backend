@@ -465,9 +465,270 @@ SELECT  empName
 FROM    Employee; /* every row from the table */
 
 ``` 
-Minute: 29:58
 
-![Structure](./images/table-structure.JPG)
+The results of the query are a relation that is as long as they are some data to be retrieved the result will be a two-dimensional table of data, it may contains just a single row or single column or it may contain may rows or many columns. 
+
+* A query pulls information from one or more relations and creates (temporary) a new relation
+* This allows us to:
+    + Create a new relation
+    + Feed information to another query (as a subquery)
+    + The result may not be in 3NF (especially when performing a join)
+
+* To show values for two or more specific columns, use a comma-separated list of column names
+
+```sql
+SELECT empName, empId
+FROM Employee;
+``` 
+
+* To show all of the column values for the rows that match the specified criteria, use an asterisk (*)
+
+```sql
+SELECT * 
+FROM Employee;
+``` 
+
+* The DISTINCT keyword may be added to the SELECT statement to suppress the display of duplicate rows (e.g. if a row has columns with duplicate values)
+
+```sql
+SELECT DISTINCT deptId
+FROM Employee;
+``` 
+
+* The WHERE clause specifies the matching or filtering criteria for the records (rows) that are to be displayed. 
+
+```sql
+SELECT empName
+FROM Employee
+WHERE deptId = 15;
+``` 
+
+* WHERE clause comparisons may include
+    + Equals `=`
+    + Not Equals `<>` or `!=`
+    + Greater then `>`
+    + Less than `<`
+    + Greater than or Equal to `>=`
+    + Less than or Equal to `<=`
+* We can also create compound additons, we can create filters based on more than one criterion
+    + AND representing an intersection of the data sets
+    + OR representing a union of the data sets
+    + Concepts such as intersection and union are derived from relational algebra (venn diagrams)
+
+```sql
+SELECT empName
+FROM Employee
+WHERE deptId < 7 OR deptId > 15;
+
+SELECT empName
+FROM Employee
+WHERE deptId = 9 AND salaryCode <= 3;
+
+``` 
+* The WHERE clause may include the IN keyword to specify that a particular column value must match one of the values in a list (this is much more convinient instead of using OR operators)
+
+```sql
+SELECT empName
+FROM Employee
+WHERE deptId IN (4, 8, 9); /* is in the department 4, 8 or 9*/
+
+SELECT empName
+FROM Employee
+WHERE deptId NOT IN (4, 8, 9); /* where the Employee is not in department id*/
+``` 
+
+Compared to:
+```sql
+WHERE deptId = 4 OR deptId = 8 OR deptId = 9;
+``` 
+
+* SQL provides a BETWEEN keyword that allows a user to specify a minimum and maximum value on one line (BETWEEN is inclusive!!!)
+
+```sql
+SELECT empName
+FROM Employee
+WHERE salaryCode BETWEEN 10 AND 45;
+```
+
+Compared to:
+```sql
+WHERE salaryCode >= 10 AND salaryCode <= 45;
+```
+
+* The SQL LIKE keyword allows for searches on partial values
+* LIKE can be paired with wildcards to find rows that partially match a string value
+    + The multiple character wildcard is a percent sign (%)
+    + The single character wildcard is an underscore (_)
+
+```sql
+SELECT empId
+FROM Employee
+WHERE empName LIKE 'Da%'; /* the name that begins with Da*/
+
+SELECT empId
+FROM Employee
+WHERE phone LIKE '657-278-_ _ _ _'; /* show all phone numbers that contain exactly 4 unkonwn characters */
+```
+* Query results may be sorted using the ORDER BY clause (ascending vs. descending sorts)
+
+```sql
+SELECT *
+FROM Employee
+ORDER BY empName ASC; /* or DESC which stands for descending */
+``` 
+
+* SQL provides several built-in functions
+    + COUNT - Counts the number of rows that match the specified criteria
+    + MIN - Finds the minimum value for a specific column for those rows matching the criteria
+    + MAX - Finds the maximum value for a specific column for those rows matching the criteria
+    + SUM - Calculates the sum (total) for a specific column for those rows matching the criteria
+    + AVG - Calculates the numerical average (mean) of a specific column for those rows matching the criteria
+    * STDEV - Calculates the standard devisation of the values in a numeric column whose rows match the criteria
+
+```sql
+SELECT COUNT(*)
+FROM Employee; /* the number of records in the empoyee table */
+
+SELECT  MIN(hours) AS minimumHours, /* it will look at the hours column and determine the min/max/avg*/
+        MAX(hours) AS maximumHours,
+        AVG(hours) AS averageHours
+FROM Project
+WHERE ProjID > 7;
+``` 
+
+* Categorized results can be retreived using the GROUP BY clause. It allows us to combine results into categorized output.
+
+```sql
+SELECT  deptId,
+        COUNT(*) AS numberOfEmployees /* we want to get the deptId and the the number of employees that work in each department*/
+FROM Employee
+GROUP BY deptId;
+``` 
+![Output](./output-sql-query.png)
+
+**Note:** In the example above we are using an alias `AS` to refer to the result of the count operation. We are telling the database that the result of the count function to be called `numberOfEmployees`
+
+* The HAVING clause may optionally be used with a GROUP BY in order to restrict which categories are diplayed (HAVING serves the same function as WHERE for a GROUP BY statement)
+
+```sql
+SELECT salespersonId, salespersonLastName, SUM(saleAmount) AS totalSales
+FROM Sales
+GROUP BY salespersonId, salespersonLastName
+HAVING SUM(saleAmount) >= 10000; /* shows only the sales people which have saleAmount >= 10000 */
+```
+
+### Retrieving Information form Multiple Tables
+* Subqueries
+    + As stated earlier, the result of a query is a relation. The results from one query may therefore be used as input for another query. This is called a subquery. There are two different types of subqueries:
+        + Noncorrelated subqueries
+        + Correlated subqueries
+
+* In a noncorrelated subquery, the inner query (a query within parenthesis) only needs to run once in order for the database engine to solve the problem
+
+```sql
+SELECT empName
+FROM Employee
+WHERE deptId IN (SELECT deptId
+                FROM Department
+                WHERE deptName LIKE 'Account%');
+```
+
+* In a correlated subquery, the inner query needs to be run repeatedly in order for the database enginge to solve the problem. (The inner query needs a value from the outer query in order to run)
+
+```sql
+SELECT empName
+FROM Employee e /* e is an alias for the Employee table, it allows to refer in outer query just by using e */
+WHERE empSalary > (SELECT AVG(empSalary)
+                    FROM Employee
+                    WHERE deptId = e.deptId);
+``` 
+* Joins: another way of combining data from multiple tables is by using a join (allows us to merge data from different tables into a single result set). All database joins can be divided into:
+    + Outer join
+        + Left Outer Join
+        + Full Outer Join
+        + Right Outer Join
+    + Inner join
+
+![Joins](./database-joins.png)
+
+```sql
+SELECT empName, deptName
+FROM Employee AS E, Department AS D
+WHERE E.deptId = D.deptID; /* this is an INNER JOIN example */
+``` 
+
+![Example](./images/join-example.png)
+
+* The JOIN...ON syntax can be also be used to perform a join. It has the advantage of moving the JOIN syntax into the FROM clause. By doing so we can use the `WHERE` clause for other filtering purposes.
+
+```sql
+SELECT empName, deptName
+FROM Employee e INNER JOIN Department d
+     ON e.deptId = d.deptId
+WHERE d.deptName NOT LIKE 'Account%';
+``` 
+* The OUTER JOIN syntax can be used to obtain data that exists in one table without matching data in the other table. 
+
+```sql
+SELECT empName, deptName
+FROM Employee e LEFT OUTER JOIN Department d
+     ON e.deptId = d.deptId,
+``` 
+
+**Note:** `LEFT OUTER JOIN` is being used to tell the database from which table all of the results should appear regardless of wheter there is a matching value in the other table. See in the example below the last empName doesn't have the department, but it's still appears on the neew table. In the `FROM` statement we have two tables listed Employee and Department. The Employee table is named on the **Left side of the join statement**, so to the database that's the `Left table` where the Department is the `Right Table`. So if we do `LEFT OUTER JOIN` we say give me a list of all the employees regardless they have a matching department, but if they have a matching department include the depratment as well. 
+
+![Outer Join](./images/outer-join-example.png)
+
+**Note:** A `RIGHT OUTER JOIN`does include all the results whether there is an employee assigned to those department. If an Employee is assigned to the department this information will be included into results if not, if there is a department that has currently no employees in it it will appear in the table as well. It will just have an empty or null value in the results where the employee name will be
+
+![Right Join](./images/right-join-example.png)
+
+* The unmatched data from either table are included in results if a FULL OUTER JOIN is used. It will include all of the records from the left and the right table regardless if the match exists, but if the match exits it will extract the results.
+
+```sql
+SELECT empNanem, deptName
+FROM Employee e
+    FULL OUTER JOIN Department d
+    ON e.deptId = d.deptId;
+```
+
+![Full](./images/join-example.png)
+
+**Note:** It will include all results regardless of the matching
+
+### Deleting Database Objects: DROP
+* To remove unwanted database objects from the database, use the SQL DROP statement
+* Warning... The DROP statement will permanently remove the object and all of its associated data!
+
+```sql
+DROP TABLE Employee; /* remove the entire table itself */
+```
+* To change the contraints on existing tables, you may need to remove the existing constraing before new constrains can be added
+
+```sql
+ALTER TABLE Employee DROP CONSTRAINT empFk; /* we want to remove Employee foreign key from the table */
+``` 
+
+* The CHECK constraint can be used to create restirciton on the values that are allowed to appear in a column
+
+```sql
+ALTER TABLE Project
+ADD CONSTRAINT projectCheckDates
+CHECK (startDate < endDate); /* if not true the db will not allow to add the data */
+```
+* SQL Views ia virtual table created by a DBMS-stored SELECT statement which can combine access to data in multiple tables and even in other views
+
+```sql
+CREATE VIEW SalesDepartment AS
+SELECT *
+FROM Employee
+WHERE deptId = (SELECT deptId FROM Department WHERE deptName = 'Sales');
+```
+* You can run a query agains a view in the same way that you run a query agains a table
+
+```sql
+SELECT empName FROM SalesDepartment;
+```
 
 
 
