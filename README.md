@@ -85,6 +85,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 ## Todo (need to read / check the stuff below)
 * [ ] [Cloudformation (production deployment / partial deployment)](https://acloud.guru/learn/aws-cloudformation)
     + CI/CD (github push, automation etc.)
+    + Here is an example how to CI/CD on AWS [Check this presentation](https://youtu.be/rPouVcJKWxM?t=2146)
 * [ ] [Storage Layer -Databases RDS, NoSQL, Warehousing (when to use aurora, dynamodb or redshift)](https://acloud.guru/learn/aws-dynamodb)
     + [Database Design and Relational Theory](https://www.amazon.com/Database-Design-Relational-Theory-Normal-ebook/dp/B007VRKQBS/ref=mt_kindle?_encoding=UTF8&me=)
     + [Database Design for Mere Mortals](https://www.amazon.com/Database-Design-Mere-Mortals-Hands/dp/0321884493/ref=sr_1_1?ie=UTF8&qid=1524835143&sr=8-1&keywords=database+for+mere+mortals)
