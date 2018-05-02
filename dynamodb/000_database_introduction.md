@@ -925,7 +925,146 @@ In the next layer of the hierarchy we see employees with a managerId 1, they all
 
 
 
+# Database Lesson #5 of 8 - Database Design
 
+## Transitioning from a Data model to a Database
+* Create a table for each entity
+    +  A table has a descriptive name and a set of attributes that together describe the entity
+* Specify a primary key
+* Specify column properties
+    + Data type
+    + Null status
+    + Default values (if any)
+    + Data constraints (if any)
+* The relation is then analyzed using the normalization rules
+* As normalization issues arise, the initial design may need to be modified
+
+### Normalization Review: Modification Anomalies
+* Tables that are not normalized are susceptible (anfällig) to experiencing modification anomalies
+    + Insertion problems: Difficulties inserting data into a relation
+    + Update problems: Difficulties modifying data in a relation
+    + Deletion problems: Difficulties deleting data from a relation
+
+**Note:** Most modification problems are solved by breaking an existing table into two or more tables through a process known as normalization.
+
+### Normalization Review: Defintions
+* Functional Dependency
+    + The relationship (within a relation) that describes how the value of one attribute may be used to find the value of another attribute
+* Determinant
+    + An attribute that can be used to find the value of another attribute in the relation
+* Candidate key
+    + The value of the candidate key can be used to find the value of every other non-key attribute in the table
+    + A simple candidate key consists of only one attribute
+    + A composite candidate key consists of more than one attribute
+
+### Normalization Review: Normalized Relations
+* For our purpose, a relation is considered normalized when every derminant is a candiate key
+    + Technically, this is Beyce-Codd Normal Form (BCNF)
+        + Somiteimes called 3.5NF
+        + Slightly more stringent than 3NF
+* A database in 3NF (or above) is generally not susceptible to modification anomalies
+
+![Normalization](./images/normalization-case-study.png)
+
+### Denormalizaiton
+* Normalizing relations (or breaking them apart into many component relations) may significantly increase compalxity of the data structure
+* The question is one of balance:
+    + Trading complexity for modification problems and speed
+        + Joining many tables together takes time, and therefore slows the query process (join operaton takes computational cycles and time to join the tables together and that extra efffort slows down the query performance)
+* There are many situations in which denormalized relations are preferrred
+* The reasons for denormalization:
+    + Simplicity of design
+    + Speed of querying (increase in query performance by denormalizing the tables)
+* The tradeoff we are introducing the possiblity of modification anomalies into our database
+* Denormalization Benefits
+    + Simplicity
+    + Improved query performance
+* Denormalization Costs
+    + Modification anomalies
+        - state example (Los Angeles, CA, los anageles, ca, Los Anageles, California)
+    + Redundant data
+    + More storage space is required
+
+![Denormalized](./images/denormalized-set.png)
+
+### Representing Relationships: 1:1 Relationships
+* The maximum cardinality determines how a relationship is represented
+* 1:1 relationship
+    + The key from one reltation is placed in the other as a foreign key
+    + If both sides of the relationship are optional (if mimimum cardinality on both sides is ZERO), it does not matter which table receives the foreign key
+    + If only one side of the relationship is optional (if one side of the relationship has a minimum cardinality of ZERO, while the other side of the relationship has a minimum cardinality of ONE), the optional side receives the foreign key
+
+![1to1](./images/1to1-relationship.png)
+
+**Note:** The minimum cardinality is ZERO on both sides. Therefore the foreign key can be placed either in the Employee or Locker tables. In the second example we have 1to1 binary relationship a patient has only one and one bed and bed can have zero or only one patient, you have to put the foreign key on in the table of the optional side. 
+
+
+```sql
+SELECT * 
+FROM Locker L, Employee E
+WHERE L.lockerId = E.lockerId; /* join by looking for matching values between those two table */
+
+SELECT *
+FROM Locker L, Employee E
+WHERE L.epmloyeeId = E.employeeId;
+```
+
+### Representing RElationships: 1:N Relationships
+* Like a 1:1 relationship, a 1:N relationship is implemented by placing the primary key from one table into another table as a foreign key
+* However, in a 1:N the foreign key always goes into the **many side (N)** of the relationship
+    + The 1 side is called the parent
+    * The N side is called the child
+
+![1:M](./images/1toM-relationship.png)
+
+
+```sql
+SELECT *
+FROM Team T, Player P
+WHERE T.teamId = P.teamId; /* A sequal query to join two tables together */
+``` 
+
+### Representing Relationships: N:M Relationships
+* To implement a N:M relationship, a new table is created.
+    + This table is called an intersection table or an associative entity
+* An intersection table typicall has a composite key comprised of the keys from each of the teables to which t is connected
+    + A surrogate key may also be used, but this has important implications...
+
+![N:M](./images/ntom-relationship1.png)
+
+**Note:** The example above cannot be implemented in a real-world database. Instead we need to introduce a lookup table see in the example below
+
+![Lookup](./images/lookup-table-example.png)
+
+**Note:** The attributes involved in the primary key in the example above are serving two purposes: 1) they are part of the primary key for our intersection table (lookup table) and 2) when considered individually they are serving a foreign key links back to the parent table.
+
+```sql
+SELECT *
+FROM Student S, Class C, Student_Class SC
+WHERE S.SID = SC.SID AND SC.ClassNumber = C.ClassNumber;
+``` 
+
+![Associative](./images/association-relationship.png)
+
+### Surrogate Keys and Associateive Entities
+* When an associative entity uses a composite primary key composed of the primary keys of its parent tables, each possible matched pair of values can apper only one in the associative entity
+* When an associative entity uses a surrogate key, however, each possible matched pair o values can appear many times in the associative entity. 
+
+![Surrogate](./images/surrogate-associative.png)
+
+### Representing Relatinships: Recursive Relationships
+* A recursive relationship occurs when a table is related to itself
+* Recursive relationships adhere to the same rules as binary relationships
+    + 1:1 and 1:N recursive relationships are implemented using foreign keys
+    + N:M recursive relationships are implemented by creating an intersection table
+
+
+![Recursive](./images/recursive-relationship-examples.png)
+
+**Note:** 
+1. Example: Each person in the table is sponsored by zero to one other people
+2. Example: One to many recursive relationship this is a referral relationship. Each customer might refer many other customers to us, but each customer is refered by a max. one other customer. This is 1:N recursive relationship
+3. Example: N:M in which a doctor might treat many other doctors, while each doctor might be treated by many other doctors as well. This is conceptually a N:M recurisive relationship
 
 
 
