@@ -1066,6 +1066,8 @@ WHERE S.SID = SC.SID AND SC.ClassNumber = C.ClassNumber;
 2. Example: One to many recursive relationship this is a referral relationship. Each customer might refer many other customers to us, but each customer is refered by a max. one other customer. This is 1:N recursive relationship
 3. Example: N:M in which a doctor might treat many other doctors, while each doctor might be treated by many other doctors as well. This is conceptually a N:M recurisive relationship
 
+# Database Lessons #6 of 8 - Database Administration
+
 
 
 
