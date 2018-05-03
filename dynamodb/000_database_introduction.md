@@ -327,6 +327,11 @@ CREATE TABLE Employee (
 
 Within SQL key is such as primary key are considered to be CONSTRAINTS. In the case above we define a primary key for our Employee table and we are naming that constraint `empPk`. Important point that is within a database, every constraint must have a unique name. We are telling the database, that each value in the `empId` attribute/column must be unique. 
 
+#### Why to have a constraint name?
+1. If a query (insert, update, delete) violates a constraint, SQL will generate an error message that will contain the constraint name. If the constraint name is clear and descriptive, the error message will be easier to understand; if the constraint name is a random guid-based name, it's a lot less clear. 
+2. If a constraint needs to be modified in the future (yes, it happens), it's very hard to do if you don't know what it's named. (ALTER TABLE MyTable drop CONSTRAINT um...) And if you create more than one instance of the database "from scratch" and use system-generated default names, no two names will ever match.
+
+
 ### Composite Primary Key
 If we want to create a composite primary key we can use something like this
 
@@ -368,11 +373,11 @@ CREATE TABLE EmployeeSkill (
 )
 ``` 
 
-`ON DELETE CASCADE` tells the database that we want to establish a cascading delete relationship between this table and the Employee table. It's used to help us to maintain the integrity and the quality of our data in the database. If e.g the employee under `empId` = 1 leaves the organization, the cascading delte will follow the relationship line to the EmployeeSkill label, if it finds any of the records it will delete them automatically.
+`ON DELETE CASCADE` tells the database that we want to establish a cascading delete relationship between this table and the Employee table. It's used to help us to maintain the integrity and the quality of our data in the database. If e.g the employee under `empId` = 1 leaves the organization, the cascading delete will follow the relationship line to the EmployeeSkill label, if it finds any of the records it will delete them automatically.
 
 ![Delete](./images/cascade-delete.png)
 
-`ON UPDATE CASCADE` very similar to cascading delte, the purpose of this command is to maintain the quality of the data and integrity in the database. It's needed to maintain the link between both tables.
+`ON UPDATE CASCADE` very similar to cascading delete, the purpose of this command is to maintain the quality of the data and integrity in the database. It's needed to maintain the link between both tables.
 
 ![Update](./images/cascade-update.png)
 
@@ -440,7 +445,7 @@ SET     deptId = 3; /* change the departmentId for every employee in the table t
 `SET` the name of the arribute that we want to change followed by the new value for that attribute.
 `WHERE` which specifies which row or rows we want to change
 
-**Note:** The shortest statement will cause the most chane in the database. If we would have a 1M records in the Employee table, the `SET   deptId = 3` would make 1M changes to that database. It will set the depratment Id to 3 for every employee
+**Note:** The shortest statement will cause the most change in the database. If we would have a 1M records in the Employee table, the `SET   deptId = 3` would make 1M changes to that database. It will set the depratment Id to 3 for every employee
 
 #### DELETE FROM
 
@@ -607,7 +612,7 @@ SELECT  deptId,
 FROM Employee
 GROUP BY deptId;
 ``` 
-![Output](./output-sql-query.png)
+![Output](./images/output-sql-query.png)
 
 **Note:** In the example above we are using an alias `AS` to refer to the result of the count operation. We are telling the database that the result of the count function to be called `numberOfEmployees`
 
