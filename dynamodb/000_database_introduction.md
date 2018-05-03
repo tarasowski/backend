@@ -76,9 +76,9 @@ Is a special kind of software program not only to create databases but also proc
 * Provide security
 * Perform data backup and recovery
 
-* Referntial Integrity Constraints
+* Referential Integrity Constraints
     + A DBMS can enforce many constraints (Einschränkungen)..
-    + **Referntiel integrity constraints** ensure that the values of a column in one table are valid based on the values in another table
+    + **Referntial integrity constraints** ensure that the values of a column in one table are valid based on the values in another table (Referential integrity is a property of data stating references within it are valid. In the context of relational databases, it requires every value of one attribute (column) of a relation (table) to exist as a value of another attribute (column) in a different (or the same) relation (table).)
         - For example, if a 5 was entered as a CustomerID in the PROJECTS table, a Customer having a CustomerID value of 5 MUST exist in the CUSTOMER TABLE. If the CustomeriD 5 doesn't exist it won't allows u to enter it as CustomerId in the PROJECTS table. This is how we maintain DATA INTEGRITY.
 
 ## Types of Database Systems
@@ -87,7 +87,7 @@ Is a special kind of software program not only to create databases but also proc
     + Support one application
     + Have only a few tables
     + Are simple in design
-    + Invovle only one computer
+    + Involve only one computer
     * Support one user at a time
 
 * Enterprise-Level database systems typically (Oracle, SQL Server, MySQL):
@@ -101,7 +101,7 @@ Is a special kind of software program not only to create databases but also proc
     + Spread across many physical servers, geographically distributed
     + **Support more than 1 database: within the same DBMS we can have operational database, and we also can create datawarehouse. They can all be managed by the same DBMS.**
 
-![Examples](./images/database-system.png)
+![Examples](./images/database-systems.png)
 
 # The Relational Model
 
