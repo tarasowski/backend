@@ -641,7 +641,7 @@ WHERE deptId IN (SELECT deptId
                 WHERE deptName LIKE 'Account%');
 ```
 
-* In a correlated subquery, the inner query needs to be run repeatedly in order for the database enginge to solve the problem. (The inner query needs a value from the outer query in order to run)
+* In a correlated subquery, the inner query needs to be run repeatedly in order for the database engine to solve the problem. (The inner query needs a value from the outer query in order to run)
 
 ```sql
 SELECT empName
@@ -657,7 +657,7 @@ WHERE empSalary > (SELECT AVG(empSalary)
         + Right Outer Join
     + Inner join
 
-![Joins](./database-joins.png)
+![Joins](./images/database-joins.png)
 
 ```sql
 SELECT empName, deptName
@@ -683,11 +683,11 @@ FROM Employee e LEFT OUTER JOIN Department d
      ON e.deptId = d.deptId,
 ``` 
 
-**Note:** `LEFT OUTER JOIN` is being used to tell the database from which table all of the results should appear regardless of wheter there is a matching value in the other table. See in the example below the last empName doesn't have the department, but it's still appears on the neew table. In the `FROM` statement we have two tables listed Employee and Department. The Employee table is named on the **Left side of the join statement**, so to the database that's the `Left table` where the Department is the `Right Table`. So if we do `LEFT OUTER JOIN` we say give me a list of all the employees regardless they have a matching department, but if they have a matching department include the depratment as well. 
+**Note:** `LEFT OUTER JOIN` is being used to tell the database from which table all of the results should appear regardless of wether there is a matching value in the other table. See in the example below the last empName doesn't have the department, but it's still appears on the new table. In the `FROM` statement we have two tables listed Employee and Department. The Employee table is named on the **Left side of the join statement**, so to the database that's the `Left table` where the Department is the `Right Table`. So if we do `LEFT OUTER JOIN` we say give me a list of all the employees regardless they have a matching department, but if they have a matching department include the depratment as well. 
 
 ![Outer Join](./images/outer-join-example.png)
 
-**Note:** A `RIGHT OUTER JOIN`does include all the results whether there is an employee assigned to those department. If an Employee is assigned to the department this information will be included into results if not, if there is a department that has currently no employees in it it will appear in the table as well. It will just have an empty or null value in the results where the employee name will be
+**Note:** A `RIGHT OUTER JOIN`does include all the results whether there is an employee assigned to those department. If an Employee is assigned to the department this information will be included into results if not, if there is a department that has currently no employees in it, it will appear in the table as well. It will just have an empty or null value in the results where the employee name will be
 
 ![Right Join](./images/right-join-example.png)
 
@@ -717,7 +717,7 @@ DROP TABLE Employee; /* remove the entire table itself */
 ALTER TABLE Employee DROP CONSTRAINT empFk; /* we want to remove Employee foreign key from the table */
 ``` 
 
-* The CHECK constraint can be used to create restirciton on the values that are allowed to appear in a column
+* The `CHECK` constraint can be used to create restirciton on the values that are allowed to appear in a column
 
 ```sql
 ALTER TABLE Project
@@ -762,7 +762,7 @@ SELECT empName FROM SalesDepartment;
     2. Attributes a) Indentifiers (Keys), b) Non-key attribues (columns)
     3. Relationships (between entities)
 
-####Entity
+#### Entity
 -  An entity class is a description of the structure and form of the occurences of the entity. Similar to a recipe or architectural blueprints (class = is the table itself )
 
 - An entity instance is a specific occurence of an entity class (instance = is a row in the table)
@@ -827,7 +827,7 @@ Attributes can be classified as:
         - An employee may have no more than one locker
         - A locker may only be used by one employee
 - 1:N (one-to-many)
-    + A signel entity instance in one entity class is related to many entity instances in another entity class
+    + A single entity instance in one entity class is related to many entity instances in another entity class
         - An employee works in one department
         - A department can have many employees
 - N:M (coceptual many-to-many)
@@ -846,7 +846,7 @@ Attributes can be classified as:
 - Minimum cardinality is the minimum number of entity instances that MUST participate in a relationship instance (the relationship might be optional or mandatory)
 - These values typically assume a value of zero (optional) or one (mandatory)    
 
-**Desc:** The maximuma and minimum cardinalities respectivly allow us to specify the max. number of instances of one entity allowed to participate in a relationship and the minimum number of instances that must participate in relationship.
+**Desc:** The maximum and minimum cardinalities respectivly allow us to specify the max. number of instances of one entity allowed to participate in a relationship and the minimum number of instances that must participate in relationship.
 
 ![Cardinalities](./images/cardinatlities.png)
 
@@ -870,7 +870,7 @@ Attributes can be classified as:
 We can add customers to the database without having any relationships to other entities. But orders cannot exist without existing customers. In this example a customer is a strong entity, where order is a weak entity. 
 
 ##### There are two weak entity types:
-- An **ID-Dependent** (also known as identifying relationships) weak entity is a weak entity that coonot exist without its parent entity. In this way database will enforce the constrain that ids cannot exist without being associated with an instance of the parent entity. 
+- An **ID-Dependent** (also known as identifying relationships) weak entity is a weak entity that cannot exist without its parent entity. In this way database will enforce the constrain that ids cannot exist without being associated with an instance of the parent entity. 
     + This requirement is enforced by using a composite key for the weak entity
         - The first part of the key is the key for the strong entity
         - The second part of the key is the key for the weak entity itself
@@ -883,12 +883,12 @@ We can add customers to the database without having any relationships to other e
     + Represented by a dashed line
     + Also used between strong entities
 
-- All ID-dependent entities are weak entities, but there are other entities that are wek but not ID-dependent
-- A non-ID-dependent weak entity many have a sginel or composite key, but the key of th parent entity will be a foreign key within the weak entity. 
+- All ID-dependent entities are weak entities, but there are other entities that are weak but not ID-dependent
+- A non-ID-dependent weak entity many have a single or composite key, but the key of the parent entity will be a foreign key within the weak entity. 
 
 ![Example](./images/id-weak.png)
 
-### Different Type of Relatinship between Entities
+### Different Type of Relationship between Entities
 
 - Subtype Entities:
     + A subtype entity is a special case of another entity (which is called its supertype)
@@ -907,7 +907,7 @@ We can add customers to the database without having any relationships to other e
 
 ![Example](./images/super-sub.png)
 
-**Desc:** `isGradStudent` the value can be true or false. The value tells us which of the relationships path follow in order to get information about that specific student. Also note that each of the stubtypes undergrad and grad contains attributs that apply to that specific type of student. Remember when the subtype is a specific type of supertype, then the subtype inherits all the attributs of the supertype. We use `StudentID` in order to link supertype to the subtypes.
+**Desc:** `isGradStudent` the value can be true or false. The value tells us which of the relationships path follow in order to get information about that specific student. Also note that each of the stubtypes undergrad and grad contains attributes that apply to that specific type of student. Remember when the subtype is a specific type of supertype, then the subtype inherits all the attributs of the supertype. We use `StudentID` in order to link supertype to the subtypes.
 
 We are using here the circular symbol
 
@@ -918,7 +918,7 @@ We are using here the circular symbol
 - It's possbile for an entity to have a (unary) relationship to itself - this is called a recursive relationship
 - Recursion can be used to implement heirarchical relationships
 
-In the example we need to remember that the mamagerId is the employeeId it just have a different key here in order to allows a specific type of relationship between employees. This types of relationships can be very useful for tracking e.g. customer referrals, another great use is to implement hierarchies
+In the example we need to remember that the managerId is the employeeId it just have a different key here in order to allows a specific type of relationship between employees. This types of relationships can be very useful for tracking e.g. customer referrals, another great use is to implement hierarchies
 
 ![One to One](./images/recursive.png)
 
@@ -975,10 +975,10 @@ In the next layer of the hierarchy we see employees with a managerId 1, they all
 ![Normalization](./images/normalization-case-study.png)
 
 ### Denormalizaiton
-* Normalizing relations (or breaking them apart into many component relations) may significantly increase compalxity of the data structure
+* Normalizing relations (or breaking them apart into many component relations) may significantly increase complexity of the data structure
 * The question is one of balance:
     + Trading complexity for modification problems and speed
-        + Joining many tables together takes time, and therefore slows the query process (join operaton takes computational cycles and time to join the tables together and that extra efffort slows down the query performance)
+        + Joining many tables together takes time, and therefore slows the query process (join operaton takes computational cycles and time to join the tables together and that extra effort slows down the query performance)
 * There are many situations in which denormalized relations are preferrred
 * The reasons for denormalization:
     + Simplicity of design
@@ -998,7 +998,7 @@ In the next layer of the hierarchy we see employees with a managerId 1, they all
 ### Representing Relationships: 1:1 Relationships
 * The maximum cardinality determines how a relationship is represented
 * 1:1 relationship
-    + The key from one reltation is placed in the other as a foreign key
+    + The key from one relation is placed in the other as a foreign key
     + If both sides of the relationship are optional (if mimimum cardinality on both sides is ZERO), it does not matter which table receives the foreign key
     + If only one side of the relationship is optional (if one side of the relationship has a minimum cardinality of ZERO, while the other side of the relationship has a minimum cardinality of ONE), the optional side receives the foreign key
 
@@ -1017,7 +1017,7 @@ FROM Locker L, Employee E
 WHERE L.epmloyeeId = E.employeeId;
 ```
 
-### Representing RElationships: 1:N Relationships
+### Representing Relationships: 1:N Relationships
 * Like a 1:1 relationship, a 1:N relationship is implemented by placing the primary key from one table into another table as a foreign key
 * However, in a 1:N the foreign key always goes into the **many side (N)** of the relationship
     + The 1 side is called the parent
@@ -1035,7 +1035,7 @@ WHERE T.teamId = P.teamId; /* A sequal query to join two tables together */
 ### Representing Relationships: N:M Relationships
 * To implement a N:M relationship, a new table is created.
     + This table is called an intersection table or an associative entity
-* An intersection table typicall has a composite key comprised of the keys from each of the teables to which t is connected
+* An intersection table typically has a composite key comprised of the keys from each of the tables to which it is connected
     + A surrogate key may also be used, but this has important implications...
 
 ![N:M](./images/ntom-relationship1.png)
@@ -1056,7 +1056,7 @@ WHERE S.SID = SC.SID AND SC.ClassNumber = C.ClassNumber;
 
 ### Surrogate Keys and Associateive Entities
 * When an associative entity uses a composite primary key composed of the primary keys of its parent tables, each possible matched pair of values can apper only one in the associative entity
-* When an associative entity uses a surrogate key, however, each possible matched pair o values can appear many times in the associative entity. 
+* When an associative entity uses a surrogate key, however, each possible matched pair of values can appear many times in the associative entity. 
 
 ![Surrogate](./images/surrogate-associative.png)
 
