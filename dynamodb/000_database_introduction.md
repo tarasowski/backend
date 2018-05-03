@@ -113,7 +113,7 @@ Is a special kind of software program not only to create databases but also proc
 ### Relation
 
 * A relation is a two-dimensional table that has specific characteristics
-* The table dimensions, like a matrix, sonsist of rows and columns
+* The table dimensions, like a matrix, consist of rows and columns
 
 **Note:** A relation is a specific type of table that is in order for a table to qualify as a relation, the table must have certain characteristics. Certain Characteristics must be met in order for a table to qualify a relation.
 
@@ -125,7 +125,7 @@ Is a special kind of software program not only to create databases but also proc
 * All values in a column are of the same kind (data type)
 * Each column has a unique name
 * The order of the columns is unimportant
-* Te order of the rows is uneimportant
+* The order of the rows is unimportant
 * No two rows can be identical (if we take all rows together entirely, they cannot be identical with other rows in the table - that's why we need a primary key or composite key, they make the specific row unique) - When all values of row a considered together, there must be something unique about the row, not two rows can be identical to each other!!!
 
 ![Simple](./images/sample-relation.png)
@@ -164,7 +164,7 @@ There are two problem here. In the first row the cell doesn't hold a single valu
 * A candidate key is called "candidate" because it has the potential to become the primary key
 * A candidate key is a unique 
 
-**Note:** Like in a presedential election where a candiate can become a president.
+**Note:** Like in a presidential election where a candiate can become a president.
 
 #### A Primary Key
 * A primary key (the main identifier for a relation and is a unique key) is a candiate key chosen to be the main key for the relation
@@ -177,7 +177,7 @@ There are two problem here. In the first row the cell doesn't hold a single valu
 * Surrogate key values have no meaning to users and are usually hidden on forms, queries, and reports
 * A surrogate key is often used in place of composite primary key
 
-**Note:** Surrogate Key is intentially added as a database designer for a purpose of serving of serving as primary key. Often used when we don't have a column within a table that naturally server as a unique identifier as a primary key
+**Note:** Surrogate Key is intentially added as a database designer for a purpose of serving as primary key. Often used when we don't have a column within a table that naturally serve as a unique identifier as a primary key.
 
 ![Surrogate](./images/surrogate-key.png)
 ---
@@ -196,9 +196,9 @@ There are two problem here. In the first row the cell doesn't hold a single valu
 ![Foreign Key](./images/foreign-key.png)
 
 #### Null Values
-* A Null value means that no data exists
-    + You can thin of a null value as an empty cell in the table
-* This is different from a zeor, space, character, empty string, or tab character
+* A Null value means that no data exists (missing or unkonwn value)
+    + You can think of a null value as an empty cell in the table
+* This is different from a zero, space, character, empty string, or tab character
 * A Null is often ambiguous. It could mean...
     + The column value is not appropriate for the specific row
     + The column value has not been decided
@@ -273,6 +273,9 @@ Each cell within a table contains a single value, the values are atomic
 
 > In order to move from a lower Normal Form into higher Normal Form we need to break the relation apart into smaller relations. By breaking our original relation into these 3 relations we have removed all the partial dependencies, that is if I look at the non-key attributes in any of these 3 relations, I'll find that all of those non-key attributes are fully functionally dependent on the entire primary key. Look e.g. at the `Product` relation, if I know the `Product_ID` I also know the `Product_Description, Product_Finish, Unit_Price`
 
+### Partial Functional Dependency Example:
+Assume you have a table called, “OrderLines” that describes order lines, and the primary key is a composite primary key consisting of OrderID + ProductID, and you have ProductName and ProductCost stored in this table. ProductName and ProductCost are partial functional dependencies because they are functionally dependent on ProductID, but not OrderID. They need to be removed from the OrderLines table and placed in a parent table called Products with a primary key of ProductID. [Source](https://www.quora.com/What-is-the-difference-between-partial-and-transitive-dependency-in-database-management)
+
 ![Partial](./images/no-partial-dependencies.png)
 
 **Note:** But we still have another problem in our `Order` relation we have the so-called transitive dependency. In order for our relational design to be in 3rd Normal Form we need to eliminate this transitive dependency. 
@@ -292,7 +295,7 @@ Each cell within a table contains a single value, the values are atomic
 * SQL is not a programming language, but rather is a data sub-language
 * SQL is comprised of
     + A data defintion language (DDL)
-        - Used to define and manage databse structures
+        - Used to define and manage database structures
             + Create database objects
     + A data manipulation language (DML)
         - Data defintion and updating
