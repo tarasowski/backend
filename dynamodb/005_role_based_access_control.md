@@ -305,5 +305,5 @@ create table t_foo (
     -- other columns ...
 );
 ```
- 
+Read more [here](https://www.xaprb.com/blog/2006/08/18/role-based-access-control-in-sql-part-2/)
 
