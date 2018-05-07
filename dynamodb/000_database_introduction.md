@@ -1074,7 +1074,128 @@ WHERE S.SID = SC.SID AND SC.ClassNumber = C.ClassNumber;
 2. Example: One to many recursive relationship this is a referral relationship. Each customer might refer many other customers to us, but each customer is refered by a max. one other customer. This is 1:N recursive relationship
 3. Example: N:M in which a doctor might treat many other doctors, while each doctor might be treated by many other doctors as well. This is conceptually a N:M recurisive relationship
 
+## 1:N Example
+
+The most common type of relationship is called a one-to-many relationship. Here, one instance of an entity can relate, or be attached to, many instances of another entity. In our sample schema, the Auto entity can have only one auto manufacturer. However, an auto manufacturer can produce many automobiles. Therefore, we say that the relationship from Auto Manufacturer to Auto is a one-to-many relationship. [Source](http://www.joinfu.com/2005/12/managing-many-to-many-relationships-in-mysql-part-1/)
+
+## N:M Example
+
+A many to many relationship is realized between two entities when either entity may be associated with more than one instance of the other entity. For example, imagine the relationship between an Auto (as in car) entity and an AutoFeature entity representing any of the myriad options a car may come with. In this case, we know that any particular automobile can have many features. Likewise we know that a specific automobile feature, say power windows, may be in any number of automobiles. [Source](http://www.joinfu.com/2005/12/managing-many-to-many-relationships-in-mysql-part-1/)
+
+* An associative entity is a term used in relational and entity-relationship theory. A relational database requires the implementation of a base relation (or base table) to resolve many-to-many relationships. A base relation representing this kind of entity is called, informally, an **"associative table"**. 
+
+* An associative (or junction) table maps two or more tables together by referencing the primary keys of each data table. In effect, it contains a number of foreign keys, each in a many-to-one relationship from the junction table to the individual table. The PK of the junction table is typically composed of the FK columns themselves. [Read more](https://en.wikipedia.org/wiki/Associative_entity)
+
+#### An associative entity (using Chen Notation)
+![Associative Entity](https://upload.wikimedia.org/wikipedia/en/1/14/Associate_Entity.png)
+
+---
+
+![Mapping](https://upload.wikimedia.org/wikipedia/commons/d/d7/Mapping_table_concept.png)
+
+---
+![Many-to-One](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Junction_Table.svg/996px-Junction_Table.svg.png)
+
+
+---
+
+What exactly is a many-to-many relationship? When your user tries to explain to you how a pair of business objects are related he might say "many of these can be related to many of those, and many of those can be related to many of these." **The solution is to create a new table which will act as the 'many' in two 'one-to-many' relationships, with each of the original tables acting as the 'one'. This is shown in the following diagram, with the new table identified as 'X'.**
+
+![One to many](https://www.tonymarston.net/php-mysql/many-to-many-03.png)
+
+> Table 'X' is sometimes referred to as a 'link', 'intersection' or 'xref' (cross-reference) table [Source](https://www.tonymarston.net/php-mysql/many-to-many.html)
+
+
 # Database Lessons #6 of 8 - Database Administration
+
+* A signle database can server many types of requests simultaniously.
+* Three of the most critical database administration functions are:
+    1. Concurrency control: 
+        + People or applicaitons may try to update ht esame information at the same time.
+        + Interdependency: Changes requested by one user many impact others (use the same information)
+        + Concurrency control ensures that one user's actions do not adversely impact another user's actions. **The objective of currency control of the database is to ensure that the actions of the users who maybe tries to access the same data at the same time are not going to impact each other.**
+        + At the core of concurrency is accessibility: In one extreme, data become inaccessible once a user "touches the data" everything is blocked until he/she finished to read/write data.
+        + In the other extereme, data are always readable: The data are even readable when they are locked for update.
+    2. Security
+    3. Backup and Recovery
+![Processing](./images/database-processing.png)
+
+## The cocept of database transaction - Atomic Operations
+
+* A database transaction typically involves several operations
+* These operations are **atomic** and are sometimes called **logical units of work (LUW)**
+* Before a transaction is committed to the database, all LUW must be successfully completed
+    + If one or more LUW is unsuccessful, a **rollback** is performed and no changes are saved to the database
+
+> A transaction is a series of operations that needs to be performed against a database (series of SQL commands)
+
+![Transactions](./images/transaction-example.png)
+
+**Note:** In the example above at the 3rd step an error occurs `FULL` perhaps the database is running out of space and therefore not able to add any additional orders to the database. Now if we stop at this point, we have introduced several anamolies to our database, if we have to stop without undoing the changes we have made, than these anomalies will cause problems for this organisation. If all steps are treated as atomic, any changes that have been made will be undone if the error occurs during the exection of the transaction.
+
+![Rollback](./images/transaction-rollback.png)
+
+## Concurent Processing Example
+
+Both of the users are trying to access a database table at the same time. User A makes a request to read `item 100`, while at the same time User B makes a request to read `item 200`. User A makes a request to change the value associated with `item 100`, and at the same point in time User B makes a request to change `item 200`. There results of User A and B needs to be written in the table both simultaneously. 
+
+**Note:** Despite the fact that those user request are arriving simultaniously the database server must process them in a sequential fashion (see the example below - this order is chosen by **RDBMS**)
+
+![Concurrent](./images/concurrent-processing.png)
+
+### Lost Update Problem
+
+* If two or more users are attempting to update the same datum at the same time, it is possible for one update to overwrite the other update. 
+
+**Notice:** In this example the item count should be 2 (left, since the User a has sold 5 and the User B has sold 3). But since the operations are happening concurrently, there is no lock or anything else the data will be overwritten and we'll get 7 as the total sum and not 2 as it should be.
+
+![Lost Update](./images/lost-update.png)
+
+## Concurrency Issues (during an execution of a transaction)
+* Dirty reads
+    + The transaction reads a modified record that has not yet been committed to the database. Will read a record from another user those changes has not been comitted to the database (a database is informed to made a change but the db has not yet made that change)
+* Incosistent reads
+    + The transaction re-reas a data set and finds that the data have changed. 
+* Phantom reads
+    + The transaction re-reads a data set and finds that a new record has been added
+
+## Resource Locking
+* To avoid concurency issues (LOST UPDATE PROBLEM), **resource locking** is used to disallow transactions from reading, updating, and/or writing to a data set that is in use. 
+* When resource locking is in place the data that is being used by a user, is temprorarilty locked until the the transaction is finished. There are two main locks:
+    + Implicit locks: are issued automatically by the DBMS bases on an activity
+    + Explicit locks are issed by users requiesting exclusive rights to specified data
+        + Table locks
+        + Row locks
+        + Column locks
+        + Cell locks
+
+**Note:** Any users that are trying to attempt the data when they are locked, they will be simply put in the `wait state` added to the queue and their requests will be proceeded after the unlock. 
+
+![Locking](./images/locking-strategy.png)
+
+## Serializable Transactions (philosophical orientation)
+* When two or more transactions are processed concurrently, the restult in the database should be logically consistent with the results that would have been achieved had the transactions been processed in an arbitrary serial fashion. 
+* A schema for processing concurrent transactions in this way is said to be serializable. 
+
+**Example:**
+A + B = C
+B + A = C
+
+## Deadlock
+Using a locking strategy can introduce certain new problems:
+
+* As  a transaction begins to lock resources, it may have to wait for a particular resource to be released by another transaction. One transaction locks a resource that another transaction needs to complete it's task
+* On accasion, two transactions may indefinitely wait on each noather to release resources
+    + This condition is known as deadlock
+
+![Lock](./images/lock-example.png)
+
+A in wait state for pencils to be released. B in wait state for paper to be released. These two transactions would then wait for each other indefinetely!!!
+
+![Lock](./images/lock-details.png)
+
+Min. 35:58
+
 
 
 
