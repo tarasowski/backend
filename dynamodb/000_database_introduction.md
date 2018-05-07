@@ -1194,7 +1194,127 @@ A in wait state for pencils to be released. B in wait state for paper to be rele
 
 ![Lock](./images/lock-details.png)
 
-Min. 35:58
+**Note:** DBMS must incorporate mechanism to avoid the deadlock situation.
+
+## Optimistic Locking versus Pessimistic Locking
+
+* Optimistic Locking (changes will succeed and no currcurrency control problems will arise - Many SELECts, Few INSERTs, UPDATE or DELETES - not that many updates to the data, most of the requests are reads)
+    + Read data
+    + Process transaction (initiate updates)
+    + Issue update (update is recored)
+    + Lock for conflict (lock and the writing start to happen)
+    + If no conflict occured (check the database if conflicts/error occured)
+        - THEN commit transaction (changes will become permament)
+    + ELSE rollback and repeat transaction (we undo all of the steps and try to repeat it again)
+
+* Pessimistic Locking (we assume a concurrency control problem may arise - many INSERTS, UPDATEs, or DELETEs - data is frequently updated)
+    + Lock required resources
+    + Read data
+    + Process transaction (making updates or modificatinons to the database)
+    + Commit changes (we add the changes)
+    + Release locks
+
+**Note:** We don't need to check if conflict occurs we simply commit the changes directly. Ther reason for that is that all the required resources are locked prior any updates or modifications are made. If Pessimistic strategy is used it's much more likely that other users will put into the `wait state` they have to wait inline to access the resources in the database to complete their transaction and it will slow the overall transaction of the database.
+
+## Consistent Transactions
+
+* Consistent transactions are often referred to by the acronym ACID:
+    + Atomic
+    + Consistent
+    + Isolated
+    + Durable
+
+### ACID: Atomic
+* An atomic transaction is one in which all of the database actions occur or none of them does.
+* A transaction consists of a series of steps. Each step must be successful for the transaction to be saved
+* This ensures that the trnasaction completes everything it intended to do before saving the changes
+
+**Note:** It helps to avoid data anomalies!
+
+### ACID: Consistent
+* A transaction is **consistent** if no other transactions are permitted on the records until the current transaction finishes it tasks. (other transactions are disallowed when the transaction is on the way)
+* This ensures that the transaction integrity has statement level consistency among all records. The consistency can be achieved through **database locks.**
+
+### ACID: Isolation
+
+* Within multisuer database environemnts, different transactions may be operating on the same data at the same time
+* As such, the sequencing of uncommitted updates, rollbacks, and commits continuously changes the data content
+* The ANSI SQL standard defins four isolation levels that specify which of the concurrency control problems are allowed to occur:
+    1. READ UNCOMMITTED (least restrictive)
+    2. READ COMMITED
+    3. REPEATABLE READ
+    4. SERIALIZABLE (most restrictive - users have to wait long periods of time)
+
+### ACID: Durable
+
+* A durable transaction is one in which all committed changes are permanent
+
+**Note:** In a general sense, a commit is the updating of a record in a database. In the context of a database transaction, a commit refers to the saving of data permanently after a set of tentative changes. A commit ends a transaction within a relational database and allows all other users to see the changes.
+
+## Cursors
+* A cursor is a pointer into a set of rows that is the result set (the rows that we get returned after SQL operation) from a SQL SELECT statement
+* Result sets can be very large, so applications and websites often cannot work with the entire result set as a single unit
+* Cursors allow a result set to be processed one row at a time
+
+```sql
+DECLARE CURSOR LargePurchases AS SELECT *
+FROM Sale
+WHERE purchasePrice >= 10000;
+``` 
+
+* There are two major types of cursors:
+    1. Forward-only cursors (non-scrollable)
+        + Rows fetched serially from the start to the end of the cursor (iterate one row of the time - from first to the last rows each row till the end of the result set)
+        + Rows are not retrieved from the database until they are fetched
+            * The effects of any INSERT, UPDATE, or DELETE statements that affect rows in the result set are visible as the rows are fetched from the cursor
+        + The cursor cannot be scrolled backward
+            * Changes made to a row in the database after the row has been fetched are not visible through the cursor
+    2. Scrollable cursors
+        + The cursor can scroll both forward and backward through the result set as needed to examine rows (for application programm or data-driven website to examine the rows)
+
+            * **Static cursors (snapshot cursor)**: 
+                + The complete result set is retrieved and stored in a temprorary table when the cursor is opened. The data in the result set always appear as they did at the moment when the cursor was opened.
+                + Any changes made to the underlying data (e.g. via INSERT, UPDATE, or DELETE statements) are not visible through the cursor (because we are not looking into the real data anymore, the static cursor uses the data from the temporary table)
+                + Static cursors consume comparatively few system resources while scrolling
+
+            * **Keyset cursors**:
+                + The keys for the rows (e.g. primary keys) in the result set are retrieved and stored in a temporary table when the cursor is opened
+                + When the cursor scrolls to a row, the key is used to fetch the current data values for that row from the database
+                    * Updates made to a row after the cursor was opened are therefore visible through the cursor
+                    * Rows in the result set that have been deleted after the cursor was opened can also be identified through the cursor
+                    * **New rows using the INSERT statement are not visible to the cursor. The reason for this is that the key values are fetched and stored at the point in time when the cursor is opened, therefore any new rows their primary key values are not going to be included into my temporary table**
+
+            * **Dynamic cursors**:
+                + All changes made to the rows in the result set are visible when scrolling through the cursor
+                    * All UPDATE, INSERT, and DELETE statements amde by all users are visible
+                + The data values, rows, and order of rows in the result set can change on each fetch
+                + Opposite of a static cursor
+                + Dynamic cursors consume a comparatively large quantity of system resources while scrolling
+
+## Database Security
+
+![Security](./images/database-security.png)
+
+* Processing rights define:
+    + Who is permitted to perfomr certain actions
+    + When certain actions are allowed to be performed
+* Teh individuals performing these activities have full responsibility for the implications of their actions
+* Individuals are authenticated via a username and a password
+* Database users are known both as an individual and as a member of one or more roles
+    + Access and data rights/privileges may be granted to an individual and/or a role
+* Permissions grant, deny or revoke a user's ability to interact with specific database objects
+* Users possess the compilation of permissions granted to the individual and all the roles for which they are members
+    + A user receives the union of all of the permissions granted, denied, or revoked by their indiviaul persmissons and role persmissions
+    + if a conflict exists between individual and role permissions, then:
+        - A "deny" persmission at any level always takes precendence
+        - Aside from "denies", role permissions take precedence over indivudual permissions
+    
+Min. 105.31
+
+
+
+
+
 
 
 
