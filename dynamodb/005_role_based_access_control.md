@@ -307,3 +307,61 @@ create table t_foo (
 ```
 Read more [here](https://www.xaprb.com/blog/2006/08/18/role-based-access-control-in-sql-part-2/)
 
+---
+# Case Study: Build yourself a simple CRM from Scratch
+
+[Source - Build yourself a simple CRM from scratch in PHP and MySQL](https://medium.freecodecamp.org/building-a-simple-crm-from-scratch-in-php-58fef061b075)
+
+We’ll be creating a simple CRM system for salespeople to:
+
+* Access their tasks
+* View their leads
+* Create new tasks for each lead
+* Create new opportunity
+* Close a sale
+
+Sales managers will be able to:
+
+* Manage all customers
+* Manage sales team
+* View current sales activities
+
+[You can find all demo files here](https://github.com/phpcontrols/phpgrid-custom-crm)
+
+Here is a list of the essential components of the CRM:
+
+* Leads: initial contacts
+* Accounts: Information about the companies you do business with
+* Contact: Information about the people you know and work with. Usually, one account has many contacts
+* Opportunities: Qualified leads
+* Activities: Tasks, meetings, phone calls, emails and any other activities that allow you to interact with customers
+* Sales: Your sales team
+* Dashboard: CRM dashboards are much more than just eye candy. They should deliver key information at a glance and provide links to drill down for more details.
+* Login: Salespeople and managers have different roles in the system. Managers have access to reports and sales pipeline information.
+
+We will start by creating our custom CRM database. The main tables we will be using are:
+
+* contact — contains basic customer data
+* notes — holds information collection from Contact by sales people.
+* users — information about sales people
+
+![Tables](https://cdn-images-1.medium.com/max/1600/0*gJgr4DrRJ3O_OEYr.)
+
+* **The Contact** table contains basic customer information including names, company addresses, project information, and so forth.
+* **The Notes** table stores all sales activity information such as meetings and phone calls.
+* **The Users** table holds login information about users of the system such as usernames and passwords. Users can also have roles, such as Sales or Manager.
+* All **other tables** are lookup tables to join to the three main relational database tables.
+    + contact_status — contains contact status such as Lead and Opportunity. Each indicates a different stage in a typical sales cycle
+    + task_status — the task status can be either Pending or Completed
+    + user_status — a sale person can be Active or Inactive
+    + todo_type — a type of task either Task or Meeting
+    + todo_desc — description of a task such as Follow Up Email, Phone Call, and Conference etc.
+    + roles — a user can be either a Sales Rep or a Manager
+
+![Design](https://cdn-images-1.medium.com/max/1600/0*qExvrxjr5WZERLEO.)
+
+**Note:** The key symbol in each table represents the table primary key. The magnifying glass indicates foreign key linking another table in the database. Sometimes we call it the “lookup” table.
+
+[Checkout install.sql file here](https://github.com/phpcontrols/phpgrid-custom-crm/blob/master/db/install.sql)
+
+
