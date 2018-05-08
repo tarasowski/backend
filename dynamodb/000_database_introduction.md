@@ -1525,13 +1525,68 @@ In this example we just needed to explore 3 rows in the table to find the name i
 ### Clustered vs. Non-Clustered Indexes
 * In a clustered index, the actual data rows that comprise the table are stored in the leaf level of the index (it will improve the search time because the database don't need to follow the pointer)
 * The indexed values are stored in a sorted order (either ascending or descending)
-    + This means that there can be only one clustered index per table. PK columns are good candiates for clustered indexes
+    + This means that there can be only `one clustered index per table`. PK columns are good candiates for clustered indexes
 
 ![B-tree](./images/cluster-b-tree.png)
 
-**Note:** At the leafs we are not only storing pointers to the rows of the database table, but instead we are storing the data rows itselfs. 
+**Note:** At the leafs we are not only storing pointers to the rows within the database table, but instead we are storing the data rows itselfs. In a clustered index we are actually braking the table apart and storing it's rows in a specific way such as that we can maximise the search performance.
 
-Min. 27:42
+
+### Nonclustered Indexes
+* In a nonclustered index, the leaf nodes contain the values from the indexed column(s), along with a row locator which points to the location of the actual data row
+    + The actual data row might be stored in a leaf node of a clustered index or in a heap (a heap is just an ordinary table that does not use a clustered index)
+* Nonclustered indexes are slower than clustered indexes because the DBMS must follow a pointer to retrieve the actual data row
+**Advantages of Nonclustered Index**
+* Unlike clustered indexes, a table can have more than one nunclustered index
+* The leaf nodes of a nonclustered index can optionally contain values from non-indexed columns
+    + Using this approach, the DBMS may be able to answer a query without ever needing to look at the actual data row itself! e.g. I have a product table where I have indexed the product name attribute, but imagine I have included also the product price as a part of nonclustered index. Now if I ran a query to find a price, the db can locate the product within the index and will know the price of the product without look into the db table itself. 
+
+### Other Types of Indexes - Bitmap Index
+* In a bitmap index, a table is created with the values of one attribute listed along the horizontal axis (student grade) and the values of another attribute along the vertical axis (student id). 
+* A bit value (1 or 0) in each cell within the table indicates wheter the value of one attribute is associated with a value of the other attribute
+* Bitmap indexes work best when one or both of the attributes has only a small number of unique values
+* When used properly, a bitmap index can require only 25% of the disk space and can be 10 times faster than a tree-based index.
+
+![Bitmap Example](./images/bitmap-index.png)
+
+**Note:** If I write a query give me the student id of all of the students who received A, the database can use the Bitmap index such as one depicted (dargestellt) here in the example above and perform bitwise comparisons, which are computationally extremely fast.
+
+### Other Types of Indexes - Hashed Index
+* In a hashed index, a hashing algorithm is used in order to convert an input value (or input data) into a location within an index (such as a B-tree index), which in turn contains or points to the actual data row
+* The hashing algorithms typically work by using prime numbers as input along with something called a modulo operation, which returns a remainder in order to generate a location within an index.
+* Hashed indexes are useful in serveral situations, including:
+    - In parallel processing or distributed database environment
+    - When a need exists to index complect objects (such as images)
+
+![Hashing Index](./hashing-index.png)
+
+**Note:** We begin by running an image through the hash algorithm and the result of that operation is a location within an index. We run the hash algo and it gives us the location of an index of 5, we can then traverse our balance tree till we get down to index location 5, which then tells us to look at row 9 of the actual datatable in data we are interested.
+
+### Index Considerations
+* Since an index can consume a lot of storage space, indexes should only be created on columns that are involved in common queries
+    + This means that a database designer must have knowledge of the queries that the DBMS will commonly process in order to design an indexing strategy
+* Indexes should be used sparingly (sparsam) on tables that are updated frequently
+    + Whenever an INSERT, UPDATE, or DELETE operation affects an indexed column, the index for the column must be rebuilt
+    + Rebuilding an index takes time, and an index is rebuilt often can actually slow the overall performance of the database
+
+### Indexing Guidelines
+* If a table is heavily updated, index as few columns as possible
+    + Do not over-index heavily updateed tables
+* If a table is updated rarely, use as many indexed columns as necessary to achieve maximum query performance
+* Clustered indexes are best used on columns that do not allow null values and whose values are uniuq
+    + PK columns are therefore good targets for clustered indexes
+* The performance benefits of an index are related to the uniquess of the values in the indexed column
+    + Index performance is poor when an index column contains a large proportion of duplicate values
+    + Index perfromance is best when an indexed column contains unique values
+
+# Database Lesson #8 of 8 - Big Data, Data Warehouses, and Business Intelligence Systems
+
+[Source - Final Video](https://www.youtube.com/watch?v=4WX2MZvmzho)
+
+
+
+
+
 
 
 
