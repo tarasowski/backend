@@ -82,7 +82,25 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [YAML Templates](https://github.com/mittyo/javascript-pocketguide/blob/master/serverless/014_yaml-templates.md)
 * [Everything you need to know about CloudFormation](https://github.com/mittyo/javascript-pocketguide/blob/master/serverless/015_cloudformation.md)
 
-## Todo (need to read / check the stuff below)
+---
+## Topics covered:
+
+* [x] JavaScript/NodeJS
+* [x] Testing
+* [x] Compute (Lambda)
+* [x] Network communication (API Gateway + GraphQL)
+* [x] Severless patterns
+* [x] Authentication & Authorization
+* [x] Security IAM
+* [x] Messaging Layer (SNS + SQS needs to be done)
+* [ ] Storage Layer
+    + Relational Databases
+    + NoSQL Databases (document storage)
+* [ ] Deployments
+* [ ] Computer Science 101
+---
+
+## Todo 
 * [ ] **Deployments & Going Live**
     + [Cloudformation (production deployment / partial deployment)](https://acloud.guru/learn/aws-cloudformation)
     + CI/CD (github push, automation etc.)
