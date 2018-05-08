@@ -94,8 +94,8 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [x] Security IAM
 * [x] Messaging Layer (SNS + SQS needs to be done)
 * [ ] Storage Layer
-    [x] Relational Databases
-    [ ] NoSQL Databases (document storage)
+    * [x] Relational Databases
+    * [ ] NoSQL Databases (document storage)
 * [ ] Deployments
 * [ ] Frontend (Vue/React)
 * [ ] Computer Science 101
