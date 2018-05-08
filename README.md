@@ -97,6 +97,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + Relational Databases
     + NoSQL Databases (document storage)
 * [ ] Deployments
+* [ ] Frontend (Vue/React)
 * [ ] Computer Science 101
 
 ---
