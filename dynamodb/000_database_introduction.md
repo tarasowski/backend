@@ -1302,19 +1302,236 @@ WHERE purchasePrice >= 10000;
 * Individuals are authenticated via a username and a password
 * Database users are known both as an individual and as a member of one or more roles
     + Access and data rights/privileges may be granted to an individual and/or a role
-* Permissions grant, deny or revoke a user's ability to interact with specific database objects
+* Permissions grant, deny or revoke a user's ability to interact with specific database objects (such as tables)
 * Users possess the compilation of permissions granted to the individual and all the roles for which they are members
-    + A user receives the union of all of the permissions granted, denied, or revoked by their indiviaul persmissons and role persmissions
+    + A user receives the union of all of the permissions granted, denied, or revoked by their indiviaul permissons and role permissions
     + if a conflict exists between individual and role permissions, then:
         - A "deny" persmission at any level always takes precendence
-        - Aside from "denies", role permissions take precedence over indivudual permissions
+        - Aside from "denies", role permissions take precedence over individual permissions
+
+
+![Permissions](./images/database-permissions.png)
+
+* SQL Server Database roles can be either fixed or flexible:
+    + Flexible roles are custom roles that are defined by the database administrator
+    + Fixed roles are predefined roles to which database users can be assigned
+
+![Roles](./images/roles-examples.png)
+
+## Database Backup and Recovery
+* Common causes of database failure
+    + Hardware
+    + Programming bugs
+    + Human errors/mistakes
+    + Malicious actions
+* Since these issues are impossible to completely avoid, recovery procedures are essential
+
+**Note:** Database needs to be backedup as often as possible
+
+### Reprocessing (used in very small database implementations)
+* In reprocessing, all activities since the last backup was performed are redone by humans
+* This is a brute-force technique
+* This procedure is costly in the effort involved in re-entering the data
+* This procedure is risky in that human error is likely and in that paper record-keeping may not be accurate
+
+### Recovery via Rollback and Rollforward (used in enterprises)
+* Most databases management systems provide a mechanism to record activities into a log file
+* The log file is used for recovery via rollback or rollforward
+    + To undo a transaction (rollback) the log must contain a copy of every database record before it was changed
+        - Such records are called before-images
+        - A transaction is undone by applying before-images of all its changes to the database
+    + To redo a transaction (rollforward) the log must contain a copy of every database record (or page) after it was changed
+        - These records are called after-images
+        - A transaction is redone by applying after-images of all its changes to the database
+
+Here you can see a log file and all data that needs to be used for rollbacks/rollforwards. We can use either before-image or after-image.
+![Rollback](./images/transaction-log.png)
+
+#### Rollback
+
+* Log files save activities in sequence order
+* It is possbile to undo activities by applying before-images to reverse database changes
+* This is performed to correct/undo errorneous or malicious transaction(s) after a database is recovered from a full backup
+
+#### Rollforward
+
+The activities in the log file are recorded in sequence in order that which they were applied to the database.
+* Activities recorded in the log files may be replayed
+* In doing so, all activities are re-applied to the databse
+* This procedure is used to restore database data by adding transactions to the last full backup
+
+## Distributed Database Processing
+* A database is distributed when it is
+    + Partitioned
+    + Replicated
+    + Both partitioned and replicated
+* This is fairly straightforward for read-only replicas, but it can be very difficult for other installations
+
+![Distribution](./images/database-distribution.png)
+
+1. The database is stored on a single processing computer (Nonpartitioned, nonreplicated)
+
+2. The database is partitioned across two different computers. Tables W, X are stored on the Computer 1 and tables Y, Z are stored on the computer 2
+
+3. The database is replicated across two different computers. Computer 1 stores the whole DB (Copy 1) and computer 2 stores the whole DB (Copy 2)
+
+4. The database is partitioned and replicated at the same time. We have a replica of the table Y on both computers and partition W, X on the 1st computer and Z on the second computer
+
+## Object-Relational Database Management
+* Object-oriented programming (OOP) is bases on objects, and OOP is now used as the basis of many computer languages
+* Just like entities in the database, object classes have
+    + identifiers
+    + Properties: data items associated with the object
+    + Methods: algorithms that allow the object to perform tasks
+* The only substantive difference between entity classes and object classes is the presence of methods
+
+**Note:** Since OOP is a so strong paradigm, developers have a need to save objects on a storage device.
+
+* Object persistence (objects that can be retrieved for the future needs) means that values of object properties are stored and retrievable 
+* Object persistence can be achieved by various techniques
+    + A common technique is database technology
+    + Relational database can e used, but require substantial programming
+* In order to store objects in the database, there is a special Object-Oriented DBMSs (OODBMSs) have been developed, but have not achieved widespread commercial success
+    + It would be too expensive to trnasfer ecisitng data from relational and other legacy databases
+    + Therefore, OODBMSs are typically considered unjustifiable from cost perspective
+
+* The current SQL standard includes several object-oriented features
+    + User-defined structured types
+    + Inheritance
+
+```sql
+CREATE TABLE policies (
+   policy_id          int,
+   date_issued        datetime,
+
+   -- // other common attributes ...
+);
+
+CREATE TABLE policy_motor (
+    policy_id         int,
+    vehicle_reg_no    varchar(20),
+
+   -- // other attributes specific to motor insurance ...
+
+   FOREIGN KEY (policy_id) REFERENCES policies (policy_id)
+);
+
+CREATE TABLE policy_property (
+    policy_id         int,
+    property_address  varchar(20),
+
+   -- // other attributes specific to property insurance ...
+
+   FOREIGN KEY (policy_id) REFERENCES policies (policy_id)
+);
+``` 
+
+* Any database that supports the SQL standard can therefore be considered an object-relational database
+
+# Database Lesson #7 of 8 - Database Indexes
+
+* Indexes are one of the most important and useful tools for achieving high performance in a relational database
+    + Many database administrators consider indexes to be the SINGLE MOST CRITICAL TOOL for imporoving database performance
+* An index is a data structure that contains an ORGANIZED copy of some of the data (one or more tables in the database) from one or more existing database tables
+    + Like an index at the back of a textbook, a database index provides an organizational framework that the DBMS can use to quickly locate the information that it needs
+    + This can vastly imporove the speed with which SQL queries can be answered
+
+
+## Indexes - An Intutitive Overview
+
+### Linear Search Strategy
+* Consider the randomly ordered table of names shown to the right below
+* If we start at the top and examine one row at a time, how many rows will we need to examine before we find a randomly selected name?
+    + It depends on the name, if e.g. we would choose Mishra, we'll start at the top and find the name after inspecting only 1 name, if we would choose Ngo we need to inspect 16 names.
+* What is the average search time if this process is repeated many times?
+    + A metric to measure the the speed and performance of the database we can use to see the performance of the operations.
+    + average = (n+1)/2 (n is the number of rows in the table) 
+    + in this table (22 + 1)/2 = 11.5 rows to find a name we are interested in
+* What is the maximum search time (linear search strategy)?
+    + maximum = n (number of rows)
+    + maximum = 22
     
-Min. 105.31
+![Example](./images/names-example.png)
+
+### A Binary Search Strategy
+* Consider the aphabetically ordered table of names shown below
+* If our objectivie is to minimize the number of rows that need to be examined in order to find a randomly chosen name, what search process could we use?
+* What is the average search time if this process is repeated many times?
+    + average = log2(n) - 1 (where n is the number of rows)
+    + average = log2(22) - 1 = 3.5 rows
+* What is the maximum search time?
+    + maximum = log2(n)
+    + maximum = log(22) = 4.5 maximum number of rows to locate the name we are looking for
+
+![Example](./images/alphabetical-example.png)
+
+**Case:** Imagine we'll choose a name Salehian from the example above. The strategy involved in the binary search is described divide and conquer. The binary search starts to search in the middle of the table (beginning the search of row 12 - Mishra). Because we know the names are in alphabetical order, we now know that the row we are seeking is below row 12 in the table. After examining a single row we are able to aliminate a half of the possibilities, of where a randomly selected name may appear! We next repeat the process again, we choose a row that lies in the middle of our selected rows, we might look at the row that is at location row 6 among our remaining set of rows. The second location would be the row that contains the last name Spievak. Because the names are in alphabetical order we are now able to eliminate Spievak and all the rows that follow. 
+
+After inspecting just two rows in the table we have been able to narrow down a set of possibilities to where our target name resides to just 5 rows. We then process with selecting again and choose a name in the middle and we would ask again the question `is this the row that we are seeking`? Yes this the row we are seeking, therefore we have completed the process.
+
+In this example we just needed to explore 3 rows in the table to find the name in which we are interested.
+
+![Example](./images/binary-search-new.png)
+
+**Note:** The purpose of this exercise was to demonstrate the massive gain in search performance that we can achieve if we empose an organisational structure on a data through which we are searching. In this case the organisational data structure was alphabetizing the list of names.
+
+## Index Concepts
+* Indexes are created on one or more columns in a table
+    * For Example:
+        1. An index is created on a PK column
+        2. The index will contain the PK value for each row in the table, along with each row's ordinal position (row number) within the table (the PKs are stored in a numerical order)
+        3. When a query involving the PK is run, the DBMS will find the PK value within the index rather than the table itself to find the primary key value using the sort of binary search strategy. The DBMS will then know the position (ordinal position) of the row within the table > it's like looking at the index of the end of the textbook and there will be a pointer which will tell you at which page you should look for your desired information
+        4. The DBMS can then quickly locate the row in the table that is associated with the PK value
+* Without an index, the DBMS has to perform a table scan in order to locate the desired row(s)
+
+* An index can be created on most, but not all columns
+    + Whether an index can be created on a column depends on the column's data type
+        * Columns with large object (LOB) data types cannot be indexed directly without employing additional mechanisms (such as a hash algorithm). These LOB data types include (in SQL server:
+            + text
+            + ntext (unicode text)
+            + image
+            + varchar(max)
+            + narchar(max) (variable lenght character string - unicode)
+            + varbinary(max) (store binary encoded data in the database)
+
+* Creating an index increases the amount of storage space required by the database
+    + This occurs because an index contains a copy of some of the data in a table
+    + To estimate the storage space requirements of an index, use the following formula:
+        Number of rows in table * Average number of bytes required per row for the indexed column(s)
+    + For example:
+        - We want to create an index on two columns, lastName and deptId, where:
+            + Balues stored in lastName require an average of 16bytes/row
+            + Values stored in deptid require an average of 2bytes/row
+            + The table contains 98,000 rows
+        - The index will require about 98000 * (16 +2) = 1764000 bytes of storage space
 
 
+![Index Example](./images/index-actual-table.png)
 
+**Note:** We can see here that we are simply storing the copy of our actual table. But now we can use binary search to locate any name just to inspect 3.5 names and it will contain a pointer to a row name we've been seeking.
 
+### Specific Type of Index Structure - B-Tree Index
+* The commonest type of index uses a B-tree (balanced tree) structure
+* B-trees use pointers and several layers of nodes in order to quickly locate desired data
+    * Root node (less granular)
+    * Intermediate nodes
+    * Leaf nodes (more granular)
+* When the DBMS processes a query which includes an indexed column, it starts at the root node of the B-tree and navigates downward until it finds the desired leaf
 
+![Tree index](./images/b-tree-index-example.png)
+
+**Note:** B-tree is a balanced tree the term comes from the objective when constructing the b-tree index is to subdivided the data as evenly as possbile.
+
+### Clustered vs. Non-Clustered Indexes
+* In a clustered index, the actual data rows that comprise the table are stored in the leaf level of the index (it will improve the search time because the database don't need to follow the pointer)
+* The indexed values are stored in a sorted order (either ascending or descending)
+    + This means that there can be only one clustered index per table. PK columns are good candiates for clustered indexes
+
+![B-tree](./images/cluster-b-tree.png)
+
+**Note:** At the leafs we are not only storing pointers to the rows of the database table, but instead we are storing the data rows itselfs. 
+
+Min. 27:42
 
 
 
