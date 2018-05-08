@@ -83,25 +83,26 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [Everything you need to know about CloudFormation](https://github.com/mittyo/javascript-pocketguide/blob/master/serverless/015_cloudformation.md)
 
 ## Todo (need to read / check the stuff below)
-* [ ] Deployments & going live
+* [ ] **Deployments & Going Live**
     + [Cloudformation (production deployment / partial deployment)](https://acloud.guru/learn/aws-cloudformation)
     + CI/CD (github push, automation etc.)
     + Here is an example how to CI/CD on AWS [Check this presentation](https://youtu.be/rPouVcJKWxM?t=2146)
-* [ ] Storage Layer - Databases
+* [ ] **Storage Layer - Databases**
     + [Storage Layer -Databases RDS, NoSQL, Warehousing (when to use aurora, dynamodb or redshift)](https://acloud.guru/learn/aws-dynamodb)
     + [Database Design and Relational Theory](https://www.amazon.com/Database-Design-Relational-Theory-Normal-ebook/dp/B007VRKQBS/ref=mt_kindle?_encoding=UTF8&me=)
     + [Database Design for Mere Mortals](https://www.amazon.com/Database-Design-Mere-Mortals-Hands/dp/0321884493/ref=sr_1_1?ie=UTF8&qid=1524835143&sr=8-1&keywords=database+for+mere+mortals)
     + [Six-Step Relational Database Design](https://www.amazon.com/Six-Step-Relational-Database-DesignTM-development/dp/1481942727)
     + [Domain Driven Design Patterns](https://www.amazon.de/Domain-Driven-Design-Reference-Definitions-Summaries/dp/1457501198/ref=sr_1_1?ie=UTF8&qid=1524835319&sr=8-1&keywords=eric+evans+domain+driven+design)
-* [ ] [Migration from Monolith to Serverless](https://www.youtube.com/watch?v=i2gEbw_jzfY)
+* [ ] **Migration from Monolith to Serverless**
+    + [Migration from Monolith to Serverless](https://www.youtube.com/watch?v=i2gEbw_jzfY)
     + [Yan Cui - All Posts](https://medium.com/theburningmonk-com/all-my-posts-on-serverless-aws-lambda-43c17a147f91)
-* [ ] Computer Science Basics
+* [ ] **Computer Science Basics**
     + [Systems analysis and design](http://www.w3computing.com/systemsanalysis/)
     + [Introduction to Computer Science and Programming](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/index.htm)
     + [Computer Networks and the Internet](https://www.edx.org/course/computer-networks-internet-kironx-fhlcnx)
     + [Algorithms & Data Structure](https://www.coursera.org/learn/algorithms-part1)
-* [ ] Coding & Patterns
-    + [Read code of open source projects such as React, Vue.js, Express - code quality of such a projects should be very good (many reviewers and clean code). Also Spectrum was recommended]
+* [ ] **Coding & Patterns**
+    + Read code of open source projects such as React, Vue.js, Express - code quality of such a projects should be very good (many reviewers and clean code). Also Spectrum was recommended
     + [Design Patterns: Elements of Reusable Object-Oriented Software](https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612)
     + SOLID need to find some good resources
 
