@@ -98,6 +98,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + NoSQL Databases (document storage)
 * [ ] Deployments
 * [ ] Computer Science 101
+
 ---
 
 ## Todo 
