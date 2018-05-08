@@ -1597,11 +1597,165 @@ In this example we just needed to explore 3 rows in the table to find the name i
 
 ![Operational vs. BI](./images/operational-bi-apps.png)
 
-BI application which go beyond basic reporting typicall rely on extract of organisational operational database, along with data acquired from other sources that can be aggregated and stored in the data warehouse.
+BI application which go beyond basic reporting typicall rely on extract of organisational operational database, along with data acquired from other sources that can be aggregated and stored in the data warehouse. Together the data is run through an ETL System, after it it can be added to the datawarehouse itself and BI tools will have this as a source of data.
 
-![Data Warehouse](./images/operational-bi-apps.png)
+![Data Warehouse](./images/datawarehouse.png)
 
-Min. 13:03
+### Problems with Operational Data
+* Dirty Data (grabage in -> garbage out)
+    + Example - "V" as a gender code (insead of "M" or "F")
+    + Example - "213" for Age (in years)
+* Missing values
+* Incostintent Data
+    + Example - data that have changed, such as a customer's phone number
+* Nonintegrated Data
+    + Example - data from two or more sources that need to be combined
+* Incorrect Format
+    + Example - time data stroed as hours when needed in minutes
+* Too much data
+    + Example - an excessive number of columns (if I construct a predictive model and it's 95 correct and it relies on 3 predictive variables in order to achieve that 95% accuracy, but I might improve the accuracy to 96% by adding 20 additional variables in most cases the additional complexity involved in order to achieve such as marginal gain would not be worth it, we prefer the simpliest model)
+
+**Note:** The parsimony principle is basic to all science and tells us to choose the simplest scientific explanation that fits the evidence. In terms of tree-building, that means that, all other things being equal, the best hypothesis is the one that requires the fewest evolutionary changes.
+
+### ETL Data Transformation
+* ETL = Extract (pulling data from various datasources), Transform (cleaining and processing the data in such as way that can be included into the warehouse), Load (taking the transformed, cleaned data and store it in the datawarehouse)
+    + Examples transforming a country code to a country name (US to United States)
+    + Customer email address dan@gmail.com and we want to store only the domain in the datawarehouse
+
+### Characteristics of a Data Mart
+
+Data Mart is the subset (a part of a larger group of related things.) of the organisational datawarehouse. Data Marts are constructed to support a specific need of the organisation, like to support a particular project or function within an organisation or a specific group of employees.
+
+* Web Log data
+* Sales data
+* Inventory
+
+![Data Mart](./images/data-mart.png)
+
+**Note:** We create data marts because not everyone need an access to all the information of the organisation. Someone who's working on product development, don't needs to access HR data.
+
+### Dimensional Databases
+* A non-normalized database structure used for data warehouses
+* May use slowly changing dimensions
+    + Values change infrequently: phone number, address
+* Used to track historical data
+    + Contain a Date or Time dimension
+
+**Note:** Normalized design allows us to fast data storage, but slow data retrieval (join operations). Non-Normalized Data Warehouse has slow data storage, fast data retrieval (the reason for that the data is preaggregated without normalization). The purpose of dimensional database is to implement data in non-normalized structure, data is mostly pre-aggregated so we can improve the query speed.
+
+![Database](./images/dimensional-database.png)
+
+The most common data model for the dimensional database is knows as a star schema. It's intersection between different tables (non-normalized) the intersection of those 3 values is a fact.
+
+![Star Schema](./images/star-schema.png)
+
+We have in this example two dimensions the customer dimension with the customer dimension in a form of a two-dimensional matrix. The value contained in each cell within this matrix then is fact and it expresses to us the quantity of a particular product that was purchased by a particular customer. 
+
+![Example](./images/two-dimensional-matrix-star.png)
+
+We have here customer (hor), products (vert), time (z-axis). The quantity of a given product that was purchased by a particular customer on a given time. This concept scales very easliy to higher dimensional spaces 4, 5 dimensions etc.
+
+![Example](./images/three-dimensional-matrix.png)
+
+### OLAP and Data Mining
+* Online Analytics Procesing (OLAP) is a technique for dnamically examining database data (in realtime ) and apply simple transformations such as grouping and simple arithmetic functions
+    + OLAP uses simple arithmetic functions such as Sum, Average, and Count
+* OLAP system produce an OLAP report, also known as a OLAP cube
+* An OLAP report uses inputs called dimensions and outputs called measures
+
+* Data Mining is a mathematecially sophisticated technique for analytzing database data
+    + Data mining uses sophisticated mathematical and statistical techniques (not just simple functions, as with OLAP)
+    + AI, ML, data technology, storage, statistics etc. are needed to run data mining
+    + Cluster analysis
+    + Decision tree analysis
+    + Regression
+    + Neural Networks
+    + Market Basket Analysis
+
+**Note:** We can create views to create common OLAP reports.
+
+### Big Data
+
+* The world is curerntly genreating many exabytes of new data every day
+    + 1 exabyte = 1,000,000 terabytes
+* Big data refers to the rapidly expanding amount of data being stored and used by organizations
+    + Large and complex datasets
+    * Difficult to process using traditional database management tools or traditional data processing applications
+    + Much of this big data is being generated by Web 2.0 applications
+* Big data presents many challenges
+    + Data capture, maintenance (curation), storage, search, transfer, analysis, visualization etc.
+
+### The NoSQL Movement
+
+* NoSQL is a movement toward using non-relational databses in order to support huge and highly distributes / highly replicated collections of data
+    + NoSQL = "Not only SQL"
+* There are many different non-relational database architectures involved in the NoSQL movement
+    + Key-value stores, wide columnar stores, document stores, graph-based stores, etc.
+* Collectively, these databases are often referred to as structured storage
+    + Simpler designs that relational databse
+    + Looser consistency models than relational databases
+    + Often do not provide ACID guarantees
+
+#### Structured Storage - Apache Cassandra
+* One of the most popular structured storage databse management systems is Apache Cassandra
+    + Uses a hybrid key-value / wide column architecture
+    + Originally created at Facebook, now open-source and free
+    + Cross-platform support (written in Java)
+    + Supports massively distributes environments
+    + Highly scalable and decentralized
+        - All nodes (servers) have the same role -> no signle point of failure
+    + Automatic data replication
+        - HIghly fault tolerant -> individual nodes can fail with no downtime
+    + Suports MapReduce (computational model for solving data processing problems)
+    + Used by CERN, Constant Contact, Digg, Instagram, Netflix, Reddit, Walmart, Twitter etc.
+
+#### Structured Storage - Cassandra Data Model
+* In a relational DBMS, related data fro an application are stored in a continer known as a databse or a schema which contains one or more tables
+* In Cassandra, related data for an application are stored in a container known as a keyspace which contains one or more column families
+    + Column families contain columns (not the same as in relational database)
+    + Columns are comprised of a name, a value, and a timestamp (when the data was changed)
+    + Related columns are stored in the same row
+    + Each row is identified by a unique row key
+    + Rows are not required to contain the same set or number of columns!
+    + There are no formal foreign key relationships between column families
+    + Column families cannot be joined using queries (i.e., join operations are not supported)
+
+![Cassandra](./images/cassandra.png)
+
+Note: In the example above we have two keyspaces store and blog. Keyspace is roughly analougous to a database in the relational world. Here we have two column families: user columns family and blog entry column family. In the user column family we have 3 rows within a `user column family` and each row represents a unique users within a blog key space, a user is represented as a collection as one or more columns and in the cassandra data model the numbe row columns per row can vary from row to row. 
+
+![Columns](./images/user-column-family.png)
+
+
+### Evenutal Consistency in Structured Storage Databases
+* In a structured storage architecture such as that used by Cassandra, data are commonly distributes and replicated across many nodes
+    + Requests for data can be handled by the nearest available node that is able to service the request
+* When a data item is updated on one node, it can take time for the update to cascade to other nodes within the cluster that contain a copy of the data
+    + If the data value is requested from one of these toerh nodes in the interim, it will be out-of-date
+* Eventual consistency is an consistency model used in replicated data environments which guarantees that if no new updates to a specific data item are made, eventually all requests for that data item will return the most up-to-date value
+    + The timestamps recorded during each data item update allow for the reconciliation of inconsistencies
+
+### The MapReduce Process (takes advantage of parallelization)
+* MapReduce is a programming model that relies on parallelization to perform data processing on huge datasets that are distributed across many servers
+* Conceptually, MapReduce involves two types of nodes (servers): master nodes and worker nodes
+* In MapReduce, processing problems are solved using two broad steps:
+    1. The Map step
+        - The master node divides the problem into a series of sub-problems, which are then assigned to and carried out by worker nodes
+    2. The Reduce step
+        - After completing their assigned tasks, the worker nodes pass their results back tot he master node. The master node then processes these results in order to produce the final answer to the processing problem
+
+![MapReduce](./images/map-reduce.png)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
