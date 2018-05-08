@@ -1583,6 +1583,27 @@ In this example we just needed to explore 3 rows in the table to find the name i
 
 [Source - Final Video](https://www.youtube.com/watch?v=4WX2MZvmzho)
 
+* Business intelleigence (BI) systems are informaiton systems that:
+    + Assist maangers and other professional in the analysis fo current and past activities and in the prediction of future events
+    + Do not directly support operational activities, such as the recording and processing of orders (These are supported by transaction processing systems)
+    + Support management assessment, analysis, planning and control
+* BI systems fall into two broad categories:
+    + Reporting systems that sort, filter, group, and make elementary calculations on operatinal data
+        + filter, sort, group
+        + summarize current status
+        + compare current status
+    + Data mining appliations that perform sphisticated analyses on data; analyses that usually involve complex statistical and mathematical processing
+        + used for what-if analysis, predictions, decisions
+
+![Operational vs. BI](./images/operational-bi-apps.png)
+
+BI application which go beyond basic reporting typicall rely on extract of organisational operational database, along with data acquired from other sources that can be aggregated and stored in the data warehouse.
+
+![Data Warehouse](./images/operational-bi-apps.png)
+
+Min. 13:03
+
+
 
 
 

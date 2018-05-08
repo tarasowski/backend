@@ -83,7 +83,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [Everything you need to know about CloudFormation](https://github.com/mittyo/javascript-pocketguide/blob/master/serverless/015_cloudformation.md)
 
 ---
-## Topics covered:
+## Topics covered/To cover:
 
 * [x] JavaScript/NodeJS
 * [x] Testing
@@ -92,13 +92,22 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [x] Severless patterns
 * [x] Authentication & Authorization
 * [x] Security IAM
-* [x] Messaging Layer (SNS + SQS needs to be done)
+* [x] Messaging Layer (SNS + SQS needs to be covered)
 * [ ] Storage Layer
     * [x] Relational Databases
     * [ ] NoSQL Databases (document storage)
+    * [ ] Migration from NoSQL to MySQL/Postgres
+    * [ ] File storage (S3, AWS KMS)
 * [ ] Deployments
-* [ ] Frontend (Vue/React)
+* [ ] Architecture (how do you start building a system - which topics first)
+* [ ] Migration from Monolith to Serverless
 * [ ] Computer Science 101
+    * [ ] Data Structures
+    * [ ] Algorithms
+    * [ ] Network (Buffers/Streaming/TCP/UDP)
+    * [ ] Engineering
+* [ ] Design Patterns 
+* [ ] Frontend (Vue/React)
 
 ---
 
@@ -113,11 +122,10 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + [Database Design for Mere Mortals](https://www.amazon.com/Database-Design-Mere-Mortals-Hands/dp/0321884493/ref=sr_1_1?ie=UTF8&qid=1524835143&sr=8-1&keywords=database+for+mere+mortals)
     + [Six-Step Relational Database Design](https://www.amazon.com/Six-Step-Relational-Database-DesignTM-development/dp/1481942727)
     + [Domain Driven Design Patterns](https://www.amazon.de/Domain-Driven-Design-Reference-Definitions-Summaries/dp/1457501198/ref=sr_1_1?ie=UTF8&qid=1524835319&sr=8-1&keywords=eric+evans+domain+driven+design)
-* [ ] **Migration from Monolith to Serverless**
-    + [Migration from Monolith to Serverless](https://www.youtube.com/watch?v=i2gEbw_jzfY)
-    + [Yan Cui - All Posts](https://medium.com/theburningmonk-com/all-my-posts-on-serverless-aws-lambda-43c17a147f91)
+(https://medium.com/theburningmonk-com/all-my-posts-on-serverless-aws-lambda-43c17a147f91)
 * [ ] **Computer Science Basics**
     + [Systems analysis and design](http://www.w3computing.com/systemsanalysis/)
+        + [Data Flow Diagram Overview](https://www.youtube.com/channel/UCm0gX5V8-meiz_1CHtc24cA/search?query=data+flow)
     + [ Base CS - Exploring the basics of computer science, every Monday, for a year.](https://medium.com/basecs/archive/2017)
     + [Introduction to Computer Science and Programming](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/index.htm)
     + [Computer Networks and the Internet](https://www.edx.org/course/computer-networks-internet-kironx-fhlcnx)
