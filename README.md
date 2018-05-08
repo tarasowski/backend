@@ -98,6 +98,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + [Yan Cui - All Posts](https://medium.com/theburningmonk-com/all-my-posts-on-serverless-aws-lambda-43c17a147f91)
 * [ ] **Computer Science Basics**
     + [Systems analysis and design](http://www.w3computing.com/systemsanalysis/)
+    + [ Base CS - Exploring the basics of computer science, every Monday, for a year.](https://medium.com/basecs/archive/2017)
     + [Introduction to Computer Science and Programming](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/index.htm)
     + [Computer Networks and the Internet](https://www.edx.org/course/computer-networks-internet-kironx-fhlcnx)
     + [Algorithms & Data Structure](https://www.coursera.org/learn/algorithms-part1)
