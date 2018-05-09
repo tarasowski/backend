@@ -174,4 +174,8 @@ Note: The whole point of using source control system is to keep track of changes
     + `git reset --soft Head~5`- bring the last 5 commits all togher into the most recent one 
     + `git reset --hard HEAD~3`- is when you want to throw commits and don't want to share them with others. You can use this command to throw the last 3 commits away. 
 
+* `git reflog` - every commit that users make to the repository is a recorded snapshot in time that shows how the code base is progressing, the `reflog` keeps track of the commits that are made as well as commits that are discarded, it provides a rolling buffer of 30 days in which you can recover by doing a mistake e.g. `reset`, `delete branch`or any other things. 
+
+* `git rebase` - is the ability to take the existing commits and to place them on a branch that starts today. Rebase allows one branch to be relocated far down the history track. Meaning taking all of the changes that are isolated on your branch and making them as if they were happen after on the master branch. 
+
 
