@@ -91,7 +91,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [x] Network communication (API Gateway + GraphQL)
 * [x] Severless patterns
 * [x] Authentication & Authorization
-* [x] Security IAM
+* [x] Cloudformation
 * [x] Messaging Layer (SNS + SQS needs to be covered)
 * [ ] Storage Layer
     * [x] Relational Databases
@@ -99,7 +99,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     * [ ] Migration from NoSQL to MySQL/Postgres
     * [ ] File storage (S3, AWS KMS)
 * [ ] Deployments
-* [ ] Architecture (how do you start building a system - which topics first)
+* [ ] Architecture (how do you start building a system - which topics come first)
 * [ ] Migration from Monolith to Serverless
 * [ ] Computer Science 101
     * [ ] Data Structures
