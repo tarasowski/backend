@@ -189,3 +189,26 @@ Deleted branch hotfix-1.2.1 (was abbe5d6).
 Every time a feature gets merged into the `develop` branch, the `develop` branch gets deployed to a staging environment. Periodically (more on that in a moment), a `release` branch gets created off of the develop branch, reviewed and merged into `master`. As soon as that happens, `master` gets deployed to the production environment.
 
 ![Workflow](https://cdn-images-1.medium.com/max/1600/1*J7M-iVWUK02MKEAXr7rzCQ.png)
+
+---
+
+## Git Tags - Releases etc.
+
+[Source - Video](https://youtu.be/govmXpDGLpo)
+
+* Tagging in Git refers to creating specific points in history of your repository/data
+* This is usually done to mark release points e.g. your project is stable and you want to release it, you can create a tag for that (v1.0, v1.1, ...)
+* You should create tags if you want to:
+    + Mark release points for your code/data
+    + To create historic restore points
+* How to create tags in git
+    1. Chechkout the branch where you want to create the tag `git checkout <branch name>`
+    2. Create a tag with some name `git tag <tag name>` e.g. `git tag v1.0` check with `git tag`
+        + Annotated tag `git tag -a <tag name> -m "this is a tag for release ver 1.1"`
+    3. Display or show tags `git tag` or `git show <tag name>``
+    4. Push tags to remote `git push origin <tag name>` - by doing so you create a release in github (you can see your push under release)
+        + Push all the tags at once use `git push origin --tags` or `git push --tags`
+    5. Delete tags (if required only) `git tag -d <tag name>`or `git tag --delete <tag name>`
+        + To delete from remote use `git push origin -d <tag name>`or `git push origin --delete <tag name>`or `git push origin :<tag name`>
+* We canot checkout tags in git, but we can create a branch from a tag and checkout the branch with `git checkout -b <branch name> <tag name>`
+* If you wan tto create a tag from some past commit you can use this command `git tag <tag name> <refernce of commit>`
