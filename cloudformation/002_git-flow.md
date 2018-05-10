@@ -190,7 +190,7 @@ Every time a feature gets merged into the `develop` branch, the `develop` branch
 
 ![Workflow](https://cdn-images-1.medium.com/max/1600/1*J7M-iVWUK02MKEAXr7rzCQ.png)
 
----
+--- 
 
 ## Git Tags - Releases etc.
 
