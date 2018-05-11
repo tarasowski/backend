@@ -2,7 +2,7 @@
 
 ## Continuous Deployment at Facebook and OANDA
 
-* [Mobile Software @ Facebook - Source ](https://research.fb.com/wp-content/uploads/2017/02/fse-rossi.pdf)
+* [Continuous Deployment at Facebook and OANDA](https://research.fb.com/wp-content/uploads/2017/01/paper_icse-savor-2016.pdf)
 
 ### 1. INTRODUCTION
 * Continuous Deployment: Continuous deployment is the software engineering practice of deploying many small incremental software updates into production, leading to a continuous stream of 10s, 100s, or even 1,000s of deployments per day.
@@ -71,8 +71,7 @@ result, management roles are often filled by promoting from within.
 
 ## Continuous Deployment of Mobile Software at Facebook
 
-
-* [Continuous Deployment at Facebook and OANDA](https://research.fb.com/wp-content/uploads/2017/01/paper_icse-savor-2016.pdf)
+* [Mobile Software @ Facebook - Source ](https://research.fb.com/wp-content/uploads/2017/02/fse-rossi.pdf)
 
 * Additionally, the data we present shows that dog-fooding and obtaining feedback from alpha and beta customers is critical to maintaining release quality.
 
