@@ -98,8 +98,13 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     * [ ] NoSQL Databases (document storage)
     * [ ] Migration from NoSQL to MySQL/Postgres
     * [ ] File storage (S3, AWS KMS)
-* [ ] Deployments
+* [x] Deployments
+    * [x] CodeStar
+    * [x] CodePipeline
+    * [x] CodeDeploy
 * [ ] Architecture (how do you start building a system - which topics come first)
+    * [ ] Data flow diagram 
+    * [ ] Structured analysis and design technique (SADT)
 * [ ] Migration from Monolith to Serverless
 * [ ] Computer Science 101
     * [ ] Data Structures

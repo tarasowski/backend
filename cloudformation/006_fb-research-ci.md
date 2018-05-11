@@ -97,7 +97,7 @@ software and in similarly-sized increments. The developers do this whenever they
 
 * Feature Toggle - A notable coding practice encouraged at FB is the use of a mechanism called Gatekeeper, that allows one to dynamically control the availability of features on the mobile device. In effect, this mechanism provides the ability to dynamically turn on or off a mobile-side feature from the server side, even on devices in client hands. Hence, if a newly deployed feature misbehaves, it can be turned off. This mechanism can also be used to incrementally turn on new features in a targeted way, say by targeting the OS, the specific OS version, the hardware device type, the specific hardware device model, the country, locale, etc. 
 
-* For Android, FB also releases Alpha and Beta versions of the app. Alpha is shipped from the Master branch once a day. It is made available through the Google Play Store to a small fraction of external users consisting of several 10,000 users. Beta is shipped from the Release branch once a day and made available to a larger fraction of external users (around 3 million).
+* For Android, FB also releases Alpha and Beta versions of the app. Alpha (dev) is shipped from the Master branch once a day. It is made available through the Google Play Store to a small fraction of external users consisting of several 10,000 users. Beta (staging) is shipped from the Release branch once a day and made available to a larger fraction of external users (around 3 million).
 
 #### Testing: Tests and when they are run
 
