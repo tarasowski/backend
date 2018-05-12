@@ -351,6 +351,17 @@ It's a way to delegate access to your AWS account!
 
 * Best Practice: Logically separate your roles based on types of access required
 
+---
+# AWS Essentials: IAM Initial Setup and Configuration
+
+[Source](https://www.youtube.com/watch?v=W_eu0rJN0yU&list=PLv2a_5pNAko0Mijc6mnv04xeOut443Wnk&index=8)
+
+* Delete your root access keys
+* Activate MFA on your root account
+* Create individual IAM users
+* User goups to assign permission
+* Apply an IAM password policy
+
 
 
 
