@@ -199,7 +199,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 ![Step 2](./images/planning-dataflow-step2.png)
 ---
 
-¡[Step 3](./images/planning-dataflow-step3.png)
+![Step 3](./images/planning-dataflow-step3.png)
 
 
 
