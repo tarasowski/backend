@@ -118,7 +118,9 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 
 ## Todo 
 * [ ] **Deployments & Going Live**
-    + [Cloudformation (production deployment / partial deployment)](https://acloud.guru/learn/aws-cloudformation)
+    + [Cloudformation (production deployment / partial deployment)](https://linuxacademy.com/amazon-web-services/training/course/name/aws-cloudformation-deep-dive)
+    + 
+    + CodeDeploy, CodeBuild, CodePipeline
     + CI/CD (github push, automation etc.)
     + Here is an example how to CI/CD on AWS [Check this presentation](https://youtu.be/rPouVcJKWxM?t=2146)
 * [ ] **Storage Layer - Databases**
