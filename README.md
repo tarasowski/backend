@@ -154,4 +154,54 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + [ ] Why do I need to read this book? Get some basic understanding about OS [The Unix Programming Environment ](https://www.amazon.com/Unix-Programming-Environment-Prentice-Hall-Software/dp/013937681X)
     + [ ] Why do I need to read this book? see above [The Art of Unix Programming](http://www.catb.org/esr/writings/taoup/html/)
 
+    ========
+    Add to architecture examples
+    [Context & Data Flow Diagrams Sample 1: YouTube](https://www.youtube.com/watch?v=hiMeEswjWuk&t=45s)
+
+## Context Diagram Example
+
+* Context diagram can be used as a planning tool to build much complex Data Flow Diagrams
+* Processes are simply manipulation of data
+* Data Flow Diagram can be either High Level (Context Diagram) or Low Level (Level I and Level II)
+    
+1. In a Context Diagram we always start with 1 circle in the midddle that represents the entire system (information system)
+2. External entity: 
+    + Youtube Partner: someone who puts content and earn from the content
+    + Youtube Viewer: someone who is just watching the videos
+    + Advertisers: the companies/people that pay youtube to put their ads on video
+    + Bank: the payments and receipts are needed to go through the bank
+
+![Example](./images/context-diagram.png)
+
+## Data Flow Diagram
+
+1. External entities:
+    + Youtube Partners
+    + Youtube Viewers
+2. Account database: The external entities needs to log in and will be authenticated
+3. The first step is to give access to view video via links, urls or search
+    + if they want to upload a video they can go to upload a video, if they click a button the video is uploaded
+    + when the video is uploaded we can edit the video
+    + once the video has been edited it's ready to be viewed once its published
+4. Once the video is online the social media aspect comes into play for both ways the users can comment, like, but they also receiving the feedback from their own videos when they have been uploaded. This feedback returns to these two users.
+5. Now we have advertisers they have to pay youtube for advertising and that goes straight to the bank account of youtube. Once the payments made they have to apply the ads to the video, they need to submit advertisements to youtube, and those ads are attached to existing youtube partners movies. 
+6. Because the ads are attached to youtube partners movies the bank has to pay those partners. And the payment receipt send to those partners based on the ads and the performance. 
+
+![DFD Youtube](./images/dataflow-diagram-youtube.png)
+
+# Planning Data Flow Diagram
+
+[Planning a Data Flow Diagram](https://www.youtube.com/watch?v=VeLkVD0Q_6M)
+
+![Planning Example](./images/planning-dataflow-diagram.png)
+---
+
+![Step 2](./images/planning-dataflow-step2.png)
+---
+
+¡[Step 3](./images/planning-dataflow-step3.png)
+
+
+
+
 
