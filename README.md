@@ -144,6 +144,8 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + Read code of open source projects such as React, Vue.js, Express - code quality of such a projects should be very good (many reviewers and clean code). Also Spectrum was recommended
     + [Design Patterns: Elements of Reusable Object-Oriented Software](https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612)
     + SOLID need to find some good resources
+    + [Hexagon](https://claudiajs.com/tutorials/designing-testable-lambdas.html)
+    + [Writing portable serverless applications](https://medium.com/datreeio/writing-portable-serverless-applications-252fd8623bce)
 
 * [ ]**Book Collection & Recommendations**
     + [ ] Why do I need to read this book? If I want to understand how to think in terms of underlying technology vs. abstractions (Cloudformation vs. AWS SAM)
