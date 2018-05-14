@@ -128,6 +128,9 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + [Six-Step Relational Database Design](https://www.amazon.com/Six-Step-Relational-Database-DesignTM-development/dp/1481942727)
     + [Domain Driven Design Patterns](https://www.amazon.de/Domain-Driven-Design-Reference-Definitions-Summaries/dp/1457501198/ref=sr_1_1?ie=UTF8&qid=1524835319&sr=8-1&keywords=eric+evans+domain+driven+design)
 (https://medium.com/theburningmonk-com/all-my-posts-on-serverless-aws-lambda-43c17a147f91)
+
+* [ ] **Migration from Monolith to Serverless
+    + [ ] [How to Migrate Existing Monoliths to Serverless](https://blog.binaris.com/how-to-migrate-existing-monoliths-to-serverless/)
 * [ ] **Computer Science Basics**
     + [Systems analysis and design](http://www.w3computing.com/systemsanalysis/)
         + [Data Flow Diagram Overview](https://www.youtube.com/channel/UCm0gX5V8-meiz_1CHtc24cA/search?query=data+flow)
