@@ -143,4 +143,11 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + [Design Patterns: Elements of Reusable Object-Oriented Software](https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612)
     + SOLID need to find some good resources
 
+* [ ]**Book Collection & Recommendations**
+    + [ ] Why do I need to read this book? If I want to understand how to think in terms of underlying technology vs. abstractions (Cloudformation vs. AWS SAM)
+    [Code Complete: A Practical Handbook of Software Construction](https://www.amazon.com/Code-Complete-Practical-Handbook-Construction/dp/0735619670)
+    + [ ] Why do I need to read this book? I need to learn to think like a real programmer [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=pd_bxgy_14_img_2?_encoding=UTF8&pd_rd_i=0132350882&pd_rd_r=8GDW312B6CFPXFG1C3NX&pd_rd_w=G2B0p&pd_rd_wg=bh747&psc=1&refRID=8GDW312B6CFPXFG1C3NX&dpID=515iEcDr1GL&preST=_SX218_BO1,204,203,200_QL40_&dpSrc=detail)
+    + [ ] Why do I need to read this book? Get some basic understanding about OS [The Unix Programming Environment ](https://www.amazon.com/Unix-Programming-Environment-Prentice-Hall-Software/dp/013937681X)
+    + [ ] Why do I need to read this book? see above [The Art of Unix Programming](http://www.catb.org/esr/writings/taoup/html/)
+
 
