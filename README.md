@@ -103,7 +103,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     * [x] CodePipeline
     * [x] CodeDeploy
 * [ ] Architecture (how do you start building a system - which topics come first)
-    * [ ] Data flow diagram 
+    * [x] Data flow diagram 
     * [ ] Structured analysis and design technique (SADT)
 * [ ] Migration from Monolith to Serverless
 * [ ] Computer Science 101
