@@ -118,41 +118,41 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 
 ## Todo 
 * [ ] **Deployments & Going Live**
-    + [Cloudformation (production deployment / partial deployment)](https://linuxacademy.com/amazon-web-services/training/course/name/aws-cloudformation-deep-dive)
-    + [an AWS CodePipeline, AWS CodeBuild, AWS APIGateway & AWS Lambda CI](https://github.com/nicolai86/awesome-codepipeline-ci)
-    + CodeDeploy, CodeBuild, CodePipeline
-    + CI/CD (github push, automation etc.)
-    + Here is an example how to CI/CD on AWS [Check this presentation](https://youtu.be/rPouVcJKWxM?t=2146)
+    + [ ] [Cloudformation (production deployment / partial deployment)](https://linuxacademy.com/amazon-web-services/training/course/name/aws-cloudformation-deep-dive)
+    + [ ] [an AWS CodePipeline, AWS CodeBuild, AWS APIGateway & AWS Lambda CI](https://github.com/nicolai86/awesome-codepipeline-ci)
+    + [ ] CodeDeploy, CodeBuild, CodePipeline
+    + [ ] CI/CD (github push, automation etc.)
+    + [ ] Here is an example how to CI/CD on AWS [Check this presentation](https://youtu.be/rPouVcJKWxM?t=2146)
 * [ ] **Storage Layer - Databases**
-    + [Storage Layer -Databases RDS, NoSQL, Warehousing (when to use aurora, dynamodb or redshift)](https://acloud.guru/learn/aws-dynamodb)
-    + [Database Design and Relational Theory](https://www.amazon.com/Database-Design-Relational-Theory-Normal-ebook/dp/B007VRKQBS/ref=mt_kindle?_encoding=UTF8&me=)
-    + [Database Design for Mere Mortals](https://www.amazon.com/Database-Design-Mere-Mortals-Hands/dp/0321884493/ref=sr_1_1?ie=UTF8&qid=1524835143&sr=8-1&keywords=database+for+mere+mortals)
-    + [Six-Step Relational Database Design](https://www.amazon.com/Six-Step-Relational-Database-DesignTM-development/dp/1481942727)
-    + [Domain Driven Design Patterns](https://www.amazon.de/Domain-Driven-Design-Reference-Definitions-Summaries/dp/1457501198/ref=sr_1_1?ie=UTF8&qid=1524835319&sr=8-1&keywords=eric+evans+domain+driven+design)
+    + [ ] [Storage Layer -Databases RDS, NoSQL, Warehousing (when to use aurora, dynamodb or redshift)](https://acloud.guru/learn/aws-dynamodb)
+    + [ ] [Database Design and Relational Theory](https://www.amazon.com/Database-Design-Relational-Theory-Normal-ebook/dp/B007VRKQBS/ref=mt_kindle?_encoding=UTF8&me=)
+    + [ ] [Database Design for Mere Mortals](https://www.amazon.com/Database-Design-Mere-Mortals-Hands/dp/0321884493/ref=sr_1_1?ie=UTF8&qid=1524835143&sr=8-1&keywords=database+for+mere+mortals)
+    + [ ] [Six-Step Relational Database Design](https://www.amazon.com/Six-Step-Relational-Database-DesignTM-development/dp/1481942727)
+    + [ ] [Domain Driven Design Patterns - Evans](https://www.amazon.de/Domain-Driven-Design-Reference-Definitions-Summaries/dp/1457501198/ref=sr_1_1?ie=UTF8&qid=1524835319&sr=8-1&keywords=eric+evans+domain+driven+design)
 (https://medium.com/theburningmonk-com/all-my-posts-on-serverless-aws-lambda-43c17a147f91)
 
 * [ ] **Migration from Monolith to Serverless
     + [ ] [How to Migrate Existing Monoliths to Serverless](https://blog.binaris.com/how-to-migrate-existing-monoliths-to-serverless/)
 * [ ] **Computer Science Basics**
-    + [Systems analysis and design](http://www.w3computing.com/systemsanalysis/)
-        + [Data Flow Diagram Overview](https://www.youtube.com/channel/UCm0gX5V8-meiz_1CHtc24cA/search?query=data+flow)
-    + [ Base CS - Exploring the basics of computer science, every Monday, for a year.](https://medium.com/basecs/archive/2017)
-    + [Algorithms and Data Structures in JavaScript](https://frontendmasters.com/workshops/algorithms-data-structures-js/)
-    + [Introduction to Computer Science and Programming in Python (MIT Open Course)](https://www.youtube.com/watch?v=ytpJdnlu9ug&list=PLUl4u3cNGP63WbdFxL8giv4yhgdMGaZNA)
-    + [Introduction to Algorithms (MIT Open Course)](https://www.youtube.com/watch?v=HtSuA80QTyo&list=PLUl4u3cNGP61Oq3tWYp6V_F-5jb5L2iHb)
-    + [Introduction to Computer Science and Programming (MIT Open Course)](https://www.youtube.com/watch?v=bX3jvD7XFPs&list=PLB2BE3D6CA77BB8F7)
-    + [Introduction to Computer Science and Programming (MIT Open Course)](https://www.youtube.com/watch?v=k6U-i4gXkLM&list=PL4C4720A6F225E074)
-    + [Computer System Engineering (MIT Open Course)](https://www.youtube.com/watch?v=zm2VP0kHl1M&list=PL6535748F59DCA484)
-    + [Text Book](https://ocw.mit.edu/resources/res-6-004-principles-of-computer-system-design-an-introduction-spring-2009/online-textbook/)
-    + [Design and Analysis of Algorithms (MIT Open Course)](https://www.youtube.com/watch?v=2P-yW7LQr08&list=PLUl4u3cNGP6317WaSNfmCvGym2ucw3oGp)
-    + [Computer Networks and the Internet](https://www.edx.org/course/computer-networks-internet-kironx-fhlcnx)
-    + [Algorithms & Data Structure](https://www.coursera.org/learn/algorithms-part1)
+    + [ ] [Systems analysis and design](http://www.w3computing.com/systemsanalysis/)
+        + [x] [Data Flow Diagram Overview](https://www.youtube.com/channel/UCm0gX5V8-meiz_1CHtc24cA/search?query=data+flow)
+    + [ ] [ Base CS - Exploring the basics of computer science, every Monday, for a year.](https://medium.com/basecs/archive/2017)
+    + [ ] [Algorithms and Data Structures in JavaScript](https://frontendmasters.com/workshops/algorithms-data-structures-js/)
+    + [ ] [Introduction to Computer Science and Programming in Python (MIT Open Course)](https://www.youtube.com/watch?v=ytpJdnlu9ug&list=PLUl4u3cNGP63WbdFxL8giv4yhgdMGaZNA)
+    + [ ] [Introduction to Algorithms (MIT Open Course)](https://www.youtube.com/watch?v=HtSuA80QTyo&list=PLUl4u3cNGP61Oq3tWYp6V_F-5jb5L2iHb)
+    + [ ] [Introduction to Computer Science and Programming (MIT Open Course)](https://www.youtube.com/watch?v=bX3jvD7XFPs&list=PLB2BE3D6CA77BB8F7)
+    + [ ] [Introduction to Computer Science and Programming (MIT Open Course)](https://www.youtube.com/watch?v=k6U-i4gXkLM&list=PL4C4720A6F225E074)
+    + [ ] [Computer System Engineering (MIT Open Course)](https://www.youtube.com/watch?v=zm2VP0kHl1M&list=PL6535748F59DCA484)
+    + [ ] [Text Book to the course above](https://ocw.mit.edu/resources/res-6-004-principles-of-computer-system-design-an-introduction-spring-2009/online-textbook/)
+    + [ ] [Design and Analysis of Algorithms (MIT Open Course)](https://www.youtube.com/watch?v=2P-yW7LQr08&list=PLUl4u3cNGP6317WaSNfmCvGym2ucw3oGp)
+    + [ ] [Computer Networks and the Internet](https://www.edx.org/course/computer-networks-internet-kironx-fhlcnx)
+    + [ ] [Algorithms & Data Structure](https://www.coursera.org/learn/algorithms-part1)
 * [ ] **Coding & Patterns**
-    + Read code of open source projects such as React, Vue.js, Express - code quality of such a projects should be very good (many reviewers and clean code). Also Spectrum was recommended
-    + [Design Patterns: Elements of Reusable Object-Oriented Software](https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612)
+    + [ ] Read code of open source projects such as React, Vue.js, Express - code quality of such a projects should be very good (many reviewers and clean code). Also Spectrum was recommended
+    + [ ] [Design Patterns: Elements of Reusable Object-Oriented Software](https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612)
     + SOLID need to find some good resources
-    + [Hexagon](https://claudiajs.com/tutorials/designing-testable-lambdas.html)
-    + [Writing portable serverless applications](https://medium.com/datreeio/writing-portable-serverless-applications-252fd8623bce)
+    + [x] [Hexagon](https://claudiajs.com/tutorials/designing-testable-lambdas.html)
+    + [ ] [Writing portable serverless applications](https://medium.com/datreeio/writing-portable-serverless-applications-252fd8623bce)
 
 * [ ] **Book Collection & Recommendations**
     + [ ] Why do I need to read this book? If I want to understand how to think in terms of underlying technology vs. abstractions (Cloudformation vs. AWS SAM)
