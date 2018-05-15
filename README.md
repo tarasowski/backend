@@ -104,6 +104,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     * [x] CodeDeploy
 * [ ] Architecture (how do you start building a system - which topics come first)
     * [x] Data flow diagram 
+    * [x] AWS Architecture
     * [ ] Structured analysis and design technique (SADT)
 * [ ] Migration from Monolith to Serverless
 * [ ] Computer Science 101
