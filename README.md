@@ -137,7 +137,15 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + [Systems analysis and design](http://www.w3computing.com/systemsanalysis/)
         + [Data Flow Diagram Overview](https://www.youtube.com/channel/UCm0gX5V8-meiz_1CHtc24cA/search?query=data+flow)
     + [ Base CS - Exploring the basics of computer science, every Monday, for a year.](https://medium.com/basecs/archive/2017)
-    + [Introduction to Computer Science and Programming](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/index.htm)
+    + [Algorithms and Data Structures in JavaScript](https://frontendmasters.com/workshops/algorithms-data-structures-js/)
+    + [Introduction to Computer Science and Programming in Python (MIT Open Course)](https://www.youtube.com/watch?v=ytpJdnlu9ug&list=PLUl4u3cNGP63WbdFxL8giv4yhgdMGaZNA)
+    + [Introduction to Algorithms (MIT Open Course)](https://www.youtube.com/watch?v=HtSuA80QTyo&list=PLUl4u3cNGP61Oq3tWYp6V_F-5jb5L2iHb)
+    + [Introduction to Computer Science and Programming (MIT Open Course)](https://www.youtube.com/watch?v=bX3jvD7XFPs&list=PLB2BE3D6CA77BB8F7)
+    + [Introduction to Computer Science and Programming (MIT Open Course)]
+    (https://www.youtube.com/watch?v=k6U-i4gXkLM&list=PL4C4720A6F225E074)
+    + [Computer System Engineering (MIT Open Course)](https://www.youtube.com/watch?v=zm2VP0kHl1M&list=PL6535748F59DCA484)
+    + [Text Book](https://ocw.mit.edu/resources/res-6-004-principles-of-computer-system-design-an-introduction-spring-2009/online-textbook/)
+    + [Design and Analysis of Algorithms (MIT Open Course)](https://www.youtube.com/watch?v=2P-yW7LQr08&list=PLUl4u3cNGP6317WaSNfmCvGym2ucw3oGp)
     + [Computer Networks and the Internet](https://www.edx.org/course/computer-networks-internet-kironx-fhlcnx)
     + [Algorithms & Data Structure](https://www.coursera.org/learn/algorithms-part1)
 * [ ] **Coding & Patterns**
@@ -147,7 +155,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + [Hexagon](https://claudiajs.com/tutorials/designing-testable-lambdas.html)
     + [Writing portable serverless applications](https://medium.com/datreeio/writing-portable-serverless-applications-252fd8623bce)
 
-* [ ]**Book Collection & Recommendations**
+* [ ] **Book Collection & Recommendations**
     + [ ] Why do I need to read this book? If I want to understand how to think in terms of underlying technology vs. abstractions (Cloudformation vs. AWS SAM)
     [Code Complete: A Practical Handbook of Software Construction](https://www.amazon.com/Code-Complete-Practical-Handbook-Construction/dp/0735619670)
     + [ ] Why do I need to read this book? I need to learn to think like a real programmer [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=pd_bxgy_14_img_2?_encoding=UTF8&pd_rd_i=0132350882&pd_rd_r=8GDW312B6CFPXFG1C3NX&pd_rd_w=G2B0p&pd_rd_wg=bh747&psc=1&refRID=8GDW312B6CFPXFG1C3NX&dpID=515iEcDr1GL&preST=_SX218_BO1,204,203,200_QL40_&dpSrc=detail)
