@@ -141,8 +141,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + [Introduction to Computer Science and Programming in Python (MIT Open Course)](https://www.youtube.com/watch?v=ytpJdnlu9ug&list=PLUl4u3cNGP63WbdFxL8giv4yhgdMGaZNA)
     + [Introduction to Algorithms (MIT Open Course)](https://www.youtube.com/watch?v=HtSuA80QTyo&list=PLUl4u3cNGP61Oq3tWYp6V_F-5jb5L2iHb)
     + [Introduction to Computer Science and Programming (MIT Open Course)](https://www.youtube.com/watch?v=bX3jvD7XFPs&list=PLB2BE3D6CA77BB8F7)
-    + [Introduction to Computer Science and Programming (MIT Open Course)]
-    (https://www.youtube.com/watch?v=k6U-i4gXkLM&list=PL4C4720A6F225E074)
+    + [Introduction to Computer Science and Programming (MIT Open Course)](https://www.youtube.com/watch?v=k6U-i4gXkLM&list=PL4C4720A6F225E074)
     + [Computer System Engineering (MIT Open Course)](https://www.youtube.com/watch?v=zm2VP0kHl1M&list=PL6535748F59DCA484)
     + [Text Book](https://ocw.mit.edu/resources/res-6-004-principles-of-computer-system-design-an-introduction-spring-2009/online-textbook/)
     + [Design and Analysis of Algorithms (MIT Open Course)](https://www.youtube.com/watch?v=2P-yW7LQr08&list=PLUl4u3cNGP6317WaSNfmCvGym2ucw3oGp)
