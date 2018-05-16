@@ -130,9 +130,12 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + [ ] [Database Design and Relational Theory](https://www.amazon.com/Database-Design-Relational-Theory-Normal-ebook/dp/B007VRKQBS/ref=mt_kindle?_encoding=UTF8&me=)
     + [ ] [Database Design for Mere Mortals](https://www.amazon.com/Database-Design-Mere-Mortals-Hands/dp/0321884493/ref=sr_1_1?ie=UTF8&qid=1524835143&sr=8-1&keywords=database+for+mere+mortals)
     + [ ] [Six-Step Relational Database Design](https://www.amazon.com/Six-Step-Relational-Database-DesignTM-development/dp/1481942727)
-    + [ ] [Domain Driven Design Patterns - Evans](https://www.amazon.de/Domain-Driven-Design-Reference-Definitions-Summaries/dp/1457501198/ref=sr_1_1?ie=UTF8&qid=1524835319&sr=8-1&keywords=eric+evans+domain+driven+design)
 (https://medium.com/theburningmonk-com/all-my-posts-on-serverless-aws-lambda-43c17a147f91)
 
+* [ ] **Software Architecture**
+    + [ ] [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=sr_1_7?ie=UTF8&qid=1526476151&sr=8-7&keywords=software+architecture)
+    + [ ] [Specification by Example: How Successful Teams Deliver the Right Software](https://www.amazon.com/Specification-Example-Successful-Deliver-Software/dp/1617290084)
+    + [ ] [Domain Driven Design Patterns - Evans](https://www.amazon.de/Domain-Driven-Design-Reference-Definitions-Summaries/dp/1457501198/ref=sr_1_1?ie=UTF8&qid=1524835319&sr=8-1&keywords=eric+evans+domain+driven+design)
 * [ ] **Migration from Monolith to Serverless
     + [ ] [How to Migrate Existing Monoliths to Serverless](https://blog.binaris.com/how-to-migrate-existing-monoliths-to-serverless/)
 * [ ] **Computer Science Basics**
