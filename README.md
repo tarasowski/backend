@@ -136,7 +136,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     + [ ] [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=sr_1_7?ie=UTF8&qid=1526476151&sr=8-7&keywords=software+architecture)
     + [ ] [Specification by Example: How Successful Teams Deliver the Right Software](https://www.amazon.com/Specification-Example-Successful-Deliver-Software/dp/1617290084)
     + [ ] [Domain Driven Design Patterns - Evans](https://www.amazon.de/Domain-Driven-Design-Reference-Definitions-Summaries/dp/1457501198/ref=sr_1_1?ie=UTF8&qid=1524835319&sr=8-1&keywords=eric+evans+domain+driven+design)
-* [ ] **Migration from Monolith to Serverless
+* [ ] **Migration from Monolith to Serverless**
     + [ ] [How to Migrate Existing Monoliths to Serverless](https://blog.binaris.com/how-to-migrate-existing-monoliths-to-serverless/)
 * [ ] **Computer Science Basics**
     + [ ] [Systems analysis and design](http://www.w3computing.com/systemsanalysis/)
