@@ -1,8 +1,12 @@
 # Contact and Data Flow Diagrams
 
 ## Rules
+
 * Processes are not allowed to talk to each other
     + Exception: in cases e.g. SNS queue sending notification, they can talk to each other
+    + Exception: Processes that are broken into steps are allowed to talk to each other (e.g. verify shipping, assemble shipment, assemble customer orders)
+
+![Example](./images/third-level-dfd.gif)
 
 * Data stores are not to talk to each other
 
