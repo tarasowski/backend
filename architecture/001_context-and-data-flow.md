@@ -1,5 +1,97 @@
 # Contact and Data Flow Diagrams
 
+## Rules
+* Processes are not allowed to talk to each other
+    + Exception: in cases e.g. SNS queue sending notification, they can talk to each other
+
+* Data stores are not to talk to each other
+
+* You have to have an even number of lines (up/down)
+
+* The interfaces (e.g. users, bank, warehouse etc.) will become tables
+
+* Avoid repetitive features such as login, signup etc., features that are not business processes should be excluded from DFD
+
+* If you have more than 2 lines up/down from the interface, usually it means the process needs to be decomposed in two (if 4 lines) or more separate processes (DFD Level 2, 3, 4, 5)
+    + You need to decompose your DFD till the process has one 1 line up and 1 line down. So it supposed to be primitive process or function
+    + In case of serverless break it down into separate functions
+
+*  DFD should always describe a process as a full (request/response), you need to describe everything in DFD 1 and break everything down in further levels.
+    + You start with Context Diagram, you break it down into another layer DFD 1, you break DFD 1 into another layer DFD 2 and so on. If you have e.g. in DFD 1 - 5 Processes you divide it into 5 separate diagrams in the second layer.
+
+* The data flow should never intersect, but if it needed to be intersected you need to create a bridge, so it's clear where input/output goes.
+
+![Intersection](./images/intersection-example.png)
+
+* Each process should have at least one input and an output.
+* Each data store should have at least one data flow in and one data flow out.
+* All processes in a DFD go to another process or a data store.
+* Data stored in a system must go through a process. (never data store to data store communication)
+
+[Source DFD](https://www.lucidchart.com/pages/data-flow-diagram)
+
+---
+
+1. All data flows must flow to or from a process
+
+All flows of data must be either coming from or going to a process. External entities can not flow directly to each other. A data flow can not link a data store to an external entity. Data can not move between data stores without first being processed.
+
+![DFD Rule #1](https://eternalsunshineoftheismind.files.wordpress.com/2013/02/picture16.png)
+
+2. A Process must have at least one input flow and one output flow.
+
+When a process has input flow but no output flow, it is called a “black hole”. When a process has output flows but no input flows, it is called a “miracle”.
+
+![DFD Rule #2](https://eternalsunshineoftheismind.files.wordpress.com/2013/02/slide-12-728.jpg)
+
+3. The inputs to a process must be sufficient to produce output flows.
+
+A “grey hole” is when the outputs of a process are greater then the sum of its inputs. For example, if a customers name and address is an input, their bank details can not be an output, as the process doesn’t have enough information to produce it.
+
+4. Processes must transform data.
+
+When naming data flows, adjectives should be used which show how processing has changed the data flow.
+
+![DFD Rule #4](https://eternalsunshineoftheismind.files.wordpress.com/2013/02/picture21.png)
+
+5. Data Flows can not cross each other
+
+The flows of data can not cross each other. To overcome this problem, data stores and entities can be duplicated. However, processes can not be deplicated. Data flows must be unidirectional.
+
+6. Entities must be labelled in lower case.
+
+[Source - Data Flow Rules](https://eternalsunshineoftheismind.wordpress.com/2013/02/25/rules-for-creating-data-flow-diagrams/)
+
+---
+
+1. Naming conventions:
+    * Processes: strong verbs
+        - Process: any process that changes the data, producing an output. It might perform computations, or sort data based on logic, or direct the data flow based on business rules. A short label is used to describe the process, such as “Submit payment.”
+    * dataflows: nouns
+        - Data flow: the route that data takes between the external entities, processes and data stores. It portrays the interface between the other components and is shown with arrows, typically labeled with a short data name, like “Billing details.”
+    * datastores: nouns
+        - Data store: files or repositories that hold information for later use, such as a database table or a membership form. Each data store receives a simple label, such as “Orders.”
+    * external entities: nouns
+        - External entity: an outside system that sends or receives data, communicating with the system being diagrammed. They are the sources and destinations of information entering or leaving the system. They might be an outside organization or person, a computer system or a business system. They are also known as terminators, sources and sinks or actors. They are typically drawn on the edges of the diagram.
+
+2. No more than 7 - 9 processes in each DFD.
+
+3. Dataflows must begin, end, or both begin & end with a process.
+
+4. Numbering: The system under study in the context diagram is given number `0'. The processes in the top level DFD are labelled consecutively by natural numbers beginning with 1. When a process is exploded in a lower level DFD, the processes in such lower level DFD are consecutively numbered following the label of such parent process ending with a period or full-stop (for example 1.2, 1.2.3, etc.).
+
+5. External entities: Lower level DFDs can not introduce new external entities. The context diagram must therefore show all external entities with which the system under study interacts. In order not to clutter higher level DFDs, detailed interactions of processes with external entities are often shown in lower level DFDs but not in the higher level ones. In this case, there will be some dataflows at lower level DFDs that do not appear in the higher level DFDs.
+
+[Guidelines for Drawing Dataflow Diagrams](https://www.albany.edu/acc/courses/acc681.fall00/681book/node31.html)
+
+---
+
+## Examples of DFD
+
+![Customer](./images/customer-data-flow-diagram.jpg)
+
+---
+
 [Context Diagrams Overview](https://www.youtube.com/watch?v=fWNrc6GNK14&index=3&list=PLyH7UFQzuDWcV5HmE8ucXVqb1YpfcPOwk)
 
 ## Context Diagrams
@@ -124,61 +216,7 @@ Data flow diagrams are also used to model information systems. They provide grea
 
 ## Data Flow Diagram Rules
 
-* Each process should have at least one input and an output.
-* Each data store should have at least one data flow in and one data flow out.
-* All processes in a DFD go to another process or a data store.
-* Data stored in a system must go through a process. (never data store to data store communication)
 
-[Source DFD](https://www.lucidchart.com/pages/data-flow-diagram)
-
-1. All data flows must flow to or from a process
-
-All flows of data must be either coming from or going to a process. External entities can not flow directly to each other. A data flow can not link a data store to an external entity. Data can not move between data stores without first being processed.
-
-![DFD Rule #1](https://eternalsunshineoftheismind.files.wordpress.com/2013/02/picture16.png)
-
-2. A Process must have at least one input flow and one output flow.
-
-When a process has input flow but no output flow, it is called a “black hole”. When a process has output flows but no input flows, it is called a “miracle”.
-
-![DFD Rule #2](https://eternalsunshineoftheismind.files.wordpress.com/2013/02/slide-12-728.jpg)
-
-3. The inputs to a process must be sufficient to produce output flows.
-
-A “grey hole” is when the outputs of a process are greater then the sum of its inputs. For example, if a customers name and address is an input, their bank details can not be an output, as the process doesn’t have enough information to produce it.
-
-4. Processes must transform data.
-
-When naming data flows, adjectives should be used which show how processing has changed the data flow.
-
-![DFD Rule #4](https://eternalsunshineoftheismind.files.wordpress.com/2013/02/picture21.png)
-
-5. Data Flows can not cross each other
-
-The flows of data can not cross each other. To overcome this problem, data stores and entities can be duplicated. However, processes can not be deplicated. Data flows must be unidirectional.
-
-6. Entities must be labelled in lower case.
-
-[Source - Data Flow Rules](https://eternalsunshineoftheismind.wordpress.com/2013/02/25/rules-for-creating-data-flow-diagrams/)
-
----
-
-1. Naming conventions:
-    * Processes: strong verbs
-        - Process: any process that changes the data, producing an output. It might perform computations, or sort data based on logic, or direct the data flow based on business rules. A short label is used to describe the process, such as “Submit payment.”
-    * dataflows: nouns
-        - Data flow: the route that data takes between the external entities, processes and data stores. It portrays the interface between the other components and is shown with arrows, typically labeled with a short data name, like “Billing details.”
-    * datastores: nouns
-        - Data store: files or repositories that hold information for later use, such as a database table or a membership form. Each data store receives a simple label, such as “Orders.”
-    * external entities: nouns
-        - External entity: an outside system that sends or receives data, communicating with the system being diagrammed. They are the sources and destinations of information entering or leaving the system. They might be an outside organization or person, a computer system or a business system. They are also known as terminators, sources and sinks or actors. They are typically drawn on the edges of the diagram.
-
-2. No more than 7 - 9 processes in each DFD.
-3. Dataflows must begin, end, or both begin & end with a process.
-4. Numbering: The system under study in the context diagram is given number `0'. The processes in the top level DFD are labelled consecutively by natural numbers beginning with 1. When a process is exploded in a lower level DFD, the processes in such lower level DFD are consecutively numbered following the label of such parent process ending with a period or full-stop (for example 1.2, 1.2.3, etc.).
-5. External entities: Lower level DFDs can not introduce new external entities. The context diagram must therefore show all external entities with which the system under study interacts. In order not to clutter higher level DFDs, detailed interactions of processes with external entities are often shown in lower level DFDs but not in the higher level ones. In this case, there will be some dataflows at lower level DFDs that do not appear in the higher level DFDs.
-
-[Guidelines for Drawing Dataflow Diagrams](https://www.albany.edu/acc/courses/acc681.fall00/681book/node31.html)
 
 ## DFD levels and layers
 
