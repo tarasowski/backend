@@ -27,6 +27,8 @@
 
 ![Intersection](./images/intersection-example.png)
 
+---
+
 * Each process should have at least one input and an output.
 * Each data store should have at least one data flow in and one data flow out.
 * All processes in a DFD go to another process or a data store.
