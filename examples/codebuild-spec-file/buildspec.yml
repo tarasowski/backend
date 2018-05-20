@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing npm dependencies
+  pre_build:
+    commands:
+      - echo Nothing to do in the pre_build phase...
+      - npm install
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm test
+  post_build:
+    commands: 
+      - echo Build completed on `date`
+
+artifacts:
+  files:
+    - '**/*' # copy all files as the build output
