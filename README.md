@@ -20,8 +20,14 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [AWS Serverless APIs & Apps - A Complete Introduction - No CLI](https://www.udemy.com/aws-serverless-a-complete-introduction/learn/v4/overview)
 * [Automating AWS with CloudFormation](https://app.pluralsight.com/library/courses/aws-automating-cloudformation/table-of-contents)
 
+## Medium & Blog Articles & Interviews
+* [The true benefit of serverless - it’s not about servers](https://twitter.com/JoeEmison/status/985583747478245376?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fread.acloud.guru%2Fmedia%2Fe4dba87d721266b8a56e21faf4f7a159%3FpostId%3D81f4e6433593)
+* [Why invest in backend developers when your customers don’t care?](https://read.acloud.guru/why-do-you-care-so-much-about-your-backend-when-your-customers-dont-81f4e6433593)
+* [Managing multi-environment serverless architecture using AWS — an investigation](https://medium.com/2pax/managing-multi-environment-serverless-architecture-using-aws-an-investigation-6cd6501d261e)
+* [A Cloud Guru Medium Blog](https://read.acloud.guru/)
 
 ## Presentations & Podcasts
+* [Joe Emison: Lessons Learned - Detailed Architecture from Building Two Serverless Applications](https://www.youtube.com/watch?time_continue=34&v=WuXAi6b0Q7Q)
 * [GOTO 2017 • Designing for the Serverless Age • Gojko Adzic](https://www.youtube.com/watch?v=w7X4gAQTk2E)
 * [GOTO 2017 • Serverless: the Future of Software Architecture • Peter Sbarski](https://www.youtube.com/watch?v=LAWjdZYrUgI&t=32s)
 * [Serverless Startup with Yan Cui](https://softwareengineeringdaily.com/2017/08/04/serverless-startup-with-yan-cui/)
@@ -58,9 +64,6 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [Serverless Architectures on AWS](https://www.manning.com/books/serverless-architectures-on-aws)
 * [Serverless Apps with Node and Claudia.js](https://www.manning.com/books/serverless-apps-with-node-and-claudiajs)
 
-## Medium & Blog Articles
-* [Managing multi-environment serverless architecture using AWS — an investigation](https://medium.com/2pax/managing-multi-environment-serverless-architecture-using-aws-an-investigation-6cd6501d261e)
-* [A Cloud Guru Medium Blog](https://read.acloud.guru/)
 
 ## Benchmarks
 * [The right way to distribute messages effectively in serverless applications](https://medium.com/epsagon/the-right-way-to-distribute-messages-effectively-in-serverless-applications-f427e4229e67)
