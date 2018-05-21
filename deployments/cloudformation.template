@@ -1,0 +1,46 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Single Instance",
+    "Resources": {
+        "Web1": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "ImageId": "ami-08111162",
+                "InstanceType": "t2.micro",
+                "Monitoring": "false",
+                "SecurityGroups": [
+                    {
+                    "Ref": "WebSecurityGroup"
+                    }
+                ],
+                "KeyName": "virginia",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "Web1"
+                    }
+                ]
+            }
+        },
+        "WebSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Enable HTTP and SSH access",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 80,
+                        "ToPort": 80,
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 20,
+                        "ToPort": 20,
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            }
+        }
+    }
+}
