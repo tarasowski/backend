@@ -119,10 +119,11 @@ Is the key element for IT and Operation stuff. The benefits of IAC (infrastructu
 
 1. Commit (fetch resource): commit to Git repo
 2. Build (jenkins or CodeBuild): compile files + unit test
-3. Alpha (deploy to master): create a cloudformation stack
-4. Test (run end-to-end testing - acceptance): run testing with real endpoints
-5. Beta (from release brach deploy to beta): wider testing with beta customers (dog food)
-    + if no bugs
+3. Pre-alpha (deploy to pre-alpha): create a cloudformation stack
+4. Test (run integration testing - acceptance tests): run testing with real endpoints 
+5. Alpha (deploy to master): create a cloudformation stack
+6. Create Release Branch (from master): once in a week or 2 weeks
+7. Beta (from release branch deploy to beta stage): wider testing with beta customers (dog food)
 6. Production (deploy from release branch to production): deployment to real customers
 
 ![Example](./images/pipeline-example.png)
@@ -157,7 +158,7 @@ When it comes time to deploy your application you create an identical copy of yo
 
 ## Automating Infrastructure with CloudFormation
 
-You write declarative templates that take care of provisioning resources that you need on AWS. Useful when you deploying environments with multiple instances / resources. CloudFormation treats every resource in the template as a single stack. The service knows the correct order in which to provision the resources, so you simply need declare the resources that you need. 
+You write declarative templates that take care of provisioning resources that you need on AWS. Useful when you deploying environments with multiple instances / resources. CloudFormation treats every template as a single stack. The service knows the correct order in which to provision the resources, so you simply need declare the resources that you need. 
 
 * CloudFormation templates are written in JSON/YAML
 
@@ -184,6 +185,10 @@ You write declarative templates that take care of provisioning resources that yo
 
 ## Creating CloudFormation Basic Template
 
+* Cloudformation offers the so called `native parameter type` such as `"Type": "AWS::EC2::KeyPair::KeyName"`. By using them you will get all available parameters during the setup process of the stack in the AWS console. [Read more](https://aws.amazon.com/blogs/devops/using-the-new-cloudformation-parameter-types/)
+    + You can also use a key/value pair e.g. `"Default": "virginia",` under parameters and you'll get this key/value pair set as default
+
+* Cloudformation has the ability to limit the parameters by `"AllowedValues": []`, so you have already predefined allowed values for settings you want to provide in the template
 
 
 
