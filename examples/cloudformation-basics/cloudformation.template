@@ -24,13 +24,17 @@
                 "t2.large"
             ],
             "ConstraintDescription": "must be a valid EC2 instance type"
-        }
-                
-    },
-      
+        },
         
-    
-
+        "SSHLocation": {
+            "Description": "The IP address range that can be used to SSH to the EC2 instance",
+            "Type": "String",
+            "MinLength": 9,
+            "MaxLength": 18,
+            "Default": "0.0.0.0/0",
+            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x"
+        }       
+    },
 
     "Resources": {
         "Web1": {
@@ -50,7 +54,21 @@
                         "Key": "Name",
                         "Value": "Web1"
                     }
-                ]
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#! /bin/bash\n",
+                                "yum install -y httpd\n",
+                                "service httpd start\n",
+                                "echo ‘<h1>Hello World</h1>’ > /var/www/html/index.html",
+                                "\n"
+                            ]
+                        ]
+                    }
+                }
             }
         },
         "WebSecurityGroup": {
@@ -68,10 +86,29 @@
                         "IpProtocol": "tcp",
                         "FromPort": 20,
                         "ToPort": 20,
-                        "CidrIp": "0.0.0.0/0"
+                        "CidrIp": {"Ref": "SSHLocation"}
                     }
                 ]
             }
         }
+    },
+
+    "Outputs": {
+        
+        "WebsiteUrl" : {
+            "Description": "URL for newly created Instance",
+            "Value" : {
+                "Fn::Join" : [
+                    "",
+                    ["http://", {
+                        "Fn::GetAtt" : [
+                            "Web1",
+                            "PublicDnsName"
+                        ]
+                    }]
+                ]
+            }
+        }
+        
     }
 }
