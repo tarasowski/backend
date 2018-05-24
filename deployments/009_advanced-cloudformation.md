@@ -723,6 +723,8 @@ Here is an example of bare minimum policies to interact with CFN, assume the CFN
 **Note:** We can also use Stack Policy to narrow down the scope of permissions to make changes to the stack and the resources.
 
 
+### Serverless Wordpress Self-Service Portal
 
+![Architecture](./images/sls-backend-cfn.png)
 
 
