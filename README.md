@@ -147,6 +147,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
         + [x] [Data Flow Diagram Overview](https://www.youtube.com/channel/UCm0gX5V8-meiz_1CHtc24cA/search?query=data+flow)
     + [ ] [ Base CS - Exploring the basics of computer science, every Monday, for a year.](https://medium.com/basecs/archive/2017)
     + [ ] [Algorithms and Data Structures](http://www.ethoberon.ethz.ch/WirthPubl/AD.pdf)
+    + [ ] [Algorithms and data structures implemented in JavaScript](https://github.com/trekhleb/javascript-algorithms)
     + [ ] [Discrete Mathematics](https://www.udemy.com/discrete-math/)
     + [ ] [Arsdigita 02 (Discrete Mathematics) Lecture 1/20](https://www.youtube.com/watch?v=h_9WjWENWV8&list=PLUpS0WwSvA3e7HtgzNHMivo0T8V0etX_Z)
     + [ ] [Lec 1 | MIT 6.042J Mathematics for Computer Science](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-042j-mathematics-for-computer-science-fall-2010/video-lectures/)

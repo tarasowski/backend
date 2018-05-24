@@ -396,3 +396,333 @@ We start with a template and this template is used to create a stack. At this po
 
 ![Example](./images/cfn-template-intrinsic-example.png)
 
+* `Fn::GetAZs` this is a function that outputs an array or list and this array or list contains the availability zones in a region. You can also use a pseudo paramter to use a region in which the stack has been implemented. We can provide a region or pseudo parameter. This function outputs an array of the zones `["use-est-1a, "us-east-1b", "..."]`
+
+* `Fn::Select`is the function accepts two inputs, one of those is the list of things, it could be a static string or a parameter such as comma delimited list of subnets. Or it could be an output of another function. We can use `!Select [0, !GetAZs]`by doing so we can take the first string from the array. This will return the first element of the string, it will return the output to the resource
+    + `0` is the first element 
+    + `N-1` is the last element (N is the amount of elements, so if we have 7 elements in the array we needs to do 7 - 1,and 6 is the last element in the array)
+
+![Example](./images/intrinsic-func-example-nested.png)
+
+* `Fn:Join` is commonly used where you need to construct values within your template. It accepts two inputs, the first input is the delimiter, this is a string will be used to join the string. If we pass `""` an empty string our things will join together with no delimeter. Logically the next input is a list of the things we want to join together `["a", "1", fn, "..."]`. This list can be statically set (pass list of things), it can be a list which references parameter value, or you can pass a mixture of things, such as strings, parameters, output of other functions. The output of the join command is a single string.
+
+**Note:** The `!Ref` function is usually used to reference the primary attribute of the resource. But `!GetAtt` can access extended data from resources.
+
+![Join](./images/intrinsic-join-function-example.png)
+
+### Intrinsic Conditional Functions
+
+* `Fn::Equals or !Equals` is one of the lower level conditional functions. Often used as a foundation for other conditional blocks and for the condition block. It accepts two value: `{"value1", "value2"}` if value1 === value1 the function returns `true` else it returns `false`. This are binary `true and false` representation.
+    + `!Equals [!Ref EnvType, "prod"]` then it will return true or false.
+    + Along with `!Equals` we have the `!Not` function, we can wrap it to revert the result.
+
+* The condition element of the CFN allows you to define conditions, this of this as variables in your template which have true or false boolean values. They are defined by using `!Equals` function. Why it is powerful, it allows you conditional resource creation.
+
+![Example](./images/condition-func-example1.png)
+
+* `!And` takes a list  of conditions to evaluate a minimum of 2 and maximum of 10. And `!AND` evalues to true or false. It evaluates to true if all of the inputs are by themselves true and false if one or more of its input are false. You can use it within the condition section within the cloudformation template. These can be used else where in the template to use the conditional logic.
+
+* `!Or` are similar to `!And`...
+
+![Example](./images/condition-func-example2.png)
+
+* `!If` accepts three inputs
+    + ConditionName: it references a condition defined in the section, in this case you don't have to use `!` use just specify the conditon name.
+    + value_if_true: you provide a value to use if the condition is true
+    + value_if_false: you provide a value if the codition is false.
+
+![Example](./images/condition-func-if-example.png)
+
+#### Use Case of AWS::NoValue
+
+You have a CFN template that makes an RDS instance, you want to use conditional logic and parameters to control how this resource is created, you need to offer two options to the resource creator:
+
+1. The resource is created fresh, a brand new RDS instance
+
+2. The resource is created from a DB snapshot that you have created before from an existing database, maybe one that was created by a deletion policy of the previous stack resource
+
+* `AWS::NoValue` it says to CFN to remove the property/attribute entirely, what you are essentially doing is you are deleting the property/attribute
+
+![Example](./images/condition-func-if-example3.png)
+
+### Some Code Examples
+
+```yaml
+Outputs:
+  wproot:
+    Description: Access URL for wordpress
+    Value: !Join ["", ["http://", !GetAtt EC2.PublicIp, "/wordpress"]]
+  wpadmin:
+    Description: Admin Login URL - if restoring from snap, always go to this URL first
+    Value: !Join ["", ["http://", !GetAtt EC2.PublicIp, "/wordpress/wp-login.php"]]
+``` 
+---
+
+```yaml
+Parameters:
+  SnapToRestore:
+    Type: String
+    Default: ""
+    Description: snap id to restore
+  EnvironmentSize:
+    Type: String
+    Default: SMALL
+    AllowedValues:
+      - SMALL
+      - MEDIUM
+      - LARGE
+    Description: Select Environment Size (S,M,L)
+  DatabaseName:
+    Type: String
+    Default: wordpress
+  DatabaseUser:
+    Type: String
+    Default: wordpress
+  DatabasePassword:
+    Type: String
+    Default: w0rdpr355
+    NoEcho: true
+Conditions:
+  isLarge:
+    !Equals [!Ref EnvironmentSize, "LARGE"]
+  isntLarge:
+    !Not [!Equals [!Ref EnvironmentSize, "LARGE"]]
+  isRestore:
+    !Not [!Equals [!Ref SnapToRestore, ""]]
+Mappings:
+  RegionMap:
+    us-east-1:
+      "AMALINUX" : "ami-c481fad3" # AMALINUX SEP 2016
+    us-east-2:
+      "AMALINUX" : "ami-71ca9114" # AMALINUX SEP 2016
+    us-west-1:
+      "AMALINUX" : "ami-de347abe" # AMALINUX SEP 2016
+    us-west-2:
+      "AMALINUX" : "ami-b04e92d0" # AMALINUX SEP 2016
+    ca-central-1:
+      "AMALINUX" : "ami-eb20928f" # AMALINUX SEP 2016 v01
+    eu-west-1:
+      "AMALINUX" : "ami-d41d58a7" # AMALINUX SEP 2016
+    eu-central-1:
+      "AMALINUX" : "ami-0044b96f" # AMALINUX SEP 2016
+    eu-west-2:
+      "AMALINUX" : "ami-bfe0eadb" # AMALINUX SEP 2016 v01
+    ap-southeast-1:
+      "AMALINUX" : "ami-7243e611" # AMALINUX SEP 2016
+    ap-southeast-2:
+      "AMALINUX" : "ami-55d4e436" # AMALINUX SEP 2016
+    ap-northeast-2:
+      "AMALINUX" : "ami-a04297ce" # AMALINUX SEP 2016
+    ap-northeast-1:
+      "AMALINUX" : "ami-1a15c77b" # AMALINUX SEP 2016
+    ap-south-1:
+      "AMALINUX" : "ami-cacbbea5" # AMALINUX SEP 2016
+    sa-east-1:
+      "AMALINUX" : "ami-b777e4db" # AMALINUX SEP 2016
+  InstanceSize:
+    SMALL:
+      "EC2" : "t2.micro"
+      "DB" : "db.t2.micro"
+    MEDIUM:
+      "EC2" : "t2.small"
+      "DB" : "db.t2.small"
+    LARGE:
+      "EC2" : "t2.medium"
+      "DB" : "db.r3.xlarge"
+Resources:
+  DB:
+    Type: "AWS::RDS::DBInstance"
+    Condition: isntLarge # added - only create the MySQL DB if its small/med
+    DeletionPolicy: Snapshot
+    Properties:
+      AllocatedStorage: 5
+      StorageType: gp2
+      DBInstanceClass: !FindInMap [InstanceSize, !Ref EnvironmentSize, DB] # Dynamic mapping + Pseudo Parameter
+      DBName: !If [isRestore, !Ref "AWS::NoValue", !Ref DatabaseName]
+      Engine: MySQL
+      StorageType: gp2
+      MasterUsername: !If [isRestore, !Ref "AWS::NoValue", !Ref DatabaseUser]
+      MasterUserPassword: !If [isRestore, !Ref "AWS::NoValue", !Ref DatabasePassword]
+      DBSnapshotIdentifier: !If [isRestore, !Ref SnapToRestore, !Ref "AWS::NoValue"]
+  DBAuroraCluster:
+    Type: "AWS::RDS::DBCluster"
+    DeletionPolicy: Snapshot
+    Condition: isLarge # only create if its a large EnvironmentSize
+    Properties:
+      DatabaseName: !If [isRestore, !Ref "AWS::NoValue", !Ref DatabaseName]
+      Engine: aurora
+      MasterUsername: !If [isRestore, !Ref "AWS::NoValue", !Ref DatabaseUser]
+      MasterUserPassword: !If [isRestore, !Ref "AWS::NoValue", !Ref DatabasePassword]
+      SnapshotIdentifier: !If [isRestore, !Ref SnapToRestore, !Ref "AWS::NoValue"]
+  DBAurora:
+    Type : "AWS::RDS::DBInstance"
+    Condition: isLarge # only create if its a large EnvironmentSize
+    Properties:
+      DBClusterIdentifier: !Ref DBAuroraCluster
+      Engine: aurora
+      DBInstanceClass: !FindInMap [InstanceSize, !Ref EnvironmentSize, DB]
+``` 
+
+---
+
+```yaml
+EC2:
+    Type: "AWS::EC2::Instance"
+    DeletionPolicy: Delete
+    Properties:
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMALINUX] # Dynamic mapping + Pseudo Parameter
+      InstanceType: !FindInMap [InstanceSize, !Ref EnvironmentSize, EC2]
+      KeyName: AdvancedCFN
+``` 
+
+### Parameter Constraints
+
+Without specific contrains it leaves our system wide open for attacks. What should we do?
+
+1. The first step is to restrict what could be added into a parameter. We can start this process by using minlength/maxlength directives. These directives are used for string types. If a type is a number you can also use minvalue/maxvalue directives.
+
+2. The next step is to use the AllowedPattern directive, uses a regex syntax to restrict what patterns of strings are valid for entry, in this case `AllowedPattern: "[a-zA-Z[a-zA-Z0-9]]"`we say the the first character should be upper or lower letter, by any number of uppercase or lowercase. There could be much complicated patterns that e.g. allow to check the ip address. You can also explicitly to allow defined values `AllowedValues: [SMALL, MEDIUM, LARGE]`
+
+3. For password fields use `NoEcho: true` it will mask the password with asteriks. 
+
+![Parameter Constraints](./images/parameter-constrains.png)
+
+**Note:** Always check the naming constrains, there could be many problems with creation of CFN template. Each resource/product has his own naming constraings such as example with AppSync and resolver namings.
+
+**Important:** You can use `AllowedPattern` directive e.g. to force users to use strong passwords, by checking e.g. if they are using special symbols, specific length. You as engineer needs to think about the security, so work on constraints for configuration.
+
+
+## CloudFormation Service Roles
+
+The permissions you require that you need to create a CloudFormation stack.
+
+1. You login to your AWS account (you need a root or IAM account)
+
+2. CFN console you need:
+    + list stacks
+    + describe stacks
+    + list stack resources
+    + create stack
+    + select template to use and upload to s3
+    + s3 bucket create
+    + s3 bucket putItems
+    + template summary from CFN
+    + s3 bucket getObjects
+    + parameters & notification setting
+
+**Note:** When CFN is creating resources is doing so with the permissions you have or the security rise you currently using to create stack/api call. If you don't have a permission across the entire AWS account, you could run into problems when creating resources within that account. If the stack attempts to create an EC2 instance and you don't have permissions to create EC2 instance the stack creatin will fail.
+
+* CFN actually uses your permissions to create the stack it gets temporary session roles/permissions to do so on your behalf (on behalf of your account)
+
+* You need always to think about the range of permissions you need to create a stack, and it can be fairly complicated. 
+
+* You also have stack update and delete, for these commands you also need to have the right permissions to do so. 
+
+![Example](./images/cfn-service-role.png)
+
+**Note:** Within IT we have best practise approach called role separation, you may have multiple teams. You may have dedicated support or operations team, this team is responsible for some simple infra architecture you want to give them a responsibility to update/delete stack, they can perform modifications set of guidelines defined by infrastructure team. The infra team is responsible to setting up base resources and creating new templates and setting up the resources (new stacks) for the support/ops team.
+
+* Whoever updates, deletes or creates a stack is the user that provides CFN with permissions to perform  these actions, if the users doesn't have these permissions, then the operation will fail. The problem here is that you can't separate roles, all users need all permissions that they operate on. 
+
+* If the user wants to update the stack needs all access to all resources controled by the stack. And this is not the right appraoch. 
+
+> We need a different way that is called AWS service roles and this security architecture uses the stack to the center of the authorization process. The stack holds the permissions which are added when a stack is created. Once done anyone who has update or delete stack permissions, can use the permissions that the stack has to change or delete resources managed by the stack. A stack becomes the holder of permissions not the user.
+
+**Note:** The example above is important to understand how the service roles work. So in general e.g. a Lambda function gets service role to CRUD database, the user only needs to have a permission to invoke the Lambda function, there is no need to give this user all the permissions. Or if e.g. there is CodePipeline setup that does automatically deploy stuff to prod, the user just only needs to have permissions to `git push` into the repository and CodePipeline manages all the process behind.
+
+![Stack](./images/stack-permissions.png)
+
+**Note:** Infrastructure team has all the rights to create to CreateStack. The infrastructure team makes an IAM role. An IAM role is a collection of permissions which other things in AWS can assume to gain those permissions. A role contains the permissions that it's grants and it staits who can use those permissions or who can assume that role and gain those permissions. 
+
+* The infra team create a CFN role, a role that allows CFN to assume that role and they set the stack to use that role, conceptually they inject that role and the permissions which it grants into the stack object at this point the stack creation begins and the system orchestrates the creation of resources behind the scenes. 
+
+* The support/ops team member logs-in into the AWS account  or CLI or API, that could be even the customer that can access the custom design. At some point the customer or support team runs stack update to change the size of their wordpress instance. Historically CFN will create temprorary credentials based on AMI account that is making the change our customer or support team it will either fail because these entities don't have enough security access or we would need to provide them with additional security (which is bad). 
+
+* But now our stack has the associated role, the role is put there but the infrastructure team or automated software deployment system and this role is used during delete and update operations, it is used by CF to perform update or deletion, so the stack uses that role to make the changes not the users own access rights. If the role has all required permissions, CF assumes that role and does update the stack and the resources. 
+
+**Note:** It's all done without having actual account permissions to modify or delte the resources!!!
+
+![Example](./images/cfn-service-role-example.png)
+
+```yaml
+LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${APIName}-appsync-lambda-role-${APIStage}
+      ManagedPolicyArns:
+        - Ref: AppSyncLambdaPolicy
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - appsync.amazonaws.com
+    DependsOn:
+      - AppSyncLambdaPolicy
+  
+  AppSyncLambdaPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Managed policy to allow AppSync to access tables in DynamoDb and do some manipulations
+      Path: /appsync/
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: 
+              - lambda:InvokeFunction
+            Resource: 
+              - !GetAtt GetLeadFunction.Arn
+              - !GetAtt SaveLeadFunction.Arn
+              - !GetAtt UpdateLeadFunction.Arn
+              - !GetAtt DeleteLeadFunction.Arn 
+``` 
+
+
+**Note:** IAM policy only supports the use of JSON.
+
+* The way a role in AWS works is that an object or principal in AWS (might be a user or service) can assume the role. When they assume the role STS (secure token service) provides them with temporary access credentials based on the permissions that the role has. The temporary security credentials consists of an access and secure key.
+
+* A role consists of two parts:
+    1. Access policy (what the role can do: which resources it can use.
+    2. Trust policy (who can use the role): it actually says that a principal e.g. `cloudformation` is allowed to assume the role. 
+
+**Note:** In the example here we can give `CloudFormation` the full admin rights by creating a role that has a trust policy that CFN can assume the role and the role has AdminAccess rights. Once the role is assigned to the stack, anyone who is updating or deleting the stack will the role created rather than users permissions.
+
+![Example](./images/stack-gets-a-role.png)
+
+Here is an example of bare minimum policies to interact with CFN, assume the CFN has the role assumed with AccessAdmin
+
+
+```json
+"Action": [
+                "cloudformation:CreateUploadBucket",
+                "cloudformation:GetTemplateSummary",
+                "cloudformation:CreateStack",
+                "cloudformation:DeleteStack",
+                "cloudformation:DescribeStacks",
+                "cloudformation:UpdateStack",
+                "cloudformation:ListStacks",
+                "cloudformation:ListStackResources",
+                "cloudformation:DescribeStackEvents",
+                "cloudformation:CreateChangeSet",
+                "cloudformation:GetTemplate",
+                "cloudformation:GetStackPolicy",
+                "cloudformation:ListChangeSets",
+                "cloudformation:DescribeChangeSet",
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:CreateBucket",
+                "iam:ListRoles"
+            ],
+``` 
+
+**Note:** We can also use Stack Policy to narrow down the scope of permissions to make changes to the stack and the resources.
+
+
+
+
+
