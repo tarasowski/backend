@@ -21,6 +21,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [Automating AWS with CloudFormation](https://app.pluralsight.com/library/courses/aws-automating-cloudformation/table-of-contents)
 
 ## Medium & Blog Articles & Interviews
+* [Serverless Architectures - Mike Roberts](https://martinfowler.com/articles/serverless.html)
 * [The true benefit of serverless - it’s not about servers](https://twitter.com/JoeEmison/status/985583747478245376?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fread.acloud.guru%2Fmedia%2Fe4dba87d721266b8a56e21faf4f7a159%3FpostId%3D81f4e6433593)
 * [Why invest in backend developers when your customers don’t care?](https://read.acloud.guru/why-do-you-care-so-much-about-your-backend-when-your-customers-dont-81f4e6433593)
 * [Managing multi-environment serverless architecture using AWS — an investigation](https://medium.com/2pax/managing-multi-environment-serverless-architecture-using-aws-an-investigation-6cd6501d261e)
@@ -36,7 +37,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [SE-Radio Episode 320: Nate Taggart on Serverless Paradigm](http://www.se-radio.net/2018/03/se-radio-episode-320-nate-taggart-on-serverless-paradigm/)
 
 ## Serverless Tutorials
-
+* [AWS Advanced CloudFormation](https://acloud.guru/learn/aws-advanced-cloudformation)
 * [Open Source Serverless Tutorial - Severless-Stack.com](https://serverless-stack.com/)
 * [aws-serverless-workshops](https://github.com/awslabs/aws-serverless-workshops)
 * [Serverless Architectures with AWS Lambda Overview and Best Practices](https://d1.awsstatic.com/whitepapers/serverless-architectures-with-aws-lambda.pdf)
