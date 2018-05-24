@@ -357,4 +357,42 @@ To understand the creation policies, you need to understand the lifecycle:
 
 ![Policies](./images/creation-policies-example.png)
 
+## Resource Deletion Policies
+
+Very useful, they allow you to define on a per resource basis what happens to the resource when a stack is deleted 
+
+* Deletion Policies are defined per resource (every resource has different deletion policies)
+	+ **Delete:** if you don't specify anything it will delete it anyway all the resources one by one in reverse dependency order
+	+ Retain: supported by all AWS resource type. Leaves the resource as-is after stack deletion. Stack will be deleted but the resources will be there e.g. for s3. The resources will live outside of CFN and will be billed etc. be aware that it will lead to chaos
+	+ Snapshot: only supported by a few resource type: AWS::EC2::Volume & AWS::RDS::DBInstances. When it comes to stack deletion time, CFN still orchestrates of the deletion of resources but before it doing so it creates an RDS snapshot. It allows any environment that are deleted to be back-up. 
+
+You can define a deletion policy within your CFN template:
+
+```yaml
+DB:
+ Type: "AWS::RDS::DBInstance"
+ Properties:
+  AllocatedStorage: 5
+  DBInstanceClass: !FindInMap [InstanceSize, !Ref EnvironmentSize, DB]
+  DBName: !Ref DatabaseName
+  Engine: MySQL
+  MasterUsername: !Ref DatabaseUser
+  MasterPassword: !Ref DatabasePassword
+ DeletionPolicy: Snapshot # if you don't define it will be deleted by the deletion policy
+``` 
+
+## Intrinsic Functions 
+
+There two concepts: 
+
+1. Template definition time: static values that are set at the template definition. The properties and associated values are set in the template that means they are defined in the template. This template is used by CFN to create a stack and this stack orchestrates the creates of the resources. This approach is often used for resources that don't change, but it is fairly inflexible. Template reuse and portability is the design preference, by using this method you cannot guarantee reuse and portability. In many of the cases you need to create new templates for small changes. THE ATTRIBUTES ARE DEFINED WHEN YOU DEFINE A TEMPLATE, THE ATTRIBUTES VALUES ARE STATICALLY SET IN THE TEMPLATE WHEN YOU DEFINE THE TEMPLATE.
+
+![Example](./images/cfn-template-defintion.png)
+
+* CFN functions are intrinsic function allow for run-time processing. So what is run-time processing?
+We start with a template and this template is used to create a stack. At this point the resource processing can change and this is where run-time processing comes in. 
+
+2. Template run-time: **Run-time processing is where some logic or some data is injected into the stack creation process at run-time during the creation of the stack**. We can use e.g. template parameters to inject some logic during the creation process of the stack. Rather then specifying attributes statically, you can add parameter references to link inputs to attribute values and this is done in YAMl  by using a `!Ref` function `!Ref DatabaseName`. Another possibility to inject some logic is by using the `!FindInMap` function, by using this function we can define lookups for names and keys. But there are also some other ways to do it. Intrinsic Function! CFN intrinsic function perform altering processes at run-time, they are executed optionally with an input and they produce an output which is used by CFN to adjust it's processing. `!Ref` is a function and `!FindInMap` is also a function but they provide only limited functionality. There are other functions that provide simple run-time processing it's not just lookup or referencing we can actually add some processing to our templates, processing which is performed at run-time and it's used to adjust the resources or configuration of resources created by CFN based on data which is injected at run-time.  
+
+![Example](./images/cfn-template-intrinsic-example.png)
 
