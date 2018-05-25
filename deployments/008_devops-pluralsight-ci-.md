@@ -280,7 +280,7 @@ The 1st stack will take the `Parameters` from the master template. The `VPCStack
 
 But there are few differences here in the second stack in a way we are using the parameters. In order to take the outputs from the first stack and pass it into the second stack we need to use `GetAtt` intrinsic function, that goes and takes the output from the first stack and assigns it to the second one. 
 
-![Output](/images/cf-nested-stacks-3.png)
+![Output](./images/cf-nested-stacks-3.png)
 
 ### Customer Resources
 
