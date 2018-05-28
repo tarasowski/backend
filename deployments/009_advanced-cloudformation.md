@@ -728,3 +728,9 @@ Here is an example of bare minimum policies to interact with CFN, assume the CFN
 ![Architecture](./images/sls-backend-cfn.png)
 
 
+We always start with the user and the flow that happens inside the application. In the example above the customer only receives limited access rights to update (change the size of the instances) or delete the stack. Customer doesn't have the rights / role to e.g. create new stack or do any additional changes that are outside of the scope and the rights of this customer. We can limit the rights by `AllowedPatterns` etc. inside the template. Only the support team has the full access and all the rights for stack creation, modification etc.
+
+**Note:** This approach can be used if you are working with multiple team. A developer can only e.g. push the code to the Codecommit which is going to do any changes on the stack, but has access to the account and the resources.
+
+
+
