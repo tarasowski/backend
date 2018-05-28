@@ -1,5 +1,7 @@
 # Advanced CloudFormation Course
 
+[Advanced CloudFormation - ACloudGuru](https://acloud.guru/course/aws-advanced-cloudformation/)
+
 ## Introduction
 
 * You can use CloudFormation to deploy pre-sales environment (automating provisioning) in minutes for your product e.g. demo environments for pre-sales or environment for testing etc. 
@@ -731,6 +733,22 @@ Here is an example of bare minimum policies to interact with CFN, assume the CFN
 We always start with the user and the flow that happens inside the application. In the example above the customer only receives limited access rights to update (change the size of the instances) or delete the stack. Customer doesn't have the rights / role to e.g. create new stack or do any additional changes that are outside of the scope and the rights of this customer. We can limit the rights by `AllowedPatterns` etc. inside the template. Only the support team has the full access and all the rights for stack creation, modification etc.
 
 **Note:** This approach can be used if you are working with multiple team. A developer can only e.g. push the code to the Codecommit which is going to do any changes on the stack, but has access to the account and the resources.
+
+## Case Study: Codys Development LLC
+
+* The ideal scenario is that each developer works on the code in realtime and pushes that changes to the central code repository. And each of those changes will be going through automated testing (simple linting, base syntax checking and other automated processes)
+
+* We were asked to create a set of templates to create the production system. All these templates will be stored in the github repository, as part of major code change the cloudformation template is automatically used to spinup the entire testing environment, based on the latest code commited to repository. 
+
+* Everytime there is a new environment created complete with AWS components, instances, load balances and other app components. Automated testing runs within this test environment, after which the whole infra set is deleted and cleaned up. And finally it's deployed to working environment with human user acceptance testing, without running base infrastructure. 
+
+![Automated Testing](./images/automated-testing.png)
+
+### Shared Infrastructure (Base Infrastructure)
+
+* CIDR: ip range
+
+
 
 
 
