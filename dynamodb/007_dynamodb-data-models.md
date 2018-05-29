@@ -3,6 +3,7 @@
 ## Design Patterns and Best Practices
 
 [Source - Youtube Video](https://www.youtube.com/watch?v=xV-As-sYKyg)
+[Presentation - Slides](https://www.slideshare.net/AmazonWebServices/deep-dive-on-amazon-dynamodb-76982688)
 
 ### What is a Datbase?
 
@@ -283,6 +284,10 @@ But there is a much better way to do it, when we create a composite key where st
 
 ![Architecture](./images/reference-architecture.png)
 
+
+# Best Practices for DynamoDB 
+
+[Source - AWS Documentation](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/best-practices.html)
 
 
 
