@@ -128,7 +128,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 
 ---
 
-## Todo 
+## Additional Information: Sources &Links
 * [ ] **Deployments & Going Live**
     + [ ] [Cloudformation (production deployment / partial deployment)](https://linuxacademy.com/amazon-web-services/training/course/name/aws-cloudformation-deep-dive)
     + [ ] [an AWS CodePipeline, AWS CodeBuild, AWS APIGateway & AWS Lambda CI](https://github.com/nicolai86/awesome-codepipeline-ci)
