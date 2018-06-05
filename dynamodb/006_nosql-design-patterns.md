@@ -137,5 +137,105 @@ Here is an another example relational database vs. document database
 }
 ``` 
 
+## General Notes on NoSQL Data Modeling
+
+[Source](https://highlyscalable.wordpress.com/2012/03/01/nosql-data-modeling-techniques/)
+
+NoSQL data modeling often starts from the application-specific queries as opposed to relational modeling:
+
+* Relational modeling is typically driven by the structure of available data. The main design theme is  “What answers do I have?”
+
+* NoSQL data modeling is typically driven by application-specific access patterns, i.e. the types of queries to be supported. The main design theme is “What questions do I have?”  
+
+## The basic principles of NoSQL data modeling.
+
+### Denormalization
+
+Denormalization can be defined as the copying of the same data into multiple documents or tables in order to simplify query processing or to fit the user's data into a particular data model. Denormalization allow one to store data in a query-friendly structure to simplify query processing.
+
+### Aggregates
+
+* Key-value stores typically do not place constraints on values. It is also possible to vary a number of records for one business entity by using composite key. For example, a user account can be modeled as a set of entries with composite keys like `UserID_name`, `UserID_email`, `UserID_messages` and so on. 
+
+* Document databases are inherently schema-less, although some of them allow to validate incoming data using a user-defined schema (mostly on the application layer -> MongoDb)
+
+Soft schema allows one to form classes of entities with complex internal structures (nested entities) and to vary the structure of particular entities. This feature provides two major facilities:
+
+* Minimization of one-to-many relationships by means of nested entities, and, consequently reducing of joins
+* Masking of "technical" differences between business entities and modeling of heterogeneous business entities **using one collection of documents or one table.**
+
+The figure below depicts modeling of a product entity for an ecommmerce business domain. Initially, we can say that all products have an ID, Price and Description. Next we discover that different types of products have different attributes like Author for Book or Length for Jeans. Some of these attributes have one-to-many or many-to-many nature like Tracks in Music Albums. Next, it's possible that some entitties cannot be modeled using fixed types at all. For example jeans attributes are not consistent across brands.  It is possible to overcome all these issues in a relational normalized data model, but solutions are far from elegant. Soft schema allows one to use a single Aggregate (product) that can model all types of products and their attributes:
+
+![Example](https://highlyscalable.files.wordpress.com/2012/02/soft-schema2.png)
+
+**Note:** Embedding with denormalization can greatly impact updates both in performance and consistency, so special attention should be paid to update flows. 
+
+### Application Side-Joins
+
+Joins are rarely supported in NoSQL Solutions. Joins are often handled at the design time as opposed to relational data models where joins are handled at query execution time. Query time joins are always mean a performance penalty, but in many cases once can avoid joins using Denormalization and Aggregates, i.e. embedding nested entities. **In many cases joins are inevitable and should be handled by an application** The major use cases:
+
+* Many to many relationships are often modeled by links and require application joins
+* Aggregates are often inapplicable when entity internals are the subject of frequent changes. It is usually better to keep a record that something happened and join the records at query time as opposed to changing a value. For example, a messaging system can be modeled as a User entity that contains nested Message entities. But if messages are often appended, it may be better to extract Messages as independent entities and join them to the User at query time: 
+
+![Example](https://highlyscalable.files.wordpress.com/2012/03/aggregates-joins.png)
+
+### Atomic Aggregates
+
+Many, although not all, NoSQL solutions have limited transaction support. It's common to model data using an Aggregates technique to guarantee some of the ACID properties. One of the reasons why powerful transactional machinery is an inevitable part of the relational databases is that normalized data typically require multi-place updates. On the other hand, Aggregates allow one to store a single business entity as one document, row or key-value pair and update it atomically:
+
+![Example](https://highlyscalable.files.wordpress.com/2012/02/atomic-aggregate1.png)
+
+### Enumerable Keys
+
+Perhaps the greates benefit of an unordered Key-Value data model is that entries can be partitioned across multiple servers by just hashing the key. Sorting make things more complex, but sometimes an application is able to take some advantages of ordered keys even if storage doesn#t offer such as feature. Let's consider modeling of email messages as an example:
+
+* Some NoSQL stores provide atomic counters that allow one to generate squential ID's. In this case one can store messages using `UserID_messageID` as a composite key. If the last message id known it's possible to traverse previous messages. It is also possible to traverse preceding and succeeding messages for any gives message ID.
+* Messages can be grouped into buckets e.g. daily bucket. This allows one to traverse the mailbox backward or forward starting from any specific date or the current date. 
+
+**Note:** Data access patterns are patterns that can be used to access data efficiently.
+
+### Index Tables
+
+The idea is to create and maintain a special table with keys that follow the access pattern. For example, there is a master table that stores user accounts that can be accessed by user ID. A query that retrieves all users by a specific city can be supported by means of an additional table where city is key.
+
+![Example](https://highlyscalable.files.wordpress.com/2012/02/index-table.png)
+
+**Note:** An index table can be updated for each update of the master table or in batch mode. Either way, it results in an additional performance penalty and become a consistency issue. Index tables can be considered as analog of the materialized view. 
+
+### Composite Key Index
+
+Composite key is a very generic technique, but it's extremely beneficial when a store with ordered keys is used. Composite key in conjunction with secondary sorting allows one to build a kind of multidimensional index. For example, let’s take a set of records where each record is a user statistic. If we are going to aggregate these statistics by a region the user came from, we can use keys in a format (State:City:UserID) that allow us to iterate over records for a particular state or city if that store supports the selection of key ranges by a partial key match (as BigTable-style systems do):
+
+```sql
+SELECT Values WHERE state="CA:*"
+SELECT Values WHERE city="CA:San Francisco*"
+``` 
+
+![Example](https://highlyscalable.files.wordpress.com/2012/03/composite-key-index.png)
+
+
+**Note:** A list stores objects in ordered sequence. A dictionary stores objects in an unordered collection. 
+
+### Aggregation with Composite Key
+
+Composite keys may be used not only for indexing, but for different types of grouping. Let's consider an example, there is a huge array of log records with information about the users and their visits from different sites (click stream). The goal is to count the number of unique users for each site. This is similar to the following SQL query:
+
+```sql
+SELECT count(distinct(user_id)) FROM clicks GROUP BY site
+``` 
+We can model this situation using composite keys with a UserID prefix:
+
+![Example](https://highlyscalable.files.wordpress.com/2012/02/composite-key-collating1.png)
+
+### Inverted Search – Direct Aggregation
+
+[Read more](https://highlyscalable.wordpress.com/2012/03/01/nosql-data-modeling-techniques/)
+
+
+
+
+
+
+
 
 

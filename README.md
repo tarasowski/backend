@@ -89,19 +89,19 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 ---
 ## Topics covered/To cover:
 
-* [x] JavaScript/NodeJS
+* [x] NodeJS
 * [x] Testing
 * [x] Compute (Lambda)
 * [x] Network communication (API Gateway + GraphQL)
 * [x] Severless patterns
 * [x] Authentication & Authorization
 * [x] Cloudformation
-* [x] Messaging Layer (SNS + SQS needs to be covered)
-* [ ] Storage Layer
+* [x] Messaging Layer (SNS + SQS)
+* [x] Storage Layer
     * [x] Relational Databases
-    * [ ] NoSQL Databases (document storage)
-    * [ ] Migration from NoSQL to MySQL/Postgres
-    * [ ] File storage (S3, AWS KMS)
+    * [x] NoSQL Databases (document storage)
+    * [x] Migration from NoSQL to MySQL/Postgres
+    * [x] File storage (S3, AWS KMS)
 * [x] Deployments
     * [x] CodeStar
     * [x] CodePipeline
