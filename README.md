@@ -111,6 +111,12 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     * [x] AWS Architecture  
     * [ ] UML Diagrams (not required)
     * [ ] Structured analysis and design technique (SADT)
+* [ ] AWS Certificates (finish 5 of 5)
+    * [ ] AWS Certified Solutions Architect Associate
+    * [ ] AWS Certified Developer Associate
+    * [ ] AWS Certified SysOps Administrator Associate
+    * [ ] AWS Certified Solutions Architect Professional
+    * [ ] AWS Certified DevOps Engineer
 * [ ] Migration from Monolith to Serverless
 * [ ] Computer Science 101
     * [ ] Data Structures
