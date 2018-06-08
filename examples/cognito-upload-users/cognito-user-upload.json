@@ -1,0 +1,18 @@
+[
+    {
+      "Name": "name",
+      "Value": "John"
+    },
+    {
+        "Name": "family_name",
+        "Value": "Doe"
+      },
+      {
+        "Name": "email",
+        "Value": "john@doe.com"
+      },
+      {
+        "Name": "preferred_username",
+        "Value": "cac689b4-079b-48ff-bd8d-a45b61da291a"
+      }
+  ]
