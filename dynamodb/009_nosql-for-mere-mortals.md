@@ -32,8 +32,9 @@
 
 * Database transaction is an operation made up of multiple steps and that all steps must complete for the transaction to complete. If any one of the multiple steps fails, then the entire transaction fails.
 
-![Transaction](/images/transaction-workflow1.gif)
-[Source](https://vladmihalcea.com/a-beginners-guide-to-acid-and-database-transactions/)
+![Transaction](./images/transaction-workflow1.gif)
+
+* [Source](https://vladmihalcea.com/a-beginners-guide-to-acid-and-database-transactions/)
 
 * The term consistency with respect to database transactions refers to maintaining a single, logically coherent view of data. When you transfer $100 from your savings account to your checking account, the bank’s software may subtract $100 from your savings account in one step and add $100 to your checking account in another.
     * For example, if two database servers each have copies of data about products stored in a warehouse, it is said they are consistent if they have the same data.
@@ -122,7 +123,7 @@ student['location'] = "Germany"
 
 * Figure 3.13 A search index helps efficiently retrieve data when selecting by criteria based on values.
 
-![Index](/images/index-based-on-values.png)
+![Index](./images/index-based-on-values.png)
 
 * Keys should have some logical structure to make code readable and extensible, but they should also be designed with storage efficiency in mind. 
 
