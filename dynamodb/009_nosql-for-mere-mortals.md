@@ -117,14 +117,26 @@ student['location'] = "Germany"
 
 * Primary keys should not be changed, so you could not simply change the key to ‘SMITH_K_IL.’ That would violate the principle that primary keys are immutable.
 
-* you can construct meaningful names that entail information about entity types, entity identifiers, and entity attributes. For example: Cust:12387:firstName could be a key to store the first name of the customer with customerID 12387.
+* You can construct meaningful names that entail information about entity types, entity identifiers, and entity attributes. For example: Cust:12387:firstName could be a key to store the first name of the customer with customerID 12387.
     * Entity Name + ':' + Entity Identifier +':' + Entity   Attribute The delimiter does not have to be a ':' but it is a common practice.
 
 * Figure 3.13 A search index helps efficiently retrieve data when selecting by criteria based on values.
 
 ![Index](/images/index-based-on-values.png)
 
-P.114
+* Keys should have some logical structure to make code readable and extensible, but they should also be designed with storage efficiency in mind. 
+
+* Anticipating all possible entities’ types can be difficult, so coming up with unambiguous name components isn’t always possible. Try to use at least three or four letters to distinguish an entity type or attribute. 'Cst' or 'cust' are better than 'c' for a customer abbreviation.
+
+**Note:** The entity type is the fundamental building block for describing the structure of data with the Entity Data Model (EDM). In a conceptual model, an entity type represents the structure of top-level concepts, such as customers or orders. An entity type is a template for entity type instances.
+
+* For example, consider a key pattern that consists of an entity or object type (for example, 'customer'), a unique identifier for that entity or object type (for example, '198277'), an attribute name (for example, 'fname'), and common delimiter (for example, ':').
+
+* Consider using values that indicate ranges when you want to retrieve groups of values. For example, you might want to include a six-digit date in a key if you want to retrieve all customers who made a purchase on a particular date. In this case, 'cust061514' could be used as a prefix instead of 'cust' to indicate customers who bought products on June 15, 2014. The customer ID would be stored as a value associated with each key.
+    * cust061514:1:custId • cust061514:2:custId
+
+
+
 
 
 
