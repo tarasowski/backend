@@ -202,7 +202,7 @@ student['location'] = "Germany"
 
 * Filtering collections is often slower than working directly with multiple collections, each of which contains a single document type.
 
-![Collections](./mixing-collections.png)
+![Collections](./images/mixing-collections.png)
 
 * Mixing document types can lead to multiple document types in a disk data block. This can lead to inefficiencies because data is read from disk but not used by the application that filters documents based on type.
 
