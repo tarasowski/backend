@@ -76,7 +76,141 @@
 
 * E-R modeling defines three stages of data modeling: conceptual, logical, and physical.
 
-P.46
+![Logical](./images/er-modeling-logical-record.png)
+
+* Is customary to use E-R data models at three levels of abstraction: conceptual (the highest level) logical physical (the lowest level)
+
+* Logical and physical E-R notation assumes that database implementation will be in a DBMS, such as a SQL DBMS, that stores data in tables. It does not, therefore, have any way of expressing two modes of data storage that NoSQL databases make possible: **arrays nested data structures (often called “nested documents” by NoSQL DBMSs)**
+
+* Both arrays and nested data structures are modeled in E-R notation in a way that corresponds to their necessary implementation in a SQL database. This is what is shown earlier in Figure 5-1. The array or nested data structure is split out into its own table. That table has a foreign key back to the table from which it was split. Additionally, that table must have its own primary key.
+
+> **Note:** Probably it's possbile to use ER for data modeling. Just instead of using tables and separating them. There could be another entity such as nest or array that holds the relationships. a) One-to-many: nested, b) Many to many: referenceId (foreign key)
+
+* NoSQL DBMSs support the direct aggregation of arrays and nested data structures in enclosing data structures, without the use of keys. E-R notation has no way to show data structures that are related to each other without keys. As a result, E-R notation cannot be used for NoSQL database design.
+
+* One of the main goals of relational database design is to eliminate redundancy in data, which is where the same data is stored in several places in the database. Redundancy leads to the possibility of inconsistent data, where an update of certain data in the database changes the logically identical data items in one physical place but leaves them out of date in another. Inconsistent data is devilishly hard to deal with, reduces the quality of data, and can lead to costly operational mistakes as fundamental as shipping a package to the wrong address.
+
+* Data exists both as concepts (at the logical level of abstraction) and as objects (at the physical level of abstraction).
+
+* Data type defines/elaborate the type of data i.e integer, float (real number - with decimal representation), string etc.
+
+* Data Structure defines how the data will be (efficiently) contained. Data can be stored serially - Stack/Queue/Array.  Data can be arranged in tree like structure where the left branch contains The data with value less than that of the parent's & right one is opposite of the left - BST.
+
+* Different types of data (such as int, float, string etc.) can be arranged/stored in various logical ways called data structures.
+
+* In an object-oriented software system, the methods of a class are ordinarily the only routines that have direct access to the attributes of objects of that class. This kind of restriction is called encapsulation.
+
+* The UML does not have a notation for identifying key attributes, and therefore cannot represent foreign keys. This means that the UML cannot fully specify a database design. There are workarounds for this deficiency.
+
+* Entity types (concepts and real-world objects).
+
+* It defines a class as “the descriptor for a set of objects.” [ibid., p. 185] This is all well and good, but the UML lacks any ability to describe entities that do not have state or behavior; that is, concepts.
+
+* The UML lacks the concept of a key, which is essential to data modeling. It can only express the identification of objects by their physically distinct existence.
+
+* Chapter 4 in part I explained the type/class split, where types designate sets and classes describe objects.
+
+* COMN separates the designation of a set of values from the description of computer object structure and behavior. Types designate sets without specifying memory structure. Classes describe computer objects in terms of their structure in memory and the routines (methods) exclusively authorized to operate on them.
+
+* Entity 2 : something that has separate and distinct existence and objective or conceptual reality object 1a : something material that may be perceived by the senses concept 1 : something conceived in the mind : thought, notion
+
+* Figure 10-1 below shows a fundamental example of an object in the ordinary English sense of the word “object. The object pictured is a rock. It is certainly material, and it can certainly be perceived by the senses.
+
+![Object](https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_1920,f_auto/Limestone-060-RD010-C-SH_by22j3.jpg)
+
+* From this point onwards, unless it is already clear from the context, I will qualify the word “object” with the adjective “material” to mean an object in the natural language sense.
+
+* Let us consider the flashlight’s characteristics. It is an object in the same sense that a rock is an object, because it can be perceived by the senses: you can see it—even when it’s off—and touch it. However, a flashlight is interesting for more than its capability to be seen and touched. A flashlight can be turned on and off. We describe this capability by saying that the flashlight can hold a state. A flashlight has a built-in mechanism for changing its state from off to on and back to off: it’s a switch.
+
+![Object with state](https://i.ytimg.com/vi/fg6J6_k3AB4/maxresdefault.jpg)
+
+* In the commonly accepted terminology of computer science, mechanisms built into an object to change its state are called methods.
+
+* In contrast to the flashlight, the rock has no states—at least not in the sense that the flashlight has states. More precisely, the rock is in a single state (solid), and offers no mechanisms of its own for changing that state. We call objects like the flashlight stateful, while we call objects like the rock stateless.
+
+* A material object is an object in the natural-language sense of the word; in other words, something you can see and touch. Some objects have states and methods to change those states (for example, a flashlight), and some do not (for example, a rock). Objects capable of having more than one state are called stateful. Objects having only one state are called stateless.
+
+* The states of some objects have intrinsic meaning, while the states of other objects have no intrinsic meaning. It is not always necessary to assign meanings to the states of an object in order for the object to be useful.
+
+* Thus, on the evening of April 18, 1776, the tower of the Old North Church was used as a stateful object, with the following states and meanings: no lanterns: information unavailable one lantern: the soldiers were coming by land two lanterns: the soldiers were coming by sea The advantage of this system of signaling was that, although anyone could observe the state of the church tower (no lanterns, one lantern, two lanterns), only those who knew the values assigned to each state could interpret and act upon the signal.
+
+* Object-oriented technologists talk much about methods, which, in terms of material objects, are mechanisms that are part of those objects that enable one to change their states. Let us consider the methods that are part of the material objects we have considered so far. rock: no methods (which makes sense, since it has but one state) flashlight: one method, the on-off switch lighted sign: a method to turn the sign on or off Old North Church: a method to light either lantern.
+
+* But it is important to remember that those abstract values zero and one are represented by the meaningless physical states of material objects; specifically, the high- and low-voltage states of R-S flip-flops.
+
+* In fact, computers usually make memory available only in groups of eight flip-flops called bytes. Each of the eight flip-flops has two states, so a byte has 2 x 2 x 2 x 2 x 2 x 2 x 2 x 2, or 28, or 256, states.
+
+* The bit (a portmanteau of binary digit) is a basic unit of information used in computing and digital communications. A binary digit can have only one of two values, and may be physically represented with a two-state device.
+
+* we look at each of the eight flip-flops in a byte as representing a binary digit or bit, then we can think of a byte as representing an 8-digit binary number. Eight binary digits can represent numbers in the range from zero to 255. Now we can refer to each of the 256 states of a byte with a number.
+
+* Objects are often combined into a composite object. In general, the composite object has a number of states which is the product of the number of states of its component objects.
+
+* Computer object: a stateful material object whose state can be read and/or modified by the execution of computer instructions.
+
+* A computer object is a material object that has two distinct qualities beyond those possessed by most material objects: A computer object is a stateful mechanism. This means that it has two or more possible states and means for changing those states. A computer object’s state may be read by a computer, or modified by a computer, or both.
+
+* We have two kinds of computer objects: hardware objects and software objects. hardware object: a computer object which is part of the physical composition of a computer software object: an object composed of hardware objects and/or other software objects by exclusively authorizing only certain routines to access the component objects.
+
+![Composition](./images/object-composition.png)
+
+* The graphs in this figure show the following: 
+    + a hardware object a software object composed of a single hardware object, where access to the hardware object is restricted to only certain routines.
+    + a software object composed of three hardware objects, where access to those hardware objects is restricted a software object composed of two hardware objects and one other software object, which in turn is composed of a hardware object.
+
+* It’s really important to understand that at the bottom of every software object are hardware objects—material things having meaningless physical states to which we assign meaning.
+
+* Class : a description of the structural and/or behavioral characteristics of potential and/or actual objects
+
+* Hardware object has a fixed built-in set of mechanisms, accessible by computer instructions, for accessing and/or changing its state. Similarly, a software object has a fixed set of routines for accessing and/or changing its state.
+
+* A hardware object may be composed of other hardware objects not directly accessible by computer instructions. Similarly, a software object may be composed of other (hardware or software) objects not directly accessible by its routines, if those objects are encapsulated within higher-level software objects that are part of the software object.
+
+* In general, the meanings of an object’s states must be supplied from some source outside the object itself.
+
+* A material object—that is, an object in the natural-language sense of the word—is something you can see and touch. A stateful material object is an object that has more than one state. A stateful material object may have mechanisms to change its state. The states of material objects may or may not have any meaning. Their states may be assigned meaning. Their states might be useful apart from any meaning. Computers are composed of stateful material objects which we call hardware objects. Software objects are composed of hardware objects and/or other software objects, in a tree. In general, the states of software objects have no more meaning than the states of the hardware objects of which they are composed. In general, meaning must be assigned to states by something other than the objects having those states.
+
++ Hardware object : a computer object which is part of the physical composition of a computer 
++ Software object : an object composed of hardware objects and/or other software objects by exclusively authorizing only certain routines to access the component objects
++ Method : a routine authorized to operate on the components of software objects of the class of which it is a part
+
+* “Type” was used as a way for a programmer to inform a compiler that a variable could take on any value in the set designated by the type, and simultaneously that a variable needed a certain amount of memory so that it could represent all the values of that set.
+    + logical purpose: A traditional type specifies the possible values a variable or field can take on. This is extremely valuable in helping to ensure the correctness of programs and data through a process called type checking.
+    + a physical purpose: A traditional type specifies the memory or storage required for a variable or data item. A compiler or DBMS ensures that the proper amount of computer memory is allocated so that it can represent all of the values in the type’s range.
+
+* Thus, while the English word “type” can mean a classification, in DBMS and high-level programming language terminology the word “type” means a constraint on values and a specification of the storage required for any variable declared to be using that type.
+
+* “Type” for the most part retained its early meaning of set of values plus storage specification. Additionally, because the term “type” was adopted early in the history of programming language development, types were generally quite simple or “primitive”, specifying little more than sets of letters and/or numbers.
+
+* In contrast, the “class” of object-oriented programming is associated with the enablement of programmers to define structures of arbitrary complexity, leading to a terminology that considers “classes” to be more powerful in their descriptive capabilities than mere “[primitive/data] types”.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
