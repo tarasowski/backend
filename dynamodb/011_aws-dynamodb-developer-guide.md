@@ -1,2 +1,217 @@
 # Amazon DynamoDB: Developer Guide
 
+[Source - HTML Version](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)
+
+* Partition key – A simple primary key, composed of one attribute known as the partition key. DynamoDB uses the partition key's value as input to an internal hash function. The output from the hash function determines the partition (physical storage internal to DynamoDB) in which the item will be stored.
+
+* All items with the same partition key are stored together, in sorted order by sort key value.
+
+* Each primary key attribute must be a scalar (meaning that it can hold only a single value). The only data types allowed for primary key attributes are string, number, or binary. There are no such restrictions for other, non-key attributes.
+
+* Every index belongs to a table, which is called the base table for the index. In the preceding example, Music is the base table for the GenreAlbumTitle index.
+
+* For example, consider a Customers table that contains customer information for a company. Suppose that you want to send a "welcome" email to each new customer. You could enable a stream on that table, and then associate the stream with a Lambda function. The Lambda function would execute whenever a new stream record appears, but only process new items added to the Customers table.
+
+* In addition to triggers, DynamoDB Streams enables powerful solutions such as data replication within and across AWS regions, **materialized views of data in DynamoDB tables**, data analysis using Kinesis materialized views, and much more.
+
+* When your application writes data to a DynamoDB table and receives an HTTP 200 response (OK), all copies of the data are updated. The data is eventually consistent across all storage locations, usually within one second or less.
+
+* One read capacity unit represents one strongly consistent read per second, or two eventually consistent reads per second, for an item up to 4 KB in size.
+
+* One write capacity unit represents one write per second for an item up to 1 KB in size.
+
+* If your read or write requests exceed the throughput settings for a table, DynamoDB can throttle that request.
+
+![Low-level](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/images/SDKSupport.png)
+
+1. You write an application using an AWS SDK for your programming language.
+2. Each AWS SDK provides one or more programmatic interfaces for working with DynamoDB. The specific interfaces available depend on which programming language and AWS SDK you use.
+3. The AWS SDK constructs HTTP(S) requests for use with the low-level DynamoDB API.
+4. The AWS SDK sends the request to the DynamoDB endpoint.
+5. DynamoDB executes the request. If the request is successful, DynamoDB returns an HTTP 200 response code (OK). If the request is unsuccessful, DynamoDB returns an HTTP error code and an error message.
+6. The AWS SDK processes the response and propagates it back to your application.
+
+* Each of the AWS SDKs provides important services to your application, including the following:
+    + Formatting HTTP(S) requests and serializing request parameters.
+    + Generating a cryptographic signature for each request.
+    + Forwarding request to a DynamoDB endpoint and receiving responses from DynamoDB.
+    + Extracting the results from those responses.
+    + Implementing basic retry logic in case of errors.
+    + You do not need to write code for any of these tasks.
+
+* Throttling prevents your application from consuming too many capacity units. When a request is throttled, it fails with an HTTP 400 code (Bad Request) and a ProvisionedThroughputExceededException. The AWS SDKs have built-in support for retrying throttled requests (see Error Retries and Exponential Backoff), so you do not need to write this logic yourself.
+
+* If you use the AWS Management Console to create a table or a global secondary index, DynamoDB auto scaling is enabled by default.
+
+* By reserving your read and write capacity units ahead of time, you realize significant cost savings compared to on-demand provisioned throughput settings.
+
+* DynamoDB stores data in partitions. A partition is an allocation of storage for a table, backed by solid-state drives (SSDs) and automatically replicated across multiple Availability Zones within an AWS Region.
+
+* Before your application can access a database, it must be authenticated to ensure that the application is allowed to use the database, and authorized so that the application can only perform actions for which it has permissions.
+
+![Client-Dynamo](./images/dynamodb-client-interraction.png)
+
+* Most SQL databases are transaction-oriented. When you issue an INSERT statement, the data modifications are not permanent until you issue a COMMIT statement. With Amazon DynamoDB, the effects of a PutItem action are permanent when DynamoDB replies with an HTTP 200 status code (OK).
+
+* GetItem – Retrieves a single item from a table. This is the most efficient way to read a single item, because it provides direct access to the physical location of the item.
+
+* Query – Retrieves all of the items that have a specific partition key. Within those items, you can apply a condition to the sort key and retrieve only a subset of the data. Query provides quick, efficient access to the partitions where the data is stored.
+
+* You can add a ProjectionExpression parameter to return only some of the attributes: 
+
+```js
+{     TableName: "Music",     Key: {         "Artist": "No One You Know",         "SongTitle": "Call Me Today"     },     "ProjectionExpression": "AlbumTitle, Year, Price" } 
+```
+* The DynamoDB GetItem action is very efficient: It uses the primary key value(s) to determine the exact storage location of the item in question, and retrieves it directly from there. The SQL SELECT statement is similarly efficient, in the case of retrieving items by primary key values.
+
+> DynamoDB is a non-relational database. As such, it does not support table joins. If you are migrating an existing application from a relational database to DynamoDB, you need to denormalize your data model to eliminate the need for joins.
+
+* You can use Query with any table that has a composite primary key (partition key and sort key). You must specify an equality condition for the partition key, and you can optionally provide another condition for the sort key.
+
+* The KeyConditionExpression parameter specifies the key values that you want to query. You can use an optional FilterExpression to remove certain items from the results before they are returned to you.
+
+* In DynamoDB, you must use ExpressionAttributeValues as placeholders in expression parameters (such as KeyConditionExpression and FilterExpression). This is analogous to the use of bind variables in relational databases, where you substitute the actual values into the SELECT statement at runtime.
+
+* A FilterExpression is applied after the entire table is scanned, but before the results are returned to you. (This is not recommended with large tables: You are still charged for the entire Scan, even if only a few matching items are returned.)
+
+* Whether you are using a relational database or DynamoDB, you should be judicious with index creation. Whenever a write occurs on a table, all of the table's indexes must be updated. In a write-heavy environment with large tables, this can consume large amounts of system resources. In a read-only or read-mostly environment, this is not as much of a concern—however, you should ensure that the indexes are actually being used by your application, and not simply taking up space.
+
+* In a relational database, an index is a data structure that lets you perform fast queries on different columns in a table.
+
+* After the index has been created, you can query the data in the table as usual, but now the database can use the index to quickly find the specified rows in the table instead of scanning the entire table.
+
+* DynamoDB does not have a query optimizer, so a secondary index is only used when you Query it or Scan it.
+
+* A query optimizer is a critical database management system (DBMS) component that analyzes Structured Query Language (SQL) queries and determines efficient execution mechanisms. A query optimizer generates one or more query plans for each query, each of which may be a mechanism used to run a query. The most efficient query plan is selected and used to run the query. Database users do not typically interact with a query optimizer, which works in the background. [Source](https://www.techopedia.com/definition/26224/query-optimizer)
+
+* DynamoDB ensures that the data in a secondary index is eventually consistent with its table. You can request strongly consistent Query or Scan actions on a table or a local secondary index. However, global secondary indexes only support eventual consistency.
+
+* Projection – Attributes from the table that are copied to the index. In this case, ALL means that all of the attributes are copied.
+
+* Part of this operation involves backfilling data from the table into the new index. During backfilling, the table remains available. However, the index is not ready until its Backfilling attribute changes from true to false. You can use the DescribeTable action to view this attribute.
+
+* In a relational database, you do not work directly with indexes. Instead, you query tables by issuing SELECT statements, and the query optimizer can make use of any indexes.
+
+* A query optimizer is a relational database management system (RDBMS) component that evaluates the available indexes, and determines whether they can be used to speed up a query. If the indexes can be used to speed up a query, the RDBMS accesses the index first and then uses it to locate the data in the table.
+
+* This example uses a ProjectionExpression to indicate that we only want some of the attributes, rather than all of them, to appear in the results.
+
+* You must specify the Key attributes of the item to be modified, and an UpdateExpression to specify attribute values.
+
+* UpdateItem replaces the entire item, rather than replacing individual attributes.
+
+* UpdateItem behaves like an "upsert" operation: The item is updated if it exists in the table, but if not, a new item is added (inserted).
+
+* UpdateItem supports conditional writes, where the operation succeeds only if a specific ConditionExpression evaluates to true.
+
+* UpdateItem also supports atomic counters, or attributes of type Number that can be incremented or decremented. Atomic counters are similar in many ways to sequence generators, identity columns, or auto-increment fields in SQL databases.
+
+* In addition to DeleteItem, Amazon DynamoDB supports a BatchWriteItem action for deleting multiple items at the same time.
+
+* The AWS SDK constructs HTTP(S) requests for use with the low-level DynamoDB API.
+
+![RR Dynamodb](./images/dynamodb-request-response.png)
+
+* The DynamoDB low-level API is the protocol-level interface for Amazon DynamoDB. At this level, every HTTP(S) request must be correctly formatted and carry a valid digital signature. The AWS SDKs construct low-level DynamoDB API requests on your behalf and process the responses from DynamoDB. This lets you focus on your application logic, instead of low-level details. However, you can still benefit from a basic knowledge of how the low-level DynamoDB API works.
+
+* The low-level DynamoDB API uses JavaScript Object Notation (JSON) as a wire protocol format. JSON presents data in a hierarchy, so that both data values and data structure are conveyed simultaneously. Name-value pairs are defined in the format name:value. The data hierarchy is defined by nested brackets of name-value pairs.
+
+* DynamoDB uses JSON only as a transport protocol, not as a storage format. The AWS SDKs use JSON to send data to DynamoDB, and DynamoDB responds with JSON, but DynamoDB does not store data persistently in JSON format.
+
+* The DynamoDB low-level API accepts HTTP(S) POST requests as input. The AWS SDKs construct these requests for you.
+
+* Suppose that you have a table named Pets, with a key schema consisting of AnimalType (partition key) and Name (sort key). Both of these attributes are of type string. To retrieve an item from Pets, the AWS SDK constructs a request as shown following:
+
+![Post](./images/request-post-dynamodb.png)
+
+* The Authorization header contains information required for DynamoDB to authenticate the request. 
+* The X-Amz-Target header contains the name of a DynamoDB operation: GetItem.
+* The payload (body) of the request contains the parameters for the operation, in JSON format.
+
+* Response Format Upon receipt of the request, DynamoDB processes it and returns a response. For the request shown above, the HTTP(S) response payload contains the results from the operation, as in this example:
+
+![Response1](./images/response-dynamodb-1.png)
+![Response2](./images/response-dynamodb-2.png)
+
+* Data Type Descriptors The low-level DynamoDB API protocol requires each attribute to be accompanied by a data type descriptor. Data type descriptors are tokens that tell DynamoDB how to interpret each attribute.
+
+* If number precision is important to your application, you should convert numeric values to strings before you pass them to DynamoDB.
+
+* To send binary data in a request, you will need to encode it in Base64 format. Upon receiving the request, DynamoDB decodes the Base64 data back to binary.
+
+* The AWS SDKs take care of propagating errors to your application, so that you can take appropriate action. For example, in a Java program, you can write try-catch logic to handle a ResourceNotFoundException
+
+* If you are not using an AWS SDK, you will need to parse the content of the low-level response from DynamoDB.
+
+* AccessDeniedException Message: Access denied. The client did not correctly sign the request. If you are using an AWS SDK, requests are signed for you automatically; otherwise, go to the Signature Version 4 Signing Process in the AWS General Reference.
+
+* Message: The request signature does not conform to AWS standards. The request signature did not include all of the required components. If you are using an AWS SDK, requests are signed for you automatically; otherwise, go to the Signature Version 4 Signing Process in the AWS General Reference.
+
+* You should also see a Request ID in the response. The Request ID can be helpful if you need to work with AWS Support to diagnose an issue.
+
+* **Exponential Backoff:** Numerous components on a network, such as DNS servers, switches, load balancers, and others can generate errors anywhere in the life of a given request. The usual technique for dealing with these error responses in a networked environment is to implement retries in the client application. This technique increases the reliability of the application and reduces operational costs for the developer. Each AWS SDK implements retry logic, automatically. You can modify the retry parameters to your needs.
+
+* In addition to simple retries, each AWS SDK implements exponential backoff algorithm for better flow control. The concept behind exponential backoff is to use progressively longer waits between retries for consecutive error responses. For example, up to 50 milliseconds before the first retry, up to 100 milliseconds before the second, up to 200 milliseconds before third, and so on. However, after a minute, if the request has not succeeded, the problem might be the request size exceeding your provisioned throughput, and not the request rate.
+
+* Most exponential backoff algorithms use jitter (randomized delay) to prevent successive collisions. Because you aren't trying to avoid such collisions in these cases, you do not need to use this random number. However, if you use concurrent clients, jitter can help your requests succeed faster.
+
+* For BatchGetItem, the tables and primary keys in question are returned in the UnprocessedKeys parameter of the request. For BatchWriteItem, similar information is returned in UnprocessedItems.
+
+* The most likely cause of a failed read or a failed write is throttling. For BatchGetItem, one or more of the tables in the batch request does not have enough provisioned read capacity to support the operation.
+
+* If DynamoDB returns any unprocessed items, you should retry the batch operation on those items. However, we strongly recommend that you use an exponential backoff algorithm. If you retry the batch operation immediately, the underlying read or write requests can still fail due to throttling on the individual tables. If you delay the batch operation using exponential backoff, the individual requests in the batch are much more likely to succeed.
+
+* An expression attribute name is a placeholder that you use in an expression, as an alternative to an actual attribute name. An expression attribute name must begin with a #, and be followed by one or more alphanumeric characters.
+
+* On some occasions, you might need to write an expression containing an attribute name that conflicts with a DynamoDB reserved word. (For a complete list of reserved words, see Reserved Words in DynamoDB.) For example, the following AWS CLI example would fail because COMMENT is a reserved word:
+
+![Reserved Words](./images/reserved-words-dynamodb.png)
+
+* To work around this, you can replace Comment with an expression attribute name such as #c. The # (pound sign) is required and indicates that this is a placeholder for an attribute name. The AWS CLI example would now look like this: 
+
+![Reserved Words](./images/reserved-words-dynamodb-expression.png)
+
+* In an expression, a dot (".") is interpreted as a separator character in a document path. However, DynamoDB also allows you to use a dot character as part of an attribute name. This can be ambiguous in some cases. Suppose that you wanted to access the nested attribute `ProductReviews.OneStar`, using the following projection expression:
+
+* Suppose that you wanted to access the nested attribute ProductReviews.OneStar, using the following projection expression: 
+```js
+aws dynamodb get-item \     --table-name ProductCatalog \     --key '{"Id":{"N":"123"}}' \     --projection-expression "ProductReviews.OneStar"    
+```
+
+The result would contain all of the one-star product reviews, which is expected. But what if you decided to use an expression attribute name instead? For example, what would happen if you were to define `#pr1star` as a substitute for ProductReviews.OneStar? 
+
+```js
+aws dynamodb get-item \     --table-name ProductCatalog \     --key '{"Id":{"N":"123"}}' \     --projection-expression "#pr1star"  \     --expression-attribute-names '{"#pr1star":"ProductReviews.OneStar"}'
+```
+
+* The correct approach would be to define an expression attribute name for each element in the document path:
+
+`#pr — ProductReviews #1star — OneStar`
+
+You could then use `#pr.#1star? for the projection expression: 
+
+```js
+aws dynamodb get-item \     --table-name ProductCatalog \     --key '{"Id":{"N":"123"}}' \     --projection-expression "#pr.#1star"  \     --expression-attribute-names '{"#pr":"ProductReviews", "#1star":"OneStar"}'
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
