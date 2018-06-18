@@ -232,9 +232,193 @@ We can model this situation using composite keys with a UserID prefix:
 [Read more](https://highlyscalable.wordpress.com/2012/03/01/nosql-data-modeling-techniques/)
 
 
+## Rules for Relations in NoSQL
+
+[Source - NoSQL for Mere Mortals](https://github.com/tarasowski/serverless/blob/master/dynamodb/009_nosql-for-mere-mortals.md)
+
+### One-to-Many
+
+* One-to-Many Relations in Document Databases One-to-many relations are the simplest of the three relations. This relation occurs when an instance of an entity has one or more related instances of another entity. The following are some examples: • One order can have many order items. • One apartment building can have many apartments. • One organization can have many departments. • One product can have many parts.
+
+* In the case of a one-to-many relation, both entities are modeled using a document embedded within another document.
+
+```js
+{    customer_id: 76123,    name: 'Acme Data Modeling Services',    person_or_business: 'business',    address : [                      { street: '276 North Amber St',                         city: 'Vancouver',                         state: 'WA',                         zip: 99076} ,                      { street: '89 Morton St',                         city: 'Salem',…
+``` 
+
+* The basic pattern is that the one entity in a one-to-many relation is the primary document, and the many entities are represented…
+
+### Many-to-Many Relations
+
+* Many-to-Many Relations in Document Databases A many-to-many relation occurs when instances of two entities can both be related to multiple instances of another entity. The following are some examples: • Doctors can have many patients and patients can have many doctors. • Operating system user groups can have many users and users can be in many operating system user groups. • Students can be enrolled in many courses…
+
+* Many-to-many relations are modeled using two collections—one for each type of entity. Each collection maintains a list of identifiers that reference related entities. For example, a document with course data would include an array of student IDs, and a student document would include a list of course IDs, as in the following:
+
+* The pattern minimizes duplicate data by referencing related documents with identifiers…
+
+* Care must be taken when updating many-to-many relationships so that both entities…
 
 
+### Hierarchies in NoSQL
 
+* Modeling Hierarchies in Document Databases Hierarchies describe instances of entities in some kind of parent-child or part-subpart relation. The product_category attribute introduced earlier is an example where a hierarchy could help represent relations between different product categories (see Figure…
+
+More Information here: [MongoDb Tutorial](https://docs.mongodb.com/manual/tutorial/model-tree-structures/)
+
+
+* One-to-many, many-to-many, and hierarchies are common patterns in document databases. The patterns described here are useful in many situations, but you should always evaluate the utility of a pattern with reference to the kinds of queries you will execute and the expected changes that will occur over the lives of the documents. Patterns should support the way you will query and maintain documents by making those operations faster or less complicated than other options.
+
+* You will have to balance benefits of faster query response with the cost of slower inserts and updates when indexes are in place.
+
+## Design Pattern for DynamoDb
+
+[Source - AWS Presentation](https://github.com/tarasowski/serverless/blob/master/dynamodb/007_dynamodb-data-models.md)
+
+* Space: access is evently spread over the key-space
+* Time: requests arrive evenly spaced in time
+
+## Data Modeling
+
+* Use table or GSI with alternative partition key
+* Use `GetItem` or `BatchGetItem` API
+* Example: Given an SSN or licence number, get attributes
+
+### 1:1 Relationship
+
+* If we want to maintain a relationship 1:1 or key-values. This is how we can do that in DynamoDb. Users by licence and you can look up your attributes by the social security number (SSN)
+![Data Modeling](./images/data-modeling-examples.png)
+
+### 1:N Relationships
+
+* Use a table or GSI with partition and sort key. Use Query API. Example given a device, find all readings between epoch X, Y
+
+![1:N](./dynamodb/images/1toN-relationships.png)
+
+* We want data structures in NoSQL that can be gathered and built into the application tier by doing a simple table select. If I have to start doing multiple selects and maintaining relational structure in the application tier, I'm defeating purpose of NoSQL. In NoSQL we want to put the data that it's already mapped to the way how our query looks like (our apps needs it)
+
+### N:M Relationships
+
+* Use a table and GSI with partition key and sort key elements switched (it's just only about flipping the partition and sort key)
+* Use Query API
+* Example: Given a user, find all games. Or given a game, find all users. 
+
+![Example](./images/ntom-relationships.png)
+
+## Hierarchical Data (Tiered relational data structures)
+
+A lot of what we see in application development is a hierarchical data. If we look at the application layer object, they have properties and properties can be base types, properties might be sets of those base types, but those properties might also be complex types,which have their own properties. 
+
+In order to represent hiararchial data you use the sort key to define the hierarchy. We have the productID and the type, which is going to be our sort key and the type is actually, defines a hierarchical structure, which we can load our product catalog. We use here the sort key in order to maintain the hierarchy. And we can query it easily by using a conditional expression `begins with` on the sort key.
+
+![Example](./images/hierarchy-data.png)
+
+### or as Document (JSON)
+
+Another way to do it with JSON documents. In this particular example, I will structure the table. You can use here filter expressions to navigate, you'll get a lot of flexibility. It's up to developer to put a hierarchy on the table or JSON. The only one problem with JSON is that you are limited to hierarchical structure of 400KB.
+
+![Example](./images/hierarchy-json.png)
+
+**Note:** You can do here a combination of the data. There is no reason only to use JSON, you can use both JSON and primary + sort key. 
+
+### Time series tables
+
+* Don't mix hot and cold data; archive cold data to Amazon S3
+
+* DynamoDb doesn't want you to grow the tables infinetely, as we start to grow in size we will start to partition the table and it's also expensive to store data.
+
+* What we would like to do is to migrate cold data to another table and don't store it with the high velocity table. We speak about cold data = data that is e.g. 3 days old. 
+
+* We would like to see you to roll the tables over, at some period of time the workflow says I create a new table and I make that hot table and my existing hot table becomes cold table and we deprovision that table (remove WCU/RCUs)
+
+* And at some point the data is so cold that we archive it, store it to s3 or drop it entirely. 
+
+**Note:** By offloading cold data you are going to save a lot of money, since you don't pay for it as for the hot data. It's lifecycle you are managing your data in a lifecycle. 
+
+![Example](./images/time-series-table-example.png)
+
+* Use a table per time period
+* Pre-create weekly, monthly tables
+* Provision required throughput for current table
+* Writes go to the current table
+* Turn off or reduce througput for older tables
+
+**Note:** Only when dealing with time series table
+
+### Messaging App
+
+* Large items
+* Filters vs. indexes
+* M:N Modeling - inbox and outbox
+
+![Messaging](./images/messaging-modeling-example.png)
+
+**Note:** In the example above we'll have problems since the data is too big and will be loaded all the time because of the attachments. We'll pay a lot of RCUs since each email is on avaerage 256kb big. Since we don't need to read all the data at once, we can create a reference from one table to another.
+
+![Example](./images/seperate-bulk-data-example.png)
+
+The example above will even support the MVC data, the model contains that the view needs and the controller interacts with the data, while the view switches, when I change from summary to the detail view, and this is ok for the application to make a roundtrip and get that data.
+
+![Example](./images/messages-table.png) 
+
+In the example above we have 2 GSI that give us the inbox and outbox view and we don't have to have the heavy RCU hit, we save a lot of money. We get the big data away from the small data and only read the data that you need. 
+
+* Reduce one-to-many item sizes
+* Configure secondary index projections
+* Use GSIs to model M:N relationship between sender and recepient
+
+**Note:** Important when: Querying many large items at once
+
+### Multiplayer Online Gaming
+
+In this particular example we have a partition key that's a gameId, games have status.
+
+![Example](./images/gaming-data-structure.png)
+---
+
+![Example](./images/gaming-data-structure-lsi.png)
+---
+
+In this example you pay for the read capacity and then filter out the results.
+
+![Example](./images/gaming-data-structure-lsi-filter.png)
+
+But there is a much better way to do it, when we create a composite key where status and date are combined together. You can call it compoud query.
+
+![Example](./images/status-date-game-lsi-filter.png)
+---
+
+![Example](./images/query-composite-key.png)
+
+#### Sparse Indexes
+
+* There are some attributes that not every has. So I can define a sparse index with much less read capacity on this GSI. And I can actually `Scan` that GSI to get all the users that have awards. It's a good way to get results you need without spending a lot of money.
+
+![Example](./images/sparse-index.png)
+
+### DynamoDb Streams
+
+* Think of that as a change log
+* Stream updates to a table
+* Asynchronous
+* Exactly once
+* Strictly ordered
+    + Per item
+* Highly durable
+    + Scale with Table
+* 24 hours lifetime
+* Sub-second latency
+
+**Note:** You can use Streams to do backups and replication of tables. 
+
+![Example](./images/data-replication-table-to-table.png)
+---
+
+![Architecture](./images/reference-architecture.png)
+
+
+# Best Practices for DynamoDB 
+
+[Source - AWS Documentation](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/best-practices.html)
 
 
 

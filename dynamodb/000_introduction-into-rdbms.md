@@ -1,4 +1,4 @@
-# Getting Started with Databases
+# Getting Started with Databases (RDBMS)
 
 [Source - 8 Lectures](https://www.youtube.com/watch?v=4Z9KEBexzcM&list=PL1LIXLIF50uXWJ9alDSXClzNCMynac38g)
 
