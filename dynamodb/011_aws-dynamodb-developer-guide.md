@@ -194,6 +194,95 @@ You could then use `#pr.#1star? for the projection expression:
 aws dynamodb get-item \     --table-name ProductCatalog \     --key '{"Id":{"N":"123"}}' \     --projection-expression "#pr.#1star"  \     --expression-attribute-names '{"#pr":"ProductReviews", "#1star":"OneStar"}'
 ```
 
+* If you need to compare an attribute with a value, define an expression attribute value as a placeholder. Expression attribute values are substitutes for the actual values that you want to compare — values that you might not know until runtime. An expression attribute value must begin with a :, and be followed by one or more alphanumeric characters. For example, suppose you wanted to return all of the ProductCatalog items that are available in Black and cost 500 or less. You could use a Scan operation with a filter expression, as in this AWS CLI example: 
+
+```js
+aws dynamodb scan \     --table-name ProductCatalog \     --filter-expression "contains(Color, :c) and Price <= :p" \     --expression-attribute-values file://values.json    The arguments for --expression-attribute-values are stored in the file values.json: {     ":c": { "S": "Black" },     ":p": { "N": "500" } } 
+``` 
+
+* **Note:** A Scan operation reads every item in a table; therefore, you should avoid using Scan with large tables. The filter expression is applied to the Scan results, and items that do not match the filter expression are discarded. If you define an expression attribute value, you must use it consistently throughout the entire expression. Also, you cannot omit the : symbol. Expression attribute values are used with condition expressions,update expressions, and filter expressions.
+
+* To manipulate data in a DynamoDB table, you use the PutItem, UpdateItem and DeleteItem operations. (You can also use BatchWriteItem to perform multiple PutItem or DeleteItem operations in a single call.) For these data manipulation operations, you can specify a condition expression to determine which items should be modified. If the condition expression evaluates to true, the operation succeeds; otherwise, the operation fails.
+
+* To perform a conditional delete, you use a DeleteItem operation with a condition expression. The condition expression must evaluate to true in order for the operation to succeed; otherwise, the operation fails.
+
+* In the condition expression, the : (colon character) indicates an expression attribute value— placeholder for an actual value.
+
+* Syntax for Condition Expressions In the following syntax summary, an operand can be the following: A top-level attribute name, such as Id, Title, Description or ProductCategory.
+
+![Operand](./images/operand-dynamodb.png)
+![Function](./images/function-dynamodb.png)
+
+* Use parentheses to change the precedence of a logical evaluation. For example, suppose that conditions a and b are true, and that condition c is false. The following expression evaluates to true: a OR b AND c However, if you enclose a condition in parentheses, it is evaluated first. For example, the following evaluates to false: (a OR b) AND c Note You can nest parentheses in an expression. The innermost ones are evaluated first.
+
+* DynamoDB evaluates conditions from left to right using the following precedence rules: = <> < <= > >= IN BETWEEN attribute_exists attribute_not_exists begins_with contains Parentheses NOT AND OR
+
+* To update an existing item in a table, you use the UpdateItem operation. You must provide the key of the item you want to update. You must also provide an update expression, indicating the attributes you want to modify and the values you want to assign to them. An update expression specifies how UpdateItem will modify the attributes of an item—for example, setting a scalar value, or removing elements from a list or a map. The following is a syntax summary for update expressions: update-expression ::=     [ SET action [, action] ... ]     [ REMOVE action [, action] ...]     [ ADD action [, action] ... ]     [ DELETE action [, action] ...] An update expression consists of one or more clauses. Each clause begins with a SET, REMOVE, ADD or DELETE keyword. You can include any of these clauses in an update expression, in any order. However, each action keyword can appear only once. Within each clause are one or more actions, separated by commas. Each action represents a data modification.
+
+* Use the SET action in an update expression to add one or more attributes to an item. If any of these attribute already exist, they are overwritten by the new values. You can also use SET to add or subtract from an attribute that is of type Number. To perform multiple SET actions, separate them by commas.
+
+* Adding Nested Map Attributes Example Add some nested map attributes:
+
+```js
+aws dynamodb update-item \     --table-name ProductCatalog \     --key '{"Id":{"N":"789"}}' \     --update-expression "SET #pr.#5star[1] = :r5, #pr.#3star = :r3" \     --expression-attribute-names file://names.json \     --expression-attribute-values file://values.json \     --return-values ALL_NEW
+``` 
+* The arguments for --expression-attribute-names are stored in the file names.json: {     "#pr": "ProductReviews",     "#5star": "FiveStar",     "#3star": "ThreeStar" } The arguments for --expression-attribute-values are stored in the file values.json: {     ":r5": { "S": "Very happy with my purchase" },     ":r3": {         "L": [             { "S": "Just OK - not that great" }         ]     } }
+
+* (Remember that list_append takes two lists as input, and appends the second list to the first.)
+
+* If you want to avoid overwriting an existing attribute, you can use SET with the if_not_exists function. (The function name is case-sensitive.) The if_not_exists function is specific to the SET action, and can only be used in an update expression. 
+
+* In general, we recommend using SET rather than ADD. Use the ADD action in an update expression to add a new attribute and its value(s) to an item. If the attribute already exists, then the behavior of ADD depends on the attribute's data type: If the attribute is a number, and the value you are adding is also a number, then the value is mathematically added to the existing attribute. (If the value is a negative number, then it is subtracted from the existing attribute.) If the attribute is a set, and the value you are adding is also a set, then the value is appended to the existing set. Note The ADD action only supports number and set data types.
+
+* Time To Live (TTL) for DynamoDB allows you to define when items in a table expire so that they can be automatically deleted from the database
+
+* **Overloading Global Secondary Indexes** Although Amazon DynamoDB has a limit of five global secondary indexes per table, in practice, you can index across far more than five data fields. As opposed to a table in a relational database management system (RDBMS), in which the schema is uniform, a table in DynamoDB can hold many different types of data items at one time. In addition, the same attribute in different items can contain entirely different types of information. Consider the following example of a DynamoDB table layout that saves a variety of different kinds of data:
+    + The Data attribute, which is common to all the items, has different content depending on its parent item. If you create a global secondary index for the table that uses the table's sort key as its partition key and the Data attribute as its sort key, you can make a variety of different queries using that single global secondary index.
+    + These queries might include the following: Look up an employee by name in the global secondary index, by searching on the Employee_Name attribute value. Use the global secondary index to find all employees working in a particular warehouse by searching on a warehouse ID (such as Warehouse_01). Get a list of recent hires, querying the global secondary index on HR_confidential as a partition-key value and Data as the sort key value.
+
+![Overloading](./images/table-overloading.png)
+
+* To enable selective queries across the entire key space, you can use write sharding by adding an attribute containing a (0-N) value to every item that you will use for the global secondary index partition key. The following is an example of a schema that uses this in a Critical-Event workflow: Using this schema design, the event items are distributed across 0-N partitions on the GSI, allowing a scatter read using a sort condition on the composite key to retrieve all items with a given state during a specified time period.
+
+![Events](./images/event-workflow.png)
+
+* This schema pattern delivers a highly selective result set at minimal cost, without requiring a table scan.
+
+* There is always a short propagation delay between a write to the parent table and the time when the written data appears in the index. In other words, your applications should take into account that the global secondary index replica is only eventually consistent with the parent table.
+
+* Amazon DynamoDB currently limits the size of each item that you store in a table (see Limits in DynamoDB. If your application needs to store more data in an item than the DynamoDB size limit permits, you can try compressing one or more large attributes, or you can store them as an object in Amazon Simple Storage Service (Amazon S3) and store the Amazon S3 object identifier in your DynamoDB item.
+
+* If you wanted to store an image of each product that was too large to fit in an item, you could store the images in Amazon S3 instead of in DynamoDB.
+
+* There are two key numbers to keep in mind for this design. First, a physical partition can support only 1,000 WCUs (writes per second, each of up to 1 KB in size). Second, it can hold only 10 GB of total data. If either of these limits is exceeded, the partition will be split.
+
+* For example, if you anticipate an average event frequency around 5,000 events per second with a maximum of 6,000 per second, your application can append to the partition key a sharding suffix that rotates from _1 through _6 and back again. This creates six physical partitions across which incoming events are evenly distributed as they arrive, and you can provision your table with 6,000 WCUs.
+
+* **Adjacency List Design Pattern** When different entities of an application have a many-to-many relationship between them, the relationship can be modeled as an adjacency list. In this pattern, all top-level entities (synonymous to nodes in the graph model) are represented using the partition key. Any relationship with other entities (edges in a graph) are represented as an item within the partition by setting the value of the sort key to the target entity ID (target node). The advantages of this pattern include minimal data duplication and simplified query patterns to find all entities (nodes) related to a target entity (having an edge to a target node).
+
+![List](./images/adjacency-list.png)
+
+* A real-world example where this pattern has been useful is an invoicing system where invoices contain multiple bills. One bill can belong in multiple invoices. The partition key in this example is either an InvoiceID or a BillID. BillID partitions have all attributes specific to bills. InvoiceID partitions have an item storing invoice-specific attributes, and an item for each BillID that rolls up to the invoice. The schema looks like the following:
+
+* Using the preceding schema, you can see that all bills for an invoice can be queried using the primary key on the table. To look up all invoices that contain a part of a bill, create a global secondary index on the table's sort key. The projections for the global secondary index look like the following:
+
+![Projected Attributes](./images/projected-attributes-list.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
