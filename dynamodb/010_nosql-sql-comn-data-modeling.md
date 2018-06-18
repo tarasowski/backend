@@ -184,6 +184,184 @@
 
 * In contrast, the “class” of object-oriented programming is associated with the enablement of programmers to define structures of arbitrary complexity, leading to a terminology that considers “classes” to be more powerful in their descriptive capabilities than mere “[primitive/data] types”.
 
+* We have seen how hardware objects are simple objects, having no components (from the point of view of software), and how we will rarely deal with hardware objects directly. We leave that difficult and tedious work to compilers and DBMSs.
+
+* An enumeration is a type that is specified by listing the names of the members of the set it designates. Here are some example enumerations: account status: open, closed, suspended, abandoned organization type: corporation, government entity, non-profit order status: ordered, shipped, back-ordered, canceled
+
+* Classification is an innate human activity. When stripped of their technical meanings, the English words “type” and “class” are synonyms, and are used to designate sets of things with similar characteristics. We say that types designate sets. The word “type” was co-opted by the information technology industry to express both a potential set of values and memory storage requirements for representations of those values. The word “class” grew up later to describe more complex structures than those that could be described directly by the types of the previous earlier decade. “Type” alone took on the connotation of being simple or “primitive”; data types were also considered primitive.
+
+* **Simple type**: a type that designates a set whose members have no components 
+
+* **Composite type**: a type that designates a set whose members have components
+
+* **Array**: a collection of some integral number of variables or objects of the same type or class
+
+* **Proposition**: an expression in language or signs of something that can be believed, doubted, or denied or is either true or false For example, the statement, “It is raining outside right now,” is a proposition, because at this very moment the statement is either true or false—or at least one may argue about whether it is true or false. (Perhaps it is only drizzling.) A proposition is the most fundamental piece of information. A collection of propositions constitutes information.
+
+* The above definition of information, as a collection of propositions, allows for the possibility that information is false, since a proposition may be true or false.
+
+* **Fact**: a piece of information presented as having objective reality— in fact : in truth (Merriam-Webster) ,we can say that a fact is a proposition (a piece of information) that is true.
+
+* Here is a proposition in the context of employment: Employee #952 works in Department 4567 and earns a salary of $5000 per month.
+
+* Clearly these propositions, being of the same form, repeat a lot of text. By separating the unique parts of each proposition from the common parts, we can simplify the expression of this information.
+
+* We will take the common parts of these propositions and place variables where the unique parts fit, as follows. Employee #EmpId works in Department DeptNr and earns a salary of $SalaryMnthUsdAm per month.
+
+![Table](./images/table-proposition.png)
+
+* The values in Table 14-1 are called data, which is a plural word. Each value individually is a datum.
+
+* **Datum**: something given or admitted especially as a basis for reasoning or inference In this context, a datum is given to a predicate as a value for one of its variables. Observe that a datum may have some intrinsic meaning, but its full meaning in context is known only after it is substituted into its related predicate. For example, the number 5000 could indicate many different things, including a monthly salary, the number of people attending a concert, or the cost of a computer. We wouldn’t know which unless we knew the predicate with which it is associated.
+
+* It is also important to understand that a value is not a datum unless it is intended to be bound to a predicate’s variable. For instance, the value 39 is just a number. If, however, the value 39 is associated with some predicate variable (for example, 39 is the x in “I just bought x apples”; or 39 is the y in “I am y years old”), then in that context 39 is a datum. This is important, because it reveals that the terms datum and data connote roles that values play.
+
+* We need to accept both the singular and plural usages of the word “data”, reserving the plural usage for more technical contexts where we are paying attention to the fact that data is composed of multiple atoms, each of which is a datum.
+
+* In order to deal with data en masse, we separate data from information. That is, we reduce a number of propositions of the same form to a single predicate and a set of data per proposition. We then store the data in a database management system, which is a computer system specifically designed to manage large quantities of data. 
+
+* A proposition is the fundamental piece of information; to put it another way, one or more propositions = information. A predicate + data (as values for the predicate’s variables) = a proposition. I like to say that data is dehydrated information; just add predicates.
+
+* Given “information” as defined above, the results of analyses are certainly a kind of information. However, if we use the term “information” solely to mean the results of analyses, we lose the more fundamental capability to reason about information as a collection of propositions. Therefore we will keep the definition of “information” a tight one. We will use the term “analytics” or “insight” for the data or information obtained by analyzing data.
+
+* That which is referred to as “just data” might really be data in the strict sense, in which case a context is definitely needed (more precisely, a predicate) in order to understand what the data indicates. By the definition above, data is separate from the context (a predicate) which gives it meaning.
+
+* Consider this progression from data to information to analytics. 
+    + just a number: 39 
+    + probably data: 39 degrees 
+    + probably data: 39 degrees Celsius 
+    + information: The patient’s temperature is 39 degrees Celsius. 
+    + information: The outdoor temperature is 39 degrees Celsius. 
+    + analytics (a kind of information): The average high temperature in Tucson, Arizona in the month of July for the last twenty years has been <data: list of monthly average temperatures> 
+    + insight (a kind of information): It sure is hot in Tucson in July!
+
+* The pure number “39”, without any other context, cannot be assumed to be data: it’s just a number. When the pure number “39” is combined with units of measure—degrees (of something unspecified) or degrees Celsius—we can begin to suspect that the values are data, because it would be unlikely that temperatures would be presented apart from some context. But without further information, such as a predicate for which the values were suited, even these measurement values are just values. When a proposition is made—that is, when an assertion is made that can be agreed or disagreed with, or believed, doubted, or denied—then we have information. Before that line is crossed, the values presented do not form any kind of proposition, and therefore there is no information, nor can we confidently assert that the values are data. Analytics are information derived from other information or data, and insights are information derived from analytics.
+
+* Table 14-1 above provides a structure for data. It is clear from the context surrounding the table that the EmpId column should only contain employee IDs, the DeptNr column should only contain department numbers, and the SalaryMnthUsdAm column should only contain monthly salaries. To a limited extent, database systems can enforce these requirements by preventing the insertion of data that violates certain rules. For example, given a second table of department numbers, a database system can ensure that the DeptNr column of Table 14-1 only contains values found in the table of department numbers.
+
+* In contrast, the software that is used to create and maintain text documents, audio recordings, etc., does not impose any structure on those artifacts other than the structure necessary to ensure that they are in fact text documents, audio recordings, etc. This is why they are called unstructured.
+
+* Additionally, unstructured data can contain what is potentially data. For example, consider residential mortgage agreements. Such agreements are often 40 pages long, and contain many statements (which are propositions) that give information about the responsibilities of mortgagor and mortgagee, the term of the loan, the schedule of payments, etc. If one had a pile of, say, 100 such mortgage agreements, all issued by the same lender in a month’s time, one would discover that the bulk of the 40 pages were identical. If one separated out the customer-specific variable parts of the agreements from the non-varying parts, and put placeholder variables where the customer-specific variable parts should be inserted, one would have customer-specific data plus (mostly) non-customer-specific predicates: we would have given structure to the otherwise unstructured data.
+
+* a “relation” is not the same as a “relationship”!
+
+* What is a Relation? In overly simplistic terms, a relation is a table. So why do we use this fancy word “relation”, instead of the more easily understood term “table”? 
+    + Because there are some important differences, namely: The order of rows in a relation has no significance whatsoever, while the order of rows in a table may carry information. 
+    + The repetition of rows in a relation has no significance whatsoever, while the repetition of rows in a table may carry information.
+
+* As soon as we take any data and write it down, we have a table, which has order to its rows. However, we want the freedom to establish that order differently for different uses. That is why it is so important to ensure that we represent data as relations—without order to their rows—while storing data as tables, which have order to their rows. Database systems that store information in the order of rows have a significant disadvantage, in that they cannot re-order rows for faster access without losing information. One of the main advantages of relational database systems over other kinds of database systems is this so-called data independence, where the physical order of data storage can be changed to speed up various styles of access without changing the information stored.
+
+* By definition, each column in a relation can only carry one type of data; that is, data drawn from only one set of values. For instance, values in the Price column of a cash register receipt can only be drawn from a set of numbers that represent prices, with two digits to the right of the decimal point. Further, the values in each column carry a significance which is usually indicated by the column heading. For instance, we expect that values in the Item Description column describe the items purchased.
+
+![Data Attributes](./images/data-attributes.png)
+`Table 16.2`
+
+* This table shows many data attribute values. Here are a few examples: <Departure City, FK(City Names), Charlotte> <Departure City, FK(City Names), Chicago> <Arrival Time, Time of Day Type, 4:30 PM> <Flight Number, FK(Flight Numbers), 445> The angle brackets (< >) indicate that the order of terms inside them is significant.
+
+* A set of data attribute values, taken together, is called a tuple value, or, more simply, a tuple. This strange name comes from the names we use for sets of particular numbers of things: single, double, triple, quadruple, quintuple, sextuple, septuple, . . . . (You can pronounce “tuple” to rhyme with “couple” or to rhyme with “scruple”; both are acceptable.) Table 16-2 shows four tuples, each one as a row of the table. Here is the tuple represented by the first row of the table. {   <Flight Number, FK(Flight Numbers), 351>,   <Departure City, FK(City Names), Charlotte>,   <Departure Time, Time of Day Type, 11:05 AM>,   <Arrival City, FK(City Names), Philadelphia>,   <Arrival Time, Time of Day Type, 12:40 PM> } The outer braces around this list of data attributes indicate that they are members of a set, and therefore the order of items in the list is insignificant.
+
+* If we store many, usually related, relations in one place, we have what is called a relational database. In relational theory, a database is a collection of relation variables, where each relation variable can take on the value of some relation.
+
+* There are nine relational operators that return relations as results: select (or restrict), join, project, union, intersection, difference, extend, rename, and divide. These relational operators show up directly or indirectly in SQL, and are often present in NoSQL DBMSs as well, of necessity. For instance, an operation that selects documents from a document database based on the value of a particular document element is performing the relational operation of restriction.
+
+![Tuple](./images/relational-database-tuple-example.png)
+
+* if you have a data structure of any sort—document, graph, key/value, whatever—where each data attribute has a name that corresponds to its role and a type that limits its possible values, you have a tuple scheme, and relational theory applies.
+
+* A database definition in SQL always starts with a CREATE TABLE statement. There is no CREATE RELATION statement in SQL. It follows from this that the SQL language describes physical tables, which have the characteristics of order and repetition explained above.
+
++  attribute: an inherent characteristic (Merriam-Webster) 
++  data attribute: a <name, type> pair. The name gives the role of a value of the given type in the context of a tuple scheme or relation scheme. 
++  data attribute value: a <name, type, value> 
++ triple tuple : a tuple value 
++ tuple value : a set of data attribute values 
++ tuple scheme : the specification of the data attributes of a tuple, together with any constraints referencing a tuple value as a whole 
++ relation : a relation value relation 
++ value : a set of tuple values all having the same tuple scheme; informally, a table without significance to the order of or repetition of the values of its rows 
++ relation scheme : the specification of the data attributes of a relation, together with other information such as keys and other constraints on a relation value as a whole tuple 
++ variable : a symbol which can be bound to a tuple value 
++ relation variable : a symbol which can be bound to a relation value data 
++ independence : the ability to re-order data without losing any information
+
+* Physical design is all about performance, and there are several critical factors to keep in mind when striving for top performance: 
+    + scalability: Make the right tradeoffs between ACID and BASE, consulting the CAP theorem as a guide. Know how large things could get—that is, how much data and how many users. You will need to know how much of each type of data you will accumulate, so that you can choose the right data organization for each type. 
+    + indexing: Indexing overcomes what amounts to the limitations of the laws of physics on data. If a field is not indexed, you will have to scan for it sequentially, which can take a very long time. Add indexes to most fields which you want to be able to search rapidly, and consider the various kinds of indexes the DBMS offers you. But be aware of the tradeoffs that come with indexes. 
+    + correctness: Make sure the logical design is robust before you embark on the physical design. There’s nothing worse than an implementation that is fast but does the wrong thing. In this context, “robust” means complete enough that we don’t expect that evolving requirements will require much more than extension of the logical design.
+
+* Almost all SQL DBMSs, plus a few NoSQL DBMSs, implement the four characteristics that are indicated by the acronym ACID: atomicity, consistency, isolation, durability. These four characteristics taken together enable SQL databases to be used in applications where the correctness of each database transaction is absolutely essential, such as financial transactions (think purchases, payments, and bank account deposits and withdrawals). In those kind of applications, getting just one transaction wrong is not acceptable.
+    + Atomicity A DBMS transaction that is atomic will act as though it is indivisible. An update operation that might update a dozen tables will either…
+    + Consistency A DBMS can enforce many constraints on data given to it to store. The most fundamental constraints are built-in type constraints: string fields can only contain strings, date fields can only…
+    + Consistency is the characteristic that a DBMS exhibits where it will not allow a transaction to succeed unless all of the applicable constraints are satisfied. If, at any point in a transaction, a constraint is found which is not met by data in the transaction, the transaction will fail, and atomicity will ensure that all…
+    + Isolation is the guarantee given by a DBMS that one transaction will not see the partial results of another transaction. It’s strongly related to atomicity. Isolation ensures that the final state of the data in a database only reflects the results of successful transactions; isolation ensures that, if a DBMS is processing multiple transactions simultaneously,…
+    + Durability is the guarantee that, once a transaction has successfully completed, its results will be permanently visible in the database,…
+
+> ACID sounds great, and it really is great if one has an application where preserving the result of every transaction is critical. But ACID comes at a cost. It is difficult to build DBMSs that can leverage large farms of parallel…
+
+* These large databases are designed to scale horizontally, meaning that greater performance is achieved by putting many computers side-by-side to process transactions in parallel, and the data is replicated many times over so that multiple copies may be accessed simultaneously for retrieving requested data. 
+
+* Horizontal scaling is great, but the CAP theorem, put forward by Eric Brewer in 2000 [Brewer 2012], proves that, in a distributed DBMS, one may only have two of the following three attributes: 
+    + consistency: This is a specialized form of the consistency of ACID. It does not refer to the enforcement of consistency constraints. Rather, it is the requirement that, in a DBMS that has many copies of the same data, all of the copies match each other. In a horizontally scaled database, one can guarantee that all the copies match each other, but only if either availability or partition tolerance is sacrificed. + availability: With lots of computers accessing lots of storage over many network connections, there are bound to be failures at various points. That much hardware just has to have some pinpoint failures from time to time. But the motivation for having so many computers and so many copies of the same data is that, for any data request, there’s a good likelihood that some working computer can access some copy of the data and satisfy the request, even if some of the computers are down or some of the storage is unavailable. 100% availability can be achieved, even in a network with some failures, but only if either consistency or partition tolerance is sacrificed. 
+    + partition tolerance: Partition tolerance in CAP means tolerance to a network partition. An example of a network partition is when two nodes can't talk to each other, but there are clients able to talk to either one or both of those nodes. If you've ever used IRC and experienced a netsplit, this is a great example of that.
+
+* Most NoSQL databases are designed to scale horizontally, and so because of CAP they can’t offer ACID. They are described as achieving BASE (cute acronym): 
+    + Basic Availability: Most of the data is available most of the time. 
+    + Soft state: Unlike ACID, a “commit” of an update to a database might not always succeed. Some updates will be lost. 
+    + Eventual consistency: After some internal failure, out of sync copies of data will eventually catch up with the current copies.
+
+> BASE sounds a little scary, but sometimes it’s all that’s needed. For example, Facebook serves hundreds of millions of users, and probably couldn’t do so effectively with ACID-strength guarantees. So they allow user to post with only a soft state guarantee. Every now and then, a user's post gets lost. The downside is minimal: a few users are occasionally slightly annoyed by having to re-type a short update. As long as it doesn't happen to often, Facebook is able to fulfill its mission of enabling hundreds of millions of users to share their persona lives and thoughts. This would not be possible with a traditional ACID approach.
+
+* A particular application might use both an ACID DBMS and a BASE DBMS, in combination, to achieve a certain mission. For example, a retail Web site might deliver product information and user reviews using a BASE DBMS, but run purchases and financial transactions on an ACID DBMS. A user would probably tolerate a review being lost, but not a purchase being lost or an account double-charged for one purchase. 
+
+* Under the covers, NoSQL and SQL DBMSs all use the same set of data structures that were worked out decades ago for organizing data for fast access. These structures include things called trees, linked lists, queues, arrays, hashes and those venerable data structure, tables. What distingueshes DBMS types from each other is how they present this varied data storage structures to the DBMS user. NoSQL can be organized into 4 types of data organization:
+    + key/value
+    + document
+    + columnar
+    + graph
+
+* As explained under document DBMSs, an index is a projection of the table data into another table.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
