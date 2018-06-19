@@ -335,6 +335,105 @@ After completing this process, you should end up with a list that might look som
 ![Relational Modeling](./images/relational-modeling-example.png)
 
 
+* **Example of Modeling Relational Data in DynamoDB:** This example describes how to model relational data in Amazon DynamoDB. A DynamoDB table design corresponds to the relational order entry schema that is shown in Relational Modeling. It follows the Adjacency List Design Pattern, which is a common way to represent relational data structures in DynamoDB. The design pattern requires you to define a set of entity types that usually correlate to the various tables in the relational schema. Entity items are then added to the table using a compound (partition and sort) primary key. The partition key of these entity items is the attribute that uniquely identifies the item and is referred to generically on all items as PK. The sort key attribute contains an attribute value that you can use for an inverted index or global secondary index. It is generically referred to as SK. You define the following entities, which support the relational order entry schema:          
+
+![Schema](./images/schema-employee-table.png)
+
+* After adding these entity items to the table, you can define the relationships between them by adding edge items to the entity item partitions. The following table demonstrates this step: In this example, the Employee, Order and Product Entity partitions on the table have additional edge items that contain pointers to other entity items on the table. [Here is the Link how to do it](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-modeling-nosql-B.html)
+
+![Table](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/images/tabledesign.png)
+
+* Next, define a few global secondary indexes (GSIs) to support all the access patterns defined previously. The entity items don't all use the same type of value for the primary key or the sort key attribute. All that is required is to have the primary key and sort key attributes present to be inserted on the table.
+
+* The fact that some of these entities use proper names and others use other entity IDs as sort key values allows the same global secondary index to support multiple types of queries. This technique is called GSI overloading. It effectively eliminates the limit of five global secondary indexes for tables that contain multiple item types. This is shown in the following diagram as GSI 1:
+
+![Overloading](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/images/tablegsi.png)
+
+GSI 2 is designed to support a fairly common application access pattern, which is to get all the items on the table that have a certain state. For a large table with an uneven distribution of items across available states, this access pattern can result in a hot key, unless the items are distributed across more than one logical partition that can be queried in parallel. This design pattern is called write sharding.
+
+To accomplish this for GSI 2, the application adds the GSI 2 primary key attribute to every Order item. It populates that with a random number in a range of 0–N, where N can generically be calculated using the following formula, unless there is a specific reason to do otherwise:
+
+```
+ItemsPerRCU = 4KB / AvgItemSize
+
+PartitionMaxReadRate = 3K * ItemsPerRCU
+
+N = MaxRequiredIO / PartitionMaxReadRate
+```
+
+* For example, assume that you expect the following:
+
+* Up to 2 million orders will be in the system, growing to 3 million in 5 years.
+* Up to 20 percent of these orders will be in an OPEN state at any given time.
+
+The average order record is around 100 bytes, with three OrderItem records in the order partition that are around 50 bytes each, giving you an average order entity size of 250 bytes.
+
+For that table, the N factor calculation would look like the following:
+
+```
+ItemsPerRCU = 4KB / 250B = 16
+
+PartitionMaxReadRate = 3K * 16 = 48K
+
+N = (0.2 * 3M) / 48K = 13
+``` 
+
+* In this case, you need to distribute all the orders across at least 13 logical partitions on GSI 2 to ensure that a read of all Order items with an OPEN status doesn't cause a hot partition on the physical storage layer. It is a good practice to pad this number to allow for anomalies in the dataset. So a model using N = 15 is probably fine. As mentioned earlier, you do this by adding the random 0–N value to the GSI 2 PK attribute of each Order and OrderItem record that is inserted on the table.
+
+* This breakdown assumes that the access pattern that requires gathering all OPEN invoices occurs relatively infrequently so that you can use burst capacity to fulfill the request. You can query the following global secondary index using a State and Date Range Sort Key condition to produce a subset or all Orders in a given state as needed. In this example, the items are randomly distributed across the 15 logical partitions.
+
+![Example](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/images/gsi2.png)
+
+Finally, you can revisit the access patterns that were defined earlier. Following is the list of access patterns and the query conditions that you will use with the new DynamoDB version of the application to accommodate them:
+
+![Access Schema](./images/access_queries.png)
+
+* In general, Scan operations are less efficient than other operations in DynamoDB. A Scan operation always scans the entire table or secondary index. It then filters out values to provide the result you want, essentially adding the extra step of removing data from the result set.
+
+* Isolate scan operations DynamoDB is designed for easy scalability. As a result, an application can create tables for distinct purposes, possibly even duplicating content across several tables. You want to perform scans on a table that is not taking "mission-critical" traffic. Some applications handle this load by rotating traffic hourly between two tables—one for critical traffic, and one for bookkeeping. Other applications can do this by performing every write on two tables: a "mission-critical" table, and a "shadow" table.
+
+* For security reasons, many AWS customers run their applications within an Amazon Virtual Private Cloud environment (Amazon VPC). With Amazon VPC, you can launch Amazon EC2 instances into a virtual private cloud, which is logically isolated from other networks—including the public Internet.
+
+> Amazon Cognito uses IAM roles to generate temporary credentials for your application's authenticated and unauthenticated users.
+
+* Before you can load data from a DynamoDB table, you must first create an Amazon Redshift table to serve as the destination for the data. Keep in mind that you are copying data from a NoSQL environment into a SQL environment.
+
+* DynamoDB table names can contain up to 255 characters, including '.' (dot) and '-' (dash) characters, and are case-sensitive. Amazon Redshift table names are limited to 127 characters, cannot contain dots or dashes and are not case-sensitive. In addition, table names cannot conflict with any Amazon Redshift reserved words.
+
+* Hadoop is a distributed application that implements the MapReduce algorithm, where a task is mapped to multiple nodes in the cluster. Each node processes its designated work, in parallel with the other nodes. Finally, the outputs are reduced on a single node, yielding the final result.
+
+* When you launch an Amazon EMR cluster, you specify the initial number and type of Amazon EC2 instances. You also specify other distributed applications (in addition to Hadoop itself) that you want to run on the cluster. These applications include Hue, Mahout, Pig, Spark, and more.
+
+* Hive is a data warehouse application for Hadoop that allows you to process and analyze data from multiple sources. Hive provides a SQL-like language, HiveQL, that lets you work with data stored locally in the Amazon EMR cluster or in an external data source (such as Amazon DynamoDB).
+
+* In Tutorial: Working with Amazon DynamoDB and Apache Hive, you created an external Hive table that mapped to a DynamoDB table. When you issued HiveQL statements against the external table, the read and write operations were passed through to the DynamoDB table. You can think of an external table as a pointer to a data source that is managed and stored elsewhere. In this case, the underlying data source is a DynamoDB table. (The table must already exist. You cannot create, update, or delete a DynamoDB table from within Hive.)
+
+* You use the CREATE EXTERNAL TABLE statement to create the external table. After that, you can use HiveQL to work with data in DynamoDB, as if that data were stored locally within Hive.
+
+* You can use AWS Data Pipeline to export data from a DynamoDB table to a file in an Amazon S3 bucket. You can also use the console to import data from Amazon S3 into a DynamoDB table, in the same AWS region or in a different region. The ability to export and import data is useful in many scenarios. For example, suppose you want to maintain a baseline set of data, for testing purposes. You could put the baseline data into a DynamoDB table and export it to Amazon S3. Then, after you run an application that modifies the test data, you could "reset" the data set by importing the baseline from Amazon S3 back into the DynamoDB table. Another example involves accidental deletion of data, or even an accidental DeleteTable operation. In these cases, you could restore the data from a previous export file in Amazon S3. You can even copy data from a DynamoDB table in one AWS region, store the data in Amazon S3, and then import the data from Amazon S3 to an identical DynamoDB table in a second region. Applications in the second region could then access their nearest DynamoDB endpoint and work with their own copy of the data, with reduced network latency. The following diagram shows an overview of exporting and importing DynamoDB data using AWS Data Pipeline.
+
+* To export a DynamoDB table, you use the AWS Data Pipeline console to create a new pipeline. The pipeline launches an Amazon EMR cluster to perform the actual export. Amazon EMR reads the data from DynamoDB, and writes the data to an export file in an Amazon S3 bucket.
+
+* Table and GSI decrease limits are decoupled, so any GSI(s) for a particular table have their own decrease limits. However, if a single request decreases the throughput for a table and a GSI, it will be rejected if either exceeds the current limits. A request will not be partially processed.
+
+* Projected Secondary Index Attributes Per Table You can project a total of up to 20 attributes into all of a table's local and global secondary indexes. This only applies to user-specified projected attributes. In a CreateTable operation, if you specify a ProjectionType of INCLUDE, the total count of attributes specified in NonKeyAttributes, summed across all of the secondary indexes, must not exceed 20. If you project the same attribute name into two different indexes, this counts as two distinct attributes when determining the total. This limit does not apply for secondary indexes with a ProjectionType of KEYS_ONLY or ALL. Partition Keys
+
+* The exception is for tables with local secondary indexes. With a local secondary index, there is a limit on item collection sizes: For every distinct partition key value, the total sizes of all table and index items cannot exceed 10 GB. This might constrain the number of sort keys per partition key value.
+
+* Expression parameters include ProjectionExpression, ConditionExpression, UpdateExpression, and FilterExpression.
+
+* US East (N. Virginia) Region: Per table – 40,000 write capacity units All Other Regions: Per table – 10,000 write capacity units
+
+
+
+
+
+
+
+
+
+
+
 
 
 
