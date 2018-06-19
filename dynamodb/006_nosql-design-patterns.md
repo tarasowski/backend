@@ -572,6 +572,28 @@ Finally, you can revisit the access patterns that were defined earlier. Followin
 
 ![Access Schema](./images/access_queries.png)
 
+## Examples of Sparse Indexes in DynamoDB
+
+* Global secondary indexes are sparse by default. When you create a global secondary index, you specify a partition key and optionally a sort-key. Only items in the parent table that contain those attributes appear in the index.
+
+* By designing a global secondary index to be sparse, you can provision it with lower write throughput than that of the parent table, while still achieving excellent performance.
+
+* For example, a gaming application might track all scores of every user, but generally only needs to query a few high scores. The following design handles this scenario efficiently:
+
+![Sparse](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/images/SparseIndex_A.png)
+
+* Here, Rick has played three games and achieved Champ status in one of them. Padma has played four games and achieved Champ status in two of them. Notice that the Award attribute is present only in items where the user achieved an award. The associated global secondary index looks like the following:
+
+![Sparse](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/images/SparseIndex_B.png)
 
 
+## Using Global Secondary Indexes for Materialized Aggregation Queries
+
+* Maintaining near real-time aggregations and key metrics on top of rapidly changing data is becoming increasingly valuable to businesses for making rapid decisions. For example, a music library might want to showcase its most downloaded songs in near real time.
+
+![Table](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/images/AggregationQueries.png)
+
+* The table in this example stores songs with the songID as the partition key. You can enable Amazon DynamoDB Streams on this table and attach a Lambda function to the streams so that as each song is downloaded, an entry is added to the table with Partition-Key=SongID and Sort-Key=DownloadID. As these updates are made, they trigger a Lambda function in DynamoDB Streams. The Lambda function can aggregate and group the downloads by songID and update the top-level item, Partition-Key=songID, and Sort-Key=Month.
+
+* To read the updates in near real time, with single-digit millisecond latency, use the global secondary index with query conditions Month=2018-01, ScanIndexForward=False, Limit=1.
 
