@@ -268,6 +268,84 @@ aws dynamodb update-item \     --table-name ProductCatalog \     --key '{"
 
 ![Projected Attributes](./images/projected-attributes-list.png)
 
+* Materialized Graph Pattern Many applications are built around understanding rankings across peers, common relationships between entities, neighbor entity state, and other types of graph style workflows. For these types of applications, consider the following schema design pattern:
+
+![Materialized](./images/materialized-view-dynamodb.png)
+
+* The precending schema shows a graph data structure that is defined by a set of data partitions containing the items that define the edges and nodes of the graph. Edge items contain a Target and a Type attribute. These attributes are used as part of a composite key name "TypeTarget" to identify the item in a partition in the primary table or in a second global secondary index. The first global secondary index is built on the Data attribute. This attribute uses global secondary index-overloading as described earlier to index several different attribute types, namely Dates, Names, Places, and Skills. Here, one global secondary index is effectively indexing four different attributes.
+
+* However, the same organizations may now find that their operations depend on high-traffic customer-facing websites, where millisecond response is essential. Relational systems can't scale to meet this requirement except at huge (and often unacceptable) expense.
+
+* In these situations, the answer might be to create a hybrid system, in which DynamoDB creates a materialized view of data stored in one or more relational systems and handles high-traffic requests against this view.
+
+* DynamoDb can take advantage of DynamoDb streams and AWS Lambda to integrate with one or more existing relational database systems. 
+
+![Materialized](./images/dynamodb-cache-materialized-view.png)
+
+* A system that integrates DynamoDb streams and AWS Lambda can provide several advantages:
+    + It can operate as persistent cache of materialized view
+    + It can be setup to fill gradually with data as that data is queried for, and and as data is modified in the SQL system. This means that the entire view doesn't need to be pre-populated, which in turn means that provisioned throughput capacity is more likely to be utilized efficiently. 
+    + It has low administrative costs and is highly available
+
+* For this kind of integration to be implemented, essentially three kinds of interoperation must be provided: 
+
+![Hybrid](./images/hybrid-system-sql-nosql.png)
+
+1. Fill the DynamoDB cache incrementally. When an item is queried, look for it first in DynamoDB. If it is not there, look for it in the SQL system, and load it into DynamoDB. 
+
+2. Write through a DynamoDB cache. When a customer changes a value in DynamoDB, a Lambda function is triggered to write the new data back to the SQL system. 
+
+3. Update DynamoDB from the SQL system. When internal processes such as inventory management or pricing change a value in the SQL system, a stored procedures is triggered to propagate the change to the DynamoDB materialized view. 
+
+* These operations are straightforward, and not all of them are needed for every scenario.
+
+* RDBMS platforms use an ad hoc query language (generally a flavor of SQL) to generate or materialize views of the normalized data to support application-layer access patterns.
+
+* One-time queries of this kind provide a flexible API for accessing data, but they require a significant amount of processing. You must often query the data from multiple locations, and the results must be assembled for presentation. The preceding query initiates complex queries across a number of tables and then sorts and integrates the resulting data.
+
+* Another factor that can slow down RDBMS systems is the need to support an ACID-compliant transaction framework. The hierarchical data structures used by most online transaction processing (OLTP) applications must be broken down and distributed across multiple logical tables when they are stored in an RDBMS. Therefore, an ACID-compliant transaction framework is necessary to avoid race conditions that could occur if an application tries to read an object that is in the process of being written. Such a transaction framework necessarily adds significant overhead to the write process.
+
+* These two factors are the primary barriers to scale for traditional RDBMS platforms. It remains to be seen whether the NewSQL community can be successful in delivering a distributed RDBMS solution. But it is unlikely that even that would resolve the two limitations described earlier. No matter how the solution is delivered the processing costs of normalization and ACID transactions must remain significant. 
+
+* A relational database system does not scale well for the following reasons: It normalizes data and stores it on multiple tables that require multiple queries to write to disk. It generally incurs the performance costs of an ACID-compliant transaction system. It uses expensive joins to reassemble required views of query results. DynamoDB scales well for these reasons: Schema flexibility lets DynamoDB store complex hierarchical data within a single item. Composite key design lets it store related items close together on the same table. Queries against the data store become much simpler, often in the following form: `SELECT * FROM Table_X WHERE Attribute_Y = "somevalue"`. DynamoDb does far less work to return requested data. 
+
+## Modeling Relational Data in DynamoDb
+
+* NoSQL design requires a different mindset than RDBMS design. For an RDBMS, you can create a normalized data model without thinking about access patterns. You can then extend it later when new questions and query requirements arise. For DynamoDB, by contrast, you shouldn't start designing your schema until you know the questions it needs to answer. Understanding the business problems and the application use cases upfront is absolutely essential. 
+
+* To start designing a DynamoDb that will scale efficiently, you must take several steps first to identify the access patterns that are required by the operations and business support systems (OSS/BSS) that it needs to support:
+    + For a new applications, review user stories about the activities and objectives. Document the various use cases that you identify, and analyze the access patterns that require.
+    + For existing applications, analyze query logs to find out how people are currently using the system and what the key access patterns are. 
+
+After completing this process, you should end up with a list that might look something like that:
+
+![Data Access Patterns](./images/data-access-patterns-analysis.png)
+
+* In a real applicaiton that, your list might be much longer. But this collection represents the range of query pattern complexity that you might find in a production environment. 
+
+> A common approach to DynamoDb schema design is to identify application layer entities and use denormalization and composite key aggregation to reduce query complexity. 
+
+* In DynamoDb, this means using composite sort keys, overloaded global secondary indexes, partitioned tables/indexes, and other design patterns. You can use these elements to structure the data so that an application can retrieve whatever it needs for a given access pattern using a single query on a table or an index.
+
+* The primary pattern that you can use to model the normalized schema shown in Relational Modeling is the adjacency pattern. Other pattern used in this design can include global secondary index write sharding, global secondary index overloading, composite key, and materialized aggregations. 
+
+**Important:** In general you should maintain as few tables as possible in DynamoDb application. Most-well designed applications require only one table. Exceptions include cases where high-volume time series data are involved, or datasets that have very different access pattern. A single table with inverted indexes can enable simple queries to create and retrieve the complex hierarchical data structures required by your application. 
+
+**Relational Modeling Example**
+![Relational Modeling](./images/relational-modeling-example.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
