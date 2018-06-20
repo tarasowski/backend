@@ -149,6 +149,8 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [ ] **Migration from Monolith to Serverless**
     + [ ] [How to Migrate Existing Monoliths to Serverless](https://blog.binaris.com/how-to-migrate-existing-monoliths-to-serverless/)
 * [ ] **Computer Science Basics**
+    + [ ] [Teach Yourself Computer Science](https://teachyourselfcs.com/)
+    + [ ] [Open Source Society University](https://github.com/ossu/computer-science)
     + [ ] [Systems analysis and design](http://www.w3computing.com/systemsanalysis/)
         + [x] [Data Flow Diagram Overview](https://www.youtube.com/channel/UCm0gX5V8-meiz_1CHtc24cA/search?query=data+flow)
     + [ ] [ Base CS - Exploring the basics of computer science, every Monday, for a year.](https://medium.com/basecs/archive/2017)
