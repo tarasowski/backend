@@ -1,5 +1,7 @@
 # Amazon's Original DynamoDb Paper
 
+[Source - Original DynamoDb Paper](https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf)
+
 * Only some of the Amazon's services use DynamoDb
 * It's highly available key/value storage (not document)
 * Since some of the Amazon's services need to be highly available, DynamoDb sacrifices consistency under certain failure scenario
