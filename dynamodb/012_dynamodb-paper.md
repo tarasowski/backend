@@ -66,3 +66,30 @@
     + **99,9% of reads/writes** needs to be performed within a few hundreds of milliseconds
     + **Zero-hop distributed hash table**, where each node maintains enough routing information locally to route a request to the appropriate node directly.
 
+* DynamoDb stores objects associated with a key through a simple interface, it exposes two operations: `get()` and `put()`. The `get(key)` operation locates the object replicas associated with the key in the storage system and returns a single object or a list of objects with conflicting versions along with a context. The `put(key, context, object)` operation determines where the replicas of the object should be placed based on the association key, and write the replicas to disk. 
+
+**Note:** The context encodes system metadata about the object that is opaque to the caller and includes information such as the version of the object. The context information is stored along with the object so that the system can verify the validity of the context object supplied in the put request.
+
+* DynamoDb treats both the key and the object supplied by the caller as an opaque array of bytes. It applies a MD5 hash on the key to generate a 128-bit identifier, which is used to determine the storage nodes that are responsible for serving the key. 
+
+* After the data was hashed it will be assigned to a node in the ring. 
+
+* DynamoDb uses the concept of "virtual nodes". A virtual node looks like a single node in the system, but each node can be responsible for more than one virtual node. 
+
+* DynamoDb provides eventual consistency, which allows for updates to be propogated to all replicas asynchronously. A `put()` call may return to it's caller before the update has been applied at all the replicas, which can result in scenarios where a subsequent `get()` operation may return an object that does not have the latest updates. 
+
+* If there are no failures then there is a bound on the update propagation times. However, under certain failure scenraios (e.g. server outages or network partitions,) updates may not arrive at all replicas for an extended perion of time.
+
+* There is category of applicaiton in Amazon's platform that can tolerate such inconsistencies and can be constructed to operate under these conditions. For example, the shopping car application requires that an "Add to Cart" operation can never be forgotten or rejects. If the most recent state of the cart is unavailable, and a user makes changes to an older version of the cart, that change is still meaningful and should be perserved. But the the same time it shoulnd't supersede the currently unavailable state of the art, which itself many contain changes that should be perserved. 
+
+**Note:** that both "add to cart" and "delete item form cart" operations are translated into put request on DynamoDb. When a customer wants to add an item to (or remove from) a shopping cart and the latest version is not avaialbe, the item is added to (or removed from) the older version and the divergent versions are reconciled later. 
+
+* In order to provide this kind of guarantee, Dynamo treats the result of each modification as a new and immutable version of the data. It allows for multiple version of an object to be present in the system at the same time. Most fo the time, new versions subsume the previous version(s), and the system itself can determine the authoritative version (syntactic reconciliation - Versöhnung)
+
+* However, version branching may happen, in the presence of failures combined with concurrent updates, resulting in conflicting version of an object. In these case, the system cannot reconcile the multiple version of the same object and the client must perform the reconcilitation in order to collaple multiple branches of data evolution back into one (semantic reconciliation). A typical example of a collape operation is "merging" different version of a customer's shopping cart. Using this reconciliation meachanims, an "add to cart" operation is never lost. However, deleted items can resurface. 
+
+* Both get and put operations are invoked using Amazon's infrastructure-specific request processing framework over HTTP. There are two strategies that a client can use to select a node: (1)route its request through a generic load balancer that will select a node based on load information, or (2) use a partition-aware client library that routes requests riectly to the approppriate coordinator nodes. The advantage of the first approach is that the client does not have a link any code specific to DYnamo in its application, whereas the second strategy can achieve lower latency because it skips a potential forwarding step. 
+
+
+
+
