@@ -37,6 +37,7 @@ This list doesn't contain everything about serverless. Mainly this is my persona
 * [SE-Radio Episode 320: Nate Taggart on Serverless Paradigm](http://www.se-radio.net/2018/03/se-radio-episode-320-nate-taggart-on-serverless-paradigm/)
 
 ## Serverless Tutorials
+* [Serverless Bytes | Build a Serverless Weather App with AWS AppSync, GraphQL & AWS Lambda](https://www.twitch.tv/videos/275946917)
 * [AWS Advanced CloudFormation](https://acloud.guru/learn/aws-advanced-cloudformation)
 * [Open Source Serverless Tutorial - Severless-Stack.com](https://serverless-stack.com/)
 * [aws-serverless-workshops](https://github.com/awslabs/aws-serverless-workshops)
