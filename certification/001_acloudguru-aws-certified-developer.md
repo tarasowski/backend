@@ -492,9 +492,48 @@ Note: A hypervisor or virtual machine monitor (VMM) is computer software, firmwa
 * Change to security groups take effect immediately
 * You can have any numer of EC2 instances within a security group
 * You can have multiple security groups attached to EC2 Instances
-* Security Groups are **STATEFUL**
+* Security Groups are **STATEFUL** (network access coltrol lists are **STATELESS**)
     + If you create an inbound rule allowing traffic in, that traffic is automatically allowed back out again.
 
+* You cannot block specific IP addresses using Security Groups, instead use Network Access Control Lists
+* You can specify allow rules, but not deny rules (by default nothing is allowed)
+
+**Exam questions**
+* You have in one availability zone an EC2 instance and EBS volume in another. Will be you able to mount that EBS to EC2. The answer is no, because the harddrive is closed to the motherboard as possible. You have your EC2 instance and EBS in the same availability zone.
+
+* You know the `root device` volume based on the snapshot under Volumes.
+
+* If we want to create a new EC2 instance in an other availability zone. We just go to the `root volume`  and create a snapshot. Then you go over to snapshots and click on actions and click on create another volume (e.g. we can change the volume type) and we can change the availability zone and attach it to a new EC2 instance. In order to move the EBS volumes from one AV to another you need to create a snapshot.
+
+* If you copy the snapshot you can move it to another region in the world. Create a snapshot, copy the snapshot to the new region. You can create an image of that snapshot and boot it from EC2 instance.
+
+* Snapshots are used for backups and Images are used to create new EC2 volumes of it.
+
+* You can create an image from an EC2 instance and based on that image launch a new EC2 instance e.g. in a new region. We can also copy AMI and migrate to a new region as well.
+
+* You need to termina all the volumes that are not `root device` volumes, so go and terminate them manually.
+
+**Exam tips**
+* Volumes exist on EBS:
+    + Virual Hard Disk === Volume
+    + Root device volume === where the OS is installed
+* Snapshots exist on S3 (you cannot see the bucket, but are stord on S3)
+* Snapshots are point in time copies of Volumes
+* Snapshots are incremental - this means that only the blocks that have changed since your last snapshot are moved to S3 (you only recording the changes)
+* To create a snapshot for Amazon EBS volumes that server as root devices, you shold stop the instance before taking the snapshot.
+* AMI === Amazon Machine Image
+* You can crate AMI's from both Volumes and Snapshots (and you can mount it to another AZ's or Regions)
+* You can change EBS volume sizes on the fly, including chanching the size and storage type (best practice to stop the machine)
+* Volumes will ALWAYS be in the same availability zone as the EC2 instance (because hard drives needs to be close to the motherboard) - you cannot EC2 and EBS in different availability zones because of the latency
+* To move an EC2 volume from one AZ/Region to another, take a snap or an image of it, then copy it to the new AZ/Region
+* Snapshots of encrypted volumes are encrypted automatically
+* Volumes rstored from encrypted snapshots are encrypted automatically
+* You can share snapshots, but only if they are unecnrypted
+    + These snapshots can be shared with other AWS accounts or made public
+
+**Note:** Before you got into the exam repeat this lab again. Lab Name: Upgrading EBS Volume Types. There will be 5 questions in the exam!
+
+Last EFS - Lab
 
 
 
