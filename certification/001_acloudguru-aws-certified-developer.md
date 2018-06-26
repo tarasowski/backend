@@ -681,6 +681,70 @@ git clone https://github.com/acloudguru/s3
 * Have their own DNS name. You are never given an IP address
 * Read the ELB FAQ for Classic Load Balancers [here](https://aws.amazon.com/elasticloadbalancing/faqs/)
 
+Q: Which operating systems does the Classic Load Balancer support?
+
+The Classic Load Balancer supports Amazon EC2 instances with any operating system currently supported by the Amazon EC2 service.
+
+Q: Which protocols does the Classic Load Balancer support?
+
+The Classic Load Balancer supports load balancing of applications using HTTP, HTTPS (Secure HTTP), SSL (Secure TCP) and TCP protocols.
+
+Q: What TCP ports can I load balance?
+
+You can perform load balancing for the following TCP ports:
+
+[EC2-VPC] 1-65535
+[EC2-Classic] 25, 80, 443, 465, 587, 1024-65535
+Q: Does the Classic Load Balancer support IPv6 traffic?
+
+Yes. Each Classic Load Balancer has an associated IPv4, IPv6, and dualstack (both IPv4 and IPv6) DNS name. IPv6 is not supported in VPC. You can use an Application Load Balancer for native IPv6 support in VPC.
+
+Q: Can I configure my Amazon EC2 instances to only accept traffic from Classic Load Balancers?
+
+Yes.
+
+Q: Can I configure a security group for the front-end of Classic Load Balancers?
+
+If you are using Amazon Virtual Private Cloud, you can configure security groups for the front-end of your Classic Load Balancers.
+
+Q: Can I use a single Classic Load Balancer for handling HTTP and HTTPS requests?
+
+Yes, you can map HTTP port 80 and HTTPS port 443 to a single Classic Load Balancer.
+
+Q: How many connections will my load balanced Amazon EC2 instances need to accept from each Classic Load Balancer?
+
+Classic Load Balancers do not cap the number of connections that they can attempt to establish with your load balanced Amazon EC2 instances. You can expect this number to scale with the number of concurrent HTTP, HTTPS, or SSL requests or the number of concurrent TCP connections that the Classic load balancers receive.
+
+Q: Can I load balance Amazon EC2 instances launched using a Paid AMI?
+
+You can load balance Amazon EC2 instances launched using a paid AMI from AWS Marketplace. However, Classic Load Balancers do not support instances launched using a paid AMI from Amazon DevPay site.
+Q: Can I use Classic Load Balancers in Amazon Virtual Private Cloud?
+
+Yes -- see the Elastic Load Balancing web page.
+Q: Can I get a history of Classic Load Balancer API calls made on my account for security analysis and operational troubleshooting purposes?
+
+Yes. To receive a history of Classic Load Balancer API calls made on your account, simply turn on CloudTrail in the AWS Management Console.
+
+Q: Do Classic Load Balancers support SSL termination?
+
+Yes you can terminate SSL on Classic Load Balancers. You must install an SSL certificate on each load balancer. The load balancers use this certificate to terminate the connection and then decrypt requests from clients before sending them to the back-end instances.
+
+Q: What are the steps to get a SSL certificate?
+
+You can either use AWS Certificate Manager to provision a SSL/TLS certificate or you can obtain the certificate from other sources by creating the certificate request, getting the certificate request signed by a CA, and then uploading the certificate using the AWS Identity and Access Management (IAM) service.
+
+Q: How do Classic Load Balancers integrate with AWS Certificate Manager (ACM)?
+
+Classic Load Balancers are now integrated with AWS Certificate Management (ACM). Integration with ACM makes it very simple to bind a certificate to each load balancer thereby making the entire SSL offload process very easy. Typically purchasing, uploading, and renewing SSL/TLS certificates is a time-consuming manual and complex process. With ACM integrated with Classic Load Balancers, this whole process has been shortened to simply requesting a trusted SSL/TLS certificate and selecting the ACM certificate to provision it with each load balancer.
+
+Q: How do I enable cross-zone load balancing in Classic Load Balancer?
+
+You can enable cross-zone load balacing using the console, the AWS CLI, or an AWS SDK. See Cross-Zone Load Balancing documentation for more details.
+
+Q: Am I charged for regional AWS data-transfer when I enable cross-zone load balancing in Classic Load Balancer?
+
+No, you are not charged for regional data transfer between Availability Zones when you enable crosss-zone load balancing for your Classic Load Balancer.
+
 ### SDK's Exam Tips
 
 * Know the available SDK's
@@ -723,4 +787,130 @@ git clone https://github.com/acloudguru/s3
 * If there are many users trying to do something like uploading an image, there will be different lambda instances that will be triggered (stateless) and it scales out (adding more and more instances) automatically. Lambda scales out automatically, one function if 1M users try to request the one function, automatically 1M functions will be deployed and that automatically will be returned to the user.
 
 * In order to pass the exam you need to remember different types that trigger the Lambda function:
-    
+
+* Exam Topic what can trigger the Lambda?
+    Amazon S3
+    Amazon DynamoDB
+    Amazon Kinesis Data Streams
+    Amazon Simple Notification Service
+    Amazon Simple Email Service
+    Amazon Cognito
+    AWS CloudFormation
+    Amazon CloudWatch Logs
+    Amazon CloudWatch Events
+    AWS CodeCommit
+    Scheduled Events (powered by Amazon CloudWatch Events)
+    AWS Config
+    Amazon Alexa
+    Amazon Lex
+    Amazon API Gateway
+    AWS IoT Button
+    Amazon CloudFront
+    Amazon Kinesis Data Firehose
+    Other Event Sources: Invoking a Lambda Function On Demand
+    Sample Events Published by Event Sources
+
+![Lambda](./images/parallel-lambda.png)
+
+**Note:** Everytime a user sends a request to API Gateway and its forward it to Lambda you are invoking a new Lambda function. If you have got two users sending 2 http requests you are going to invoke 2 Lambda functions (the function code is identical). One code respond to multiple requests.
+
+* Languages:
+    + Node.js
+    + Java
+    + C#
+    + Go
+    + Python
+
+#### Lambda Pricing
+* Number of requests
+    + First 1M request are free. $0.20 per 1 million requests thereafter
+    + Lambda is disruptive in terms of costs
+
+#### Duration
+* Duration (max. threshold 5m)
+    + Duration is calculated from the time your code begins executing until it returns or otherwise terminates, rounded to the nearest 100ms. The price depends on the amount of memory you allocate to your functions. You are charged $0.000001667 for every GB-second used
+
+* Lambda scales instantly and not like EC2 autoscaling that can take couple of minutes
+
+**Lambda Exam Tips**
+* Lambda scales out (not up) automatically
+* Lambda functions are independent, 1 event = 1 function
+* Lamda is serverless
+* Know what services are serverless!
+    + DynamoDb
+    + S3
+    + AppSync
+    + API Gateway
+    + Cognito
+    + SNS
+    + SQS
+* Lambda function can trigger other lambda functions, 1 event can = x functions if functions trigger other function
+* Architectures can get extremely complicated, AWS X-ray allows you to debut what is happening
+* Lambda can do things globally, you can use it to back up S3 buckets to other S3 bucket etc.
+* Know your triggers and languages
+
+### Summary of EC2 Section
+
+Before you take the exam, read the FAQ section [here](https://aws.amazon.com/ec2/faqs/)
+
+* Know the difference between (pricing models - case studies):
+    + On Demand (black friday sale)
+    + Spot (geonomics company not time bound)
+    + Reserved (stable app traffic)
+    + Dedicated Hosts (regulatory body must not have multi-tenant compute)
+* Remember with spot instances:
+    + If you terminate the instance, you pay for the hour
+    + If AWS terminates the spot instance, you get the hour it was termiated in for free
+
+![Instance Types](./images/instance-types.png)
+
+* EBS Consists of:
+    + SSD, General Purpose - GP2 (up to 10,000 IOPS)
+    + SSD, Provisioned IOPS - IO1 (More than 10,000 IOPS)
+    + HDD, Troughput Optimized - ST1 - frequence accessed workloads (database)
+    + HDD, Cold - SC1 - less frequently accessed data (file servers)
+    + HDD, Magnetic - Standard - cheap, infrequently accessed storage
+* You cannot mount 1 EBS volume to multiple EC2 instances, instead use EFS
+
+* Termination Protection is tunred off by default, you must turn it on
+* On an EBS-backed instance, the default actionis for the root EBS voluem to be deleted when the instance is terminated
+* Root Volumes canot be necrypted by default, but additional volumes can be encrypted.
+* Volumes exist on EBS
+    + Volume === Virtual Hard Disk
+    + Snapshots exist on S3 (point in time snapshots)
+* Snapshots are incremental, this means that only the blocks that have changed since your last snapshot are moved to S3
+* How to make an application consistent snapshot?
+    + Stop the application from writing to disk
+    + Flush all caches to the disk
+        * How can we do this?
+            + Freeze the file system OR
+            + Unmount Raid Array OR
+            + Shutting down the associated EC2 instance
+* AMI's are regional. You can copy AMI's to another regios
+* Standard Motinoring = 5 Minutes
+* Detailed Monitoring = 1 Minute
+* CloudWatch for performance monitoring
+    + Dashboards
+    + Alarms
+    + Event: helps to respond to state changes in your AWS resources
+    + Logs
+* CloudTrain is for auditing of your AWS account
+
+* Roles are more secure than storing your access key and secret access key on individual EC2 instances
+    + Easier to manage
+    + Can be assigned to EC2 instance after it has been provisioned
+    + Universal, globally
+
+* Instance Meta-data get information about an instance `curl http://169.254.169.254/latest/meta-data/`
+
+* EFS you only pay for the storage you use
+    + Supports the Network File System version 4 (NFSv4 protocol)
+    + Can scale up to the petabytes
+    + Can support thousands of concurrent NFS connections
+    + Data is stored across multiple AZ's within a region
+    + Read After Write Consistency: Read-after-write consistency tightens things up a bit, guaranteeing immediate visibility of new data to all clients. With read-after-write consistency, a newly created object or file or table row will immediately be visible, without any delays. Note that read-after-write is not complete consistency: there’s also read-after-update and read-after-delete. Read-after-update consistency would allow edits to an existing file or changes to an already-existing object or updates of an existing table row to be immediately visible to all clients. [Source](https://shlomoswidler.com/2009/12/read-after-write-consistency-in-amazon.html)
+
+
+**Note:** In a computer, a file system (sometimes written filesystem) is the way in which files are named and where they are placed logically for storage and retrieval.
+
+* Incorrect. This would be a 5XX error. Many people think of 404 errors and think this is a problem with the server. It is not, it means the link you have tried to access doesn't exist on the server. Remember this for the exam.
