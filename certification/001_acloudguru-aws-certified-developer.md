@@ -533,13 +533,66 @@ Note: A hypervisor or virtual machine monitor (VMM) is computer software, firmwa
 
 **Note:** Before you got into the exam repeat this lab again. Lab Name: Upgrading EBS Volume Types. There will be 5 questions in the exam!
 
-Last EFS - Lab
+### EFS ElasticFile System (still not in the exam)
+
+* Amazon Elastic File System (Amazon EFS) is a file storage service for Amazon Elastic Compute Cloud (Amazon EC2) instances. Amazon EFS is easy to use and provides a simple interface that allows you to create and configure file systems quickly and easily. With Amazon EFS, storage capacity is elastic, growing and shrinking automatically as you add and remove files, so your applications have the storage they need, when they need it.
+
+**Note:** In computing, a file system or filesystem controls how data is stored and retrieved. ... File systems can be used on numerous different types of storage devices that use different kinds of media. The most common storage device in use today is a hard disk drive.
+
+* EFS allows you to mount the volume to two different EC2 instances
+* Support the Network File System version 4 (NFSv4) protocol
+* You only pay for the storage you use (no pre-provisioning required)
+* Can scale up to the petabytes
+* Can support thousands of concurrent NFS connections
+* Data is stored across multiple AZ's within a region
+* EFS block based storage and not object based storage
+* Read After Wrtie Consistency
 
 
 
+**Object Based Storage**
+
+* Object storage (also referred to as object-based storage) is a general term that refers to the way in which we organize and work with units of storage, called objects. Every object contains three things:
+    + The data itself. The data can be anything you want to store, from a family photo to a 400,000-page manual for assembling an aircraft.
+    + An expandable amount of metadata. The metadata is defined by whoever creates the object storage; it contains contextual information about what the data is, what it should be used for, its confidentiality, or anything else that is relevant to the way in which the data is used.
+    + A globally unique identifier. The identifier is an address given to the object in order for the object to be found over a distributed system. This way, it’s possible to find the data without having to know the physical location of the data
+
+![Object](https://www.druva.com/wp-content/uploads/Screen-Shot-2014-08-18-at-11.02.02-AM-500x276.png)
+
+* With block storage, files are split into evenly sized blocks of data, each with its own address but with no additional information (metadata) to provide more context for what that block of data is. 
+
+* Object storage, by contrast, doesn’t split files up into raw blocks of data. Instead, entire clumps of data are stored in, yes, an object that contains the data, metadata, and the unique identifier.
+
+* However, object storage generally doesn’t provide you with the ability to incrementally edit one part of a file (as block storage does). Objects have to be manipulated as a whole unit, requiring the entire object to be accessed, updated, then re-written in their entirety. That can have performance implications.
+
+* Another key difference is that block storage can be directly accessed by the operating system as a mounted drive volume, while object storage cannot do so without significant degradation to performance. 
+
+[Source](https://www.druva.com/blog/object-storage-versus-block-storage-understanding-technology-differences/)
+
+**Note:** Mounting a filesystem simply means making the particular filesystem accessible at a certain point in the Linux directory tree. When mounting a filesystem it does not matter if the filesystem is a hard disk partition, CD-ROM, floppy, or USB storage device.
+
+* By using EFS we can have one file system that is accessed by different EC2 instances, they could be in different Availability Zones in one Region.
+
+* You can have your code in one container in one EFS system and mount it across multiple different EC2 volumes.
 
 
+### AWS Command Line CLI
 
+* You can install CLI on your instances, your laptop etc.
+* Checkout AWS CLI you can destroy instances from the CLI
+* Never store the credentials on your EC2 instances or other AWS resources
+* IAM roles are global, available across all regions
+* You can attach roles to your EC2 instances
+
+**Note:** The command to ssh into your EC2 instance: `ssh ec2-user@54.205.40.189 -i MyEC2KeyPair.pem`
+
+#### CLI Cmmands Developer Associate Exam
+
+* These 3 specific commands you need to know for the developer associate exam:
+    + `aws ec2 describe-instances` - all active and terminated instances 
+    + `aws ec2 describe-images` - the images that are available to us we can provision instances from. **It can take couple of minutes just sit and wait**
+    + `aws ec2 run-instances` - the command to create new instances
+    + `aws ec2 run-instances --image-id ami-14c5486b --count 1 --instance-type t2.micro --key-name MyEC2KeyPair --security-group-ids sg-788a1033 --subnet-id subnet-2de5e249` [Source](https://docs.aws.amazon.com/cli/latest/reference/ec2/run-instances.html)
 
 
 
