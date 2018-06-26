@@ -1,5 +1,7 @@
 # AWS Certified Developer - Associate 2018
 
+[Source](https://www.udemy.com/aws-certified-developer-associate/)
+
 Why do companies pay more for certified specialists? In order to become an AWS partner to offer consulting or services, companies needs to employ certified employees. The table below shows the amount of certified people that a company needs to be partner of AWS.
 
 ![AWS Partners](./images/aws-partner-program.png)
@@ -591,9 +593,134 @@ Note: A hypervisor or virtual machine monitor (VMM) is computer software, firmwa
 * These 3 specific commands you need to know for the developer associate exam:
     + `aws ec2 describe-instances` - all active and terminated instances 
     + `aws ec2 describe-images` - the images that are available to us we can provision instances from. **It can take couple of minutes just sit and wait**
-    + `aws ec2 run-instances` - the command to create new instances
+    + `aws ec2 run-instances` - the command to create/launch new instances (start-instances are used to start or stop instances, don't be confused with run-instances)
     + `aws ec2 run-instances --image-id ami-14c5486b --count 1 --instance-type t2.micro --key-name MyEC2KeyPair --security-group-ids sg-788a1033 --subnet-id subnet-2de5e249` [Source](https://docs.aws.amazon.com/cli/latest/reference/ec2/run-instances.html)
+    + `aws ec2 terminate-instances --instance-ids i-023290640cc601c12` - if you want to terminate the instances 
+
+### S3 CLI & Regions
+
+* You can attach the role to your EC2 instance (it was new in 2017 or so). You can do it via the CLI or the console.
+
+### Bash Scripting
+
+* You can run a bash script with different commands when you start your EC2 to bootstrap your stack.
+* You always start bash scripts with a shebang
+* If the command doesn't work just add `--region XXX``
+* When you create your bash scripts manually you can troubleshoot and make shure everything is working
+* Use `sudo su` to get priviliges
+
+```sh
+#!/usr/bin/env bash
+yum update -y
+yum install httpd -y
+service httpd start
+chkconfig httpd on
+aws s3 cp s3://claudia-udemy-bucket/index.html /var/www/html
+```
+* What we are doing here above:
+    + update all the packages and dependencies 
+    + install apache web server
+    + start apache web server
+    + if the machines reboots restart apache again
+    + copy website file from s3 to the directory that is open to the public
 
 
+```sh
+#!/bin/bash
+yum update -y
+yum install httpd24 php56 git -y
+service httpd start
+chkconfig httpd on
+cd /var/www/html
+echo "<?php phpinfo();?>" > test.php
+git clone https://github.com/acloudguru/s3
+``` 
 
+* You can install an SDK on the EC2 instance and this instance can interact with the AWS resource such as creating new S3 buckets, create new tables in DynamoDb etc.
 
+* You can do the same with Node.js [See here](https://aws.amazon.com/sdk-for-node-js/)
+    + Install `npm install aws-sdk`
+    + `const AWS = require('aws-sdk)`
+
+### EC2 Instance Metadata
+
+[Read this article - Very important for the exam](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html)
+
+* Instance metadata is data about your instance that you can use to configure or manage the running instance. 
+
+* Although you can only access instance metadata and user data from within the instance itself, the data is not protected by cryptographic methods. Anyone who can access the instance can view its metadata. 
+
+**Remember for the exam - you use meta data not user data!**
+* `curl http://169.254.169.254/latest/meta-data/` - you'll get all the meta data from inside the instance. You need first to ssh into machine, than change to `sudo su` and use the curl command
+
+* `curl http://169.254.169.254/latest/meta-data/public-ipv4`- this is how you can access the public ip. 
+
+![Meta Data](./images/meta-data-ec2.png)
+
+**Note:** Metadata is data that describes other data. Meta is a prefix that in most information technology usages means "an underlying definition or description." Metadata summarizes basic information about data, which can make finding and working with particular instances of data easier.
+
+### Elastic Load Balancers
+
+* Load Balancer spread your traffic across different EC2 instances
+* Application Load Balancer: they work with the application layer http/https
+* Classic Load Balancer: does it's rooting decisions usually at a TCP layer (layer4 balancer)
+* Load Balancer Listener Configuration: Basically it says it listen to a specific port to a specific protocol 
+
+**Note:** To discover the availability of your EC2 instances, a load balancer periodically sends pings, attempts connections, or sends requests to test the EC2 instances. These tests are called health checks. The status of the instances that are healthy at the time of the health check is InService. The status of any instances that are unhealthy at the time of the health check is OutOfService. The load balancer performs health checks on all registered instances, whether the instance is in a healthy state (inService) or an unhealthy state (OutofService). The load balancer routes requests only to the healthy instances. When the load balancer determines that an instance is unhealthy, it stops routing requests to that instance. The load balancer resumes routing requests to the instance when it has been restored to a healthy state.
+
+* People go above their free-tier account because they forgot to switch off Elastic Load Balancer and they cost you money!
+
+* DNS resolution: it does convert the DNS e.g of our Load Balancer to the Public IP address of our instance. You don't get the IP address of your ELB (Elastic Load Balancer), you always use the IP address of your EC2 instance
+
+![Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/images/internet_facing_load_balancer.png)
+
+**Note:** One subnet equals one availability zone (remember)
+
+* Instances monitored by ELB are reported as; inService, or OutofService
+* Health Checks check the instance health by talking to it `healthcheck.html`
+* Have their own DNS name. You are never given an IP address
+* Read the ELB FAQ for Classic Load Balancers [here](https://aws.amazon.com/elasticloadbalancing/faqs/)
+
+### SDK's Exam Tips
+
+* Know the available SDK's
+    + Android, iOS, JavaScript (Browser)
+    + Java
+    + .Net
+    + PHP
+    + Python
+    + Ruby
+    + Go
+    + C++
+* SDK's Default Regions
+    + Some have default regions (Java)
+    + Some do not (Node.js)
+    + If you don't set a default region it will always go back to `us-east-1`
+
+### Lambda
+
+**from 2006 to 2018**
+1. Data Center
+2. IAAS (EC2) - infrastructure as a service - physical machines you need to manage linux, windows, you have to reinstall stuff and patch security updates
+3. PAAS (Elastic Beanstalk) - platform as a service - you upload the code and Amazon provision everything for you. But you still managing operation systems
+4. Containers (ECS) - isolated, you still have to deploy them into a server, you still have to monitor them and scale them according to the load
+5. Serverless (Lambda) - you don't need to worry managing your infrastructure, you just manage your code
+
+#### What is Lambda
+
+* All the stuff below is encapsulated into Lambda
+    * Data Centers
+    * Hardware
+    * Assembly Code/Protocols
+    * High Level Languages
+    * Operating Systems
+    * Application Layer/AWS APIs
+
+* AWS Lambda is a compute service where you can upload your code and create a Lambda function. AWS Lambda takes care of provisioning and managing the servers that you use to run the code. You don't have to worry about operating systems, patching, scaling etc. You can use Lambda in the following ways:
+    + As an event-driven compute service whre AWS Lambda runs your code in response to events. These everynt could be changes to data in an Amazon S3 bucket or an Amazon DynamoDb table.
+    + As a compute service to run your code in response to HTTP request using Amazon API Gateway or API calls made using AWS SDKs. 
+
+* If there are many users trying to do something like uploading an image, there will be different lambda instances that will be triggered (stateless) and it scales out (adding more and more instances) automatically. Lambda scales out automatically, one function if 1M users try to request the one function, automatically 1M functions will be deployed and that automatically will be returned to the user.
+
+* In order to pass the exam you need to remember different types that trigger the Lambda function:
+    
