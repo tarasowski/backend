@@ -1010,8 +1010,114 @@ Before you take the exam, read the FAQ section [here](https://aws.amazon.com/ec2
 
 * If you upload a file you'll get 200 response (important for the exam)
 
+* Permissions
+    + Owner access
+    + Public access
+
+* Properties:
+    + Under storage class we can choose the class: a) standard, b) standard - IA - not going to access this object very frequently, c) reduced redundancy - non-critical data
+    + Encryption: server-side encryption
+    + Metadata: we can add our own metadata
+    
+The data about data!
+![Metadata](./images/metadata-example.png)
+
+* Min size is 0 Bytes!
+* We can change properties under a bucket level and under an object level
+* There are two way to control the permissions:
+    + ACL's (access control list)
+    + Bucket Policy (JSON): there are different policy types
+        + SQS Queue Policy
+        + IAM Policy
+        + S3 Bucket Policy:
+            + Principal ARN (e.g. Joe) or `*`everyone
+        + SNS Queue Policy
+        + VPC Endpoint Policy
+
+* Encryption:
+    + Client Side Encryption
+    + Server Side Encryption
+        * with Amazon S3 Managed Keys (SSE S3)
+        * with KMS (SSE-KMS)
+        * with Customer Provided Keys (SSE-C)
+
+* If you plan to use your bucket with Route53 with your Domain. You need to make sure that your bucket has the same name as your domain name. If your domain is acloud.guru then your bucket name would have to be acloud (you don't include the top domain level) but your bucket name has to be exact name of the domain. If you are hosting hotmail.com your bucket name should be hotmail.
+
+* <bucketname>-<region>-amazonaws.com - the DNS name for your website hosting from your S3
+
+* On S3 you can host static websites but not dynamic websites (like PHP and other stuff - you cannot run server-side scripts there)
+
+#### Cross Origin Resource Sharing (CORS)
+
+* It's a way to allow one S3 bucket (javascript file) to reference code in another S3 bucket, it's just a way to allow one resource to access the other
+
+* CORS allows you to have images, css, html files in different buckets and you can allow all your buckets to start talking them to each other. Also you can design your website for different regions
+
+* You need to add CORS to the child bucket, so the parent bucket can call the child bucket
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+<CORSRule>
+    <AllowedOrigin>http://mytest-bucket-number1.s3-website-us-east-1.amazonaws.com</AllowedOrigin>
+    <AllowedMethod>GET</AllowedMethod>
+    <MaxAgeSeconds>3000</MaxAgeSeconds>
+    <AllowedHeader>Authorization</AllowedHeader>
+</CORSRule>
+</CORSConfiguration>
+``` 
+
+### Build A Serverless Webpage with API Gateway & Lambda
+
+![Architecture](./images/serverless-website-architecture.png)
+
+* For the exam you need to know what can trigger Lambda (all the triggers)
+
+**Note:** If the bucketname of your domain name is not available, you cannot use route53 to connect to your bucket name.
+
+**Note:** Moving from servers and infrastructure is everyone endgoal
+t
+
+### Using Polly (text-to-speech service) to Help You Pass Your Exam
+
+![Polly](./images/polly-architecture.png)
+
+1. We have a client that accesses a static hosted website on S3. The client enters the notes on this website.
+
+2. Once the notes are entered is going to POST to API Gateway. The notes are pushed to the Lamba function.
+
+3. These notes are going to be stored in DynamoDb
+
+4. The Lambda function is going to trigger an SNS event
+
+5. The SNS event is going to trigger another Lambda function
+
+6. That lambda function is going to take your notes and pass it Amazon Polly service. Which will return it back as mp3
+
+7. That mp3 file is going to be saved to S3 bucket
+
+8. And this Lambda function is going to update DynamoDb that the notes are converted into audio
+
+---
+
+1. You are going to visit the website and do a search for your notes. That search is going trigger an API Gateway
+
+2. The API Gateway is going to trigger a Lambda function which is going to do a scan of DynamoDb and return your notes to you
 
 
+**Note:** The workflow for setting up a new architecture. You first create your resources buckets, functions, tables (scaffolding). And after that you start to wire them up and write some code.
+
+**Note:** If you test `scan` operation from the frontend you can use something like this:
+
+```json
+{
+  "postId": "*"
+}
+``` 
+
+**Note:** If you have one domain name that is trying to interact with other domain name and it's not working, always check that CORS is enabled.
+
+* URL Query String Parameters: is the way for passing string through the actual URL
 
 
 
