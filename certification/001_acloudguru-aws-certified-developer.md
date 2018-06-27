@@ -1314,6 +1314,18 @@ t
 
 * Import/Export where you send your own disks, but it was a huge pain in the ass, so AWS has created a snowball an universal device for sending data forth and back.
 
+* Snowball Can:
+    + Import to S3
+    + Export from S3
+
+### S3 Transfer Acceleration
+
+* S3 Transfer Acceleration utilises the CloudFront Edge Network to accelerate your uploads to S3. Instead of uploading directly to your S3 bucket, you can use a distinct URL to putload direclty to an edge location which will then transfer that file to S3. You willg et a distinct URL to upload to.
+
+
+
+
+
 
 
 
