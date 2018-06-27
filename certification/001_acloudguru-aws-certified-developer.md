@@ -914,3 +914,104 @@ Before you take the exam, read the FAQ section [here](https://aws.amazon.com/ec2
 **Note:** In a computer, a file system (sometimes written filesystem) is the way in which files are named and where they are placed logically for storage and retrieval.
 
 * Incorrect. This would be a 5XX error. Many people think of 404 errors and think this is a problem with the server. It is not, it means the link you have tried to access doesn't exist on the server. Remember this for the exam.
+
+
+
+### S3 - 101
+
+* S3 (Simple Storage Service) - provides developers and IT temas with secure dureable, highly scalable object storage. Amazon S3 is easy to use, which a simple web services interface to store and retrieve any amount of data from anywhere on the web.
+
+* It is Object based storage. In storage there are two terms block and object based:
+    + An object is video or photos or pdf document (flat files)
+    + It's not a place where you would install an operating system or you run a database from, for that you need block based storage
+    + Data is crossed across multiple devices and facilities
+* S3 is a safe place to store your files
+* The data is spread across multiple devices and facilities
+
+* S3 is Object based i.e. allows you to upload files
+* Files can be from 0 Bytes to 5 TG
+* There is unlimited storage
+* Files are stored in Buckets (folder)
+* S3 is a uniersal namespace, that is, names mus be unique globally
+* https://s3-eu-west-1.amazonaws.com/acloudguru (bucket name format)
+* When you upload a file to S3 you will receive a HTTP 200 if the upload was successful
+
+#### Data Consistency Model For S3
+
+* Read after Write consistency for PUTS of new Objects
+    + When you put a new object into S3 you get immediate consistency, you can read that object straight away
+* Eventual Consistency for overwrite PUTS and DELETES (can take some time to propagate)
+    + When you update or delete an object it can take some time after it's propogates. I.e. you edit a doc file you might get the new or old data
+* Updates to S3 are atomic
+    + you either get the new data or old data
+    + you are not going to get partial or corrupted data
+
+* S3 is Object based. Objects consists of the following:
+    + Key (this is simply the name of the object) - S3 designed to sort object in the alphabetical order. Try to avoid hot keys! Store the object evenly across the S3 (don't have similar filenames)
+    + Value (this is the data itself is made of a sequence of bytes)
+    + Version ID (important for versioning)
+    + Metadata (data about the data you are storing - date uploaded the file, last time you uploaded the object)
+    + Subresources - exist underneath an object
+        + Access Control List (who can access the object - fine-grained permission - at file or bucket level)
+        + Torrent
+    
+* Build for 99,99% availability for the S3 platform (SLA)
+* Amazon guarantees 99,99999999999% (11 x 9's) durability 
+* Tiered Storage Available
+* Lifecycle Management (archiving data)
+* Versioning
+* Encryption
+* Secure your data using Access Control Lists and Bucket Policies
+
+* S3 - 99,99% durability, storead across multiple devices and multiple facilities and design to sustain the loss of 2 facilities concurrently
+
+* S3 - IA (Infrequently Accessed) For data that is accessed less frequently, but requires rapid access when needed. Lower fee than S3,but you are charged a retrieval fee.
+    + Payroll data (wageslips) you don't need to review at at the year end
+
+* Reduced Redundandy Storage - Designed to provide 99,99% durability and 99,99% available of object over a given year
+    + Image files in one bucket and thumbnails you can use RRS
+
+* Glacier - very cheap, but used for archival only. It takes 3 - 5 hours to restore from Glacier (comes up in the exam)
+
+![S3](./images/s3-options.png)
+
+* Glacier is an extremely low-cost storage service for data archival. Amazon Glacier stores data for as little as $0,01 per gigabyte per month, and is optimized for data that is infrequently accessed an for which retrieval times of 3 to 5 hours are suitable.
+
+![Glacier](./images/glacier-vs-s3.png)
+
+* S3 Pricing - Charge for:
+    + Storage
+    + Requests
+    + Storage Management Pricing (when you store data in S3 to add tags to control costs)
+    + Data Transfer Pricing (coming in is free, but moving around in S3 you need to pay)
+    + Transfer Acceleration: enables fast, easy and secure transfers of files over long distances between your end users and an S3 bucket. Transfer Acceleration takes advanctage of Amazon CloudFront's globally distirubted edge locations. As the data arrives at an edge location data is routed to Amazon S3 over an optimized network path
+
+**Users first upload the files to the edge locationa and form there the files are transfered to the data centers.**
+![Edge Locations](./images/s3-edge-locations.png)
+
+**How the object is composed:**
+* Key (name)
+* Value (data)
+* Version ID
+* Metadata
+* Subresources
+    + ACL
+    + Torren
+
+**Important:** Read FAQ before exam [S3 FAQ](https://aws.amazon.com/s3/faqs/)
+
+* The bucket names are unique because it's using DNS name space, you'll be able to access the buckets by DNS address (it's simply a web address)
+
+* Logging (who does what to your bucket)
+* Tagging (to track your costs across buckets)
+* Under manage users you can add other users
+* By default all buckets are private and objects too (that's why if you want to browser to an object you'll get access denied)
+    + To make an object public just click on more and choose `make this object public`
+
+* If you upload a file you'll get 200 response (important for the exam)
+
+
+
+
+
+
