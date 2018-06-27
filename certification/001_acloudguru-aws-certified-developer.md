@@ -1119,5 +1119,202 @@ t
 
 * URL Query String Parameters: is the way for passing string through the actual URL
 
+### S3 Versioning
+
+* Permissions (on a bucket and object level):
+    * User permissions: user within AIM
+        + Object (read/write) : upload / download
+        + Object permissions (read/write) : ACL
+    * Public permissions:
+        + Objects (read/write)
+        + Object permissions (read/write)
+    
+* You need to turn on the versioning (it can be removed, it can only disabled), if you want to remove versioning you need to create a new bucket
+
+![Versions](./images/s3-versioning.png)
+
+**Note:** If you activate versioning, all the version of your file will be stored which means you store all separate version and they will take more space each time you upload a new version. You need some kind of Lifecycle management policies to get rid of non-used versions (you can archive them to Glacier). The storage size will be the some of all this different versions...
+
+* `Initiate restore` is the command with Glacier
+
+* You can restore versions that were deleted from the console
+
+* Versioning is fantastic tool, when you want to prevent your users from deleting files without the possiblity to restore files
+
+* Storeas ll version of an object (including all writes and even if you delete an object)
+* Great backup tool
+* Cannot be deisbabled, only suspended
+* Integrates with Lifecycle rules
+* Versioning MFA Delete capability, which uses multi-factor authentication, can be used to provide an additonal layer of security
+
+### Cross-Region Replication
+
+* Under Management > Replication
+    + All content (entire bucket)
+    + Prefix (folders)
+
+* You can use it as a backup and replicate across different regions with other **Storage class** so it will consts much less! Storage class can be chosen for every object you upload to the bucket.
+
+**Note:** Only new object are getting replicated, not the object that are inside the bucket
+
+![Replication](./images/s3-replication.png)
+
+**Use case:** Buys ether the ether are stored on the wallet that is client side encrypted on mac. Stores this up on S3 and use cross-region replication encrypted at rest in both buckets as well. No matter what happens, he has the copy of the wallet on S3.
+
+
+![Copy](./images/s3-copy-command.png)
+
+* If the versioning is on, hitting delete is just placing a delete market, but the object is still there. The delete marker is replicated to the other region too. If we delete the delete market, in the replication bucket it will be still there. The deletion marker is not replicated across.
+
+* Versioning ust be enabled on both the source and destionation buckets.
+* Regions must be unique
+* Files in an existing bucket are not replicated automatically.
+    + `aws 3s cp --recursive s3:// s3://`
+
+* All subsequent updated files will be replicated automatically.
+* You cannot replicate to multiple buckets or use daisy chainng (at this time.)
+* Delete markers are replicated
+* Deleting individual versions or delete markers will not be replicated
+* Understand what Cross Region Replicaiton is at a high level
+
+
+### Lifecycle Management S3 - IA & Glacier
+
+* If you have a business that generates a lot of data. And the data is relevant to 30 days or so. After 30 days you want to tranfer it to S3 IA and after 60 days you want to transfer it to Glacier and archive it. 
+
+* Glacier is data arhival tool.
+
+![Lifecycle](./images/s3-lifecycle-management.png)
+
+
+* Can be used in conjunction with versioning
+* Can be applied to current version and previous versions
+* Following action s can now be done
+    + Transition to the Standard IA Storage Class (128kb and 30 days after the creation date)
+    + Archive to the Glacier Storage Class (30 days after IA, if relevant)
+    + Premanently Delete
+
+### CloudFront
+
+* CDN: a content delivery network is a system of distirubted servers (network) that deliver webpages and other web content to a user based on the geopgraphical locations of the user, the origin of the webpage and a content delivery server. 
+
+#### Without CDN
+![W/O CDN](./images/without-cdn.png)
+
+* Edge Location: This is the location where content will be cached. This is separete to an AWS Region/AZ
+
+* Origin - This the origin of all the files that the CDN will distribute. This can be either an S3 Bucket, an EC2 Instance, an Elastic Load Balancer or Route53. In the example above the origin was the webserver in UK. Origin === where the data is stored orginally in a Rigion/AZ
+
+* Distribution - This is the name given the CDN which consists of a collection of Edge Locations. When we create a new CDN network, this is called a distribution. 
+
+* The enduser uses distribution url to make a request and it checks if the requested object is cached at the edge location. User is trying to play a video file, if the edge location doesn't have cached it at the edge location. So now the edge location pull it down from S3 bucket that is e.g. based in Ireland and it caches it with a time to live TTL. 
+
+![Edge Location](./images/edge-location.png)
+
+* The first time the user does the request, the edge location goes and pull the file (red). If the second user does the request the same file it just goes and plays the file from the edge location, because the file is cached with TTL. That user is pulling the file from it's edge location then from the origin.
+
+
+* Amazon CloudFront can be used to deliver your entire website, including dynamic, static, streaming, and interactive content using a global network of edge locations. Request fro your content are automatically routed to the nearest ede location, so content is delivered with the best possible performance.
+
+* Amazon CloudFront is optimized to work with other Amazon Web Services, like Amazon Simple Storage Service (S3), EC2, Elastic Load Balancing and Route53. Amazon CloudFront also works seamlessly with any non-AWS origin server, which stores the original, definite version of your files.
+
+* Web Distributon - typically used for websites
+* RTMP - used for media streaming (adobe flash)
+* Edge location - this is the location where content will be cached, this is separete to an AWS Region/AZ
+* Origin - this is the origin of all the files that the CDN will distribute
+* Distribution - this is the name given the CDN which consists of a collection of edge locations
+    + web distribution - typically used for websites
+    + RTMP - used for media streaming
+
+* Edge locations are not just READ only, you can write to them too (put an object) - will be pushed back to the origin
+* Object are cached for the of the TTL (Time to live)
+* You can clear cached objects, but you will be charged
+
+* You can have more distributions per 1 origin
+
+* Origin access identity: creates a new user to make a call to S3
+
+* Allowed HTTP Methods:
+    + GET, HEAD
+    + GET, HEAD, OPTIONS
+    + GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE (if people want to upload files at the edge location)
+
+* If your objects are constantly changing e.g. every 12 hours, you need to set the right TTL to 12 hours so your objects will be updated after 12 hours. Once TTL is set, it will be difficult to clear this objects from the edge locations.
+
+* If you want to restrict content to specific users and you use cloudfront to distribute, you can use pre-signed urls / or signed cookies. You can only view the video if you use this url (private url), you can view the content but cannot share the content with other people.
+
+* GEO restrictions:
+    + Whitelist: countries that allowed to see this distribution
+    + Blacklit: countries that are not allowed to see this distribution
+
+* Invalidating object removes the objects from Cloudfront edge locations caches. But it costs you money if you want to invalidate the object.
+
+* Cloudfront can be used for uploading and downloading files.
+
+### Securing your buckets
+
+* By default, all newly create buckets are PRIVATE
+* You can setup access control to your buckets using:
+    + Bucket Policies (per buckets)
+    + Access Control Lists (per objects)
+* S3 buckets can be configures to create access logs which log all requests made to the S3 bucket. This can be done to another bucket.
+
+* Encryption 4 methods:
+    + In Transit: when you sending information from your pc to the bucket and is secured SSL/TLS (https)
+    + Data at rest:
+        + Server-side encryption
+            + S3 Managed Keys - SS3-S3: unique key
+            + AWS Key Management Service, Managed Keys - SS3-KMS (provides with audit trail - CloudTrail)
+            + Server Side Encrytpion With Customer Provided Keys - SSE-C
+        + Client Side Encryption: where you encrypt the data on your client side and upload the data to S3
+
+**Note:** Data protection at rest aims to secure inactive data stored on any device or network. While data at rest is sometimes considered to be less vulnerable than data in transit, attackers often find data at rest a more valuable target than data in motion. [Source](https://digitalguardian.com/blog/data-protection-data-in-transit-vs-data-at-rest)
+
+### Storage Gateway
+
+**Note:** Read again about this topic more in detail, the notes are sparse and not complete OR repeat the lesson [here](https://www.udemy.com/aws-certified-developer-associate/learn/v4/content)
+
+* AWS Storage Gateway is a service that connects an on-premises software appliance with cloud-based storage to provide seamless and secure integration between an organization's on-premises IT environment and AWS's storage infrastructure. The service enables you to securely store data to the AWS cloud for scalable and cost-effective storage.
+
+![Storage Gateway](./images/s3-storage-gateway.png)
+
+
+* Four Types of Storage Gateway:
+    + File Gateway (NFS): flat files -> pdf, pictures, docs
+        + Files are stored as object in your S3 buckets, accessed through a Network File System (NFS) mount point.
+    + Volumes Gateway (iSCSI): block storage, virtual hard disk for sql server, operation systems
+        The volume interface persents your applications with disk volumes using the iSCSI block protocol (virtual hard disk)
+        + Stored Volumes: you store the whole data set locally and backup to AWS (EBS snapshots - virtual hard disks)
+        + Cached Volumes: let you use S3 as your primary data storage while retaining frequnetly accessed data locally in your storage gateway
+    + Tape Gateway (VTL): backup and archiving solution, to create virtual tapes: offers a durable, cost-effective solution to archive your data in the AWS Cloud. 
+
+![Gateway](./images/file-gateway.png)
+
+#### Exam Tips
+
+* File Gateway: For flat files, stored directly on S3 (not for OS)
+* Volume Gateway (block based):
+    + Stored Volumes - Entire Dataset is stored on site and is asynchronously backed up to S3.
+    + Cached Valumes - Entire Dataset is stored on S3 and the most frequently accessed data is cached on site.
+* Gateway Virtual Tape Libraray (VTL):
+    + Used for backup and uses popular backup applications like NetBackup, Backup Exec, Veam etc.
+
+### Snowball
+
+* Snowball (storage only): you load data to snowball and send it to amazon and they transfer it to their resources (you can track where your snowball is)
+
+* Snowball Edge (compute + storage): it has compute capabilities as well e.g. small aws datacenter in a box that you can bring on-premise, you can run Lambda function on it. Airline manufacturers can deploy snowball edges on their airplane and when it's landed take out the snowball and ship it back to Amazon
+
+* Snowmobile (massive a container on a back of a track): huge amounts of data e.g. exobytes of data. Companies that have exobytes of data, they can take the data with the snowmobile.
+
+
+![Snowball](./images/snowball-aws.png)
+
+![Snowmobile](http://www.datacenterdynamics.com/pictures/2000x2000fit/8/9/0/18890_Snowmobile-AWS-truck-data-delivery.jpg)
+
+* Import/Export where you send your own disks, but it was a huge pain in the ass, so AWS has created a snowball an universal device for sending data forth and back.
+
+
+
 
 
