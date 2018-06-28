@@ -1429,7 +1429,125 @@ t
 
 * Example Question: Polling in tight loops is burining company's money, how would you fix this? Enable long polling...
 
+* Question: You are designing a new application which involves processing payments and delivering promotional emails to customers. You plan to use SQS to help facilitate this. You need to ensure that the payment process takes priority over the creation and delivery of emails. What is the best way to achieve this. Answer: Use 2 SQS queues for the platform. Have the EC2 fleet poll the payment SQS queue first. If this queues is empty then poll the promotional emails queue.
+
 ##### SQS Fanning Out
 
 * Create an SNS topic first using SNS. Then create and subscribe multiple SQS queues to the SNS topic. Now whenever a message is sent to the SNS topic, the message will be fanned out to the SQS queues, i.e. SNS will deliver the message to all the SQS queues that are subscribed to the topic. 
 
+
+![Fanout](https://media.amazonwebservices.com/blog/sns_sqs_image_proc_2.png)
+
+**Note:** Amazon SQS automatically deletes messages that have been in a queue for more than maximum message retention period. The default message retention period is 4 days. However, you can set the message retention period to a value from 60 seconds to 1,209,600 seconds (14 days) using the SetQueueAttributes action.
+
+### Simple Notificaton Service - SNS
+
+* Amazon Simple Notification Service is a web service that makes it easy to set up, operate, and send notifications from the cloud. It provides developers with a highly scalalbe, flexible, and cost-effective capability to publish messages from an application and immediately deliver them to subscribers or other applications.
+
+* Amazon SNS follows the "publish-subscribe" (pub-sub) messaging paradigm, with notifications being delivered to clients using a "push" mechanism that eliminates the need to periodically check or "poll" for new information and updates.
+
+* With simple APIs requiring minimal up-front development effort, no maintance or management overhead and pay-as-you-go pricing, Amazon SNS gives develpers an easy mechanism to incorporate a powerful notification system with their applications.
+
+**Note:** If you need to push out message use SNS if you need to pull/poll use SQS.
+
+* Besides pushing cloud notification directly to mobile devices, Amazon SNS can also deliver notifications by SMS text message or email, to Amazon Simple Queue Service (SQS) queues, or to any HTTP endpoint. 
+
+* You can use SNS to sen dpush notifications to Apple, Googele, Fire OS, and Windows devices, as well as Androind devices in China with Baidu Cloud Push.
+
+* To prevent messages from being lost all messages published to Amazon SNS are stored redundantly across mutliple availablity zones.
+
+* SNS allows you to group multiple recepients using topics. A topic is an "access point" for allowing recipients to dynamically subscribe for identical copies of the same notification.
+
+* Once topic can support deliveries to multiple endpoint types -- for example, you can group together iOS, Android and SMS recipients. When you publish once to a topic, SNS delivers appropriately formatted copies of your message to each subscriber.
+
+* Instantaneous, push-baed delivery (no polling)
+* Simple APIs and easy integration with applications
+* Flexible message delivery over multiple transport protocols
+* Inexpensive, pay-as-you-go model with no up-front costs
+* Web-based AWS Management console offer the simplicity click-interface
+
+#### SNS vs SQS
+
+* Both Messaging Services in AWS
+* SNS - Push
+* SQS - Polls (Pulls)
+* SNS Pricing:
+    + 0,50$ per 1M Amazon SNS requests
+    + 0,06$ per 100,000 Notifications deliveries over HTTP
+    + 0,75$ per 100 Notification deliveries over SMS 
+    + 2,00$ per 100,000 Notification deliveries over Email
+
+
+**Note:** Data format is JSON at SNS. A subscriber needs to confirm the subscription e.g. for emails.
+
+* TTL: Is the number of seconds since the message was published. When you use TT, messags that remain undelivered for the specified time will expire. 
+
+
+* Below is the structure of the message
+
+```json
+POST / HTTP/1.1
+x-amz-sns-message-type: SubscriptionConfirmation
+x-amz-sns-message-id: 165545c9-2a5c-472c-8df2-7ff2be2b3b1b
+x-amz-sns-topic-arn: arn:aws:sns:us-west-2:123456789012:MyTopic
+Content-Length: 1336
+Content-Type: text/plain; charset=UTF-8
+Host: myhost.example.com
+Connection: Keep-Alive
+User-Agent: Amazon Simple Notification Service Agent
+
+{
+  "Type" : "SubscriptionConfirmation",
+  "MessageId" : "165545c9-2a5c-472c-8df2-7ff2be2b3b1b",
+  "Token" : "2336412f37fb687f5d51e6e241d09c805a5a57b30d712f794cc5f6a988666d92768dd60a747ba6f3beb71854e285d6ad02428b09ceece29417f1f02d609c582afbacc99c583a916b9981dd2728f4ae6fdb82efd087cc3b7849e05798d2d2785c03b0879594eeac82c01f235d0e717736",
+  "TopicArn" : "arn:aws:sns:us-west-2:123456789012:MyTopic",
+  "Message" : "You have chosen to subscribe to the topic arn:aws:sns:us-west-2:123456789012:MyTopic.\nTo confirm the subscription, visit the SubscribeURL included in this message.",
+  "SubscribeURL" : "https://sns.us-west-2.amazonaws.com/?Action=ConfirmSubscription&TopicArn=arn:aws:sns:us-west-2:123456789012:MyTopic&Token=2336412f37fb687f5d51e6e241d09c805a5a57b30d712f794cc5f6a988666d92768dd60a747ba6f3beb71854e285d6ad02428b09ceece29417f1f02d609c582afbacc99c583a916b9981dd2728f4ae6fdb82efd087cc3b7849e05798d2d2785c03b0879594eeac82c01f235d0e717736",
+  "Timestamp" : "2012-04-26T20:45:04.751Z",
+  "SignatureVersion" : "1",
+  "Signature" : "EXAMPLEpH+DcEwjAPg8O9mY8dReBSwksfg2S7WKQcikcNKWLQjwu6A4VbeS0QHVCkhRS7fUQvi2egU3N858fiTDN6bkkOxYDVrY0Ad8L10Hs3zH81mtnPk5uvvolIC1CXGu43obcgFxeL3khZl8IKvO61GWB6jI9b5+gLPoBc1Q=",
+  "SigningCertURL" : "https://sns.us-west-2.amazonaws.com/SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem"
+  }
+``` 
+
+![Subscription Methods](./images/sns-subscription-methods.png)
+
+**Note:** application -- delivery of JSON-encoded message to an EndpointArn for a mobile app and device
+
+* Messages can be customized for each protocol
+
+### Simple Workflow Service
+
+* Amazon Simple Workflow Service (Amazon SWF) is a web service that makes it easy to coordinate work across distributes application components. Amazon SWF enables applications for a range of use cases,including media processing, web application back-ends, business process workflows, and analytics pipelines to be designed as a coordination of tasks.
+
+* Tasks represent invocations of various processing steps in an application which can be performed by executable code, web service calls, human actions and scripts
+
+![Workflow](./images/workflow-example.png)
+
+* Workers are programs that interact with Amazon SWF to get tasks, process received tasks, and return the results.
+
+* The decier is a program that control the coordination of tasks i.e. their ordering, concurrency, and scheduling according to the application logic. 
+
+* The worker and the decider can run on cloud infrastructure, such as Amazon EC2, or on machines behind firewalls. Amazon SWF brokers the interactions between workers and teh decider. It allows the decider to get consistent views into the progress of tasks and to initiate new tasks in an ongoing manner.
+
+* At the same time, Amazon SWF stores tasks, assign them to workers when they are ready, and monitors their pgroess. It ensures that a task is assigned only once and is never duplicated.  Since Amazon SWF maintains the application state durably, workers and deciders don't have to keep track of execution state. They can run independently, and scale quickly. 
+
+* **The main difference between SQS and SWF a simple task is only assigned once and it never duplicated. With SQS you got your message visibility time out a task can be assigned multiple times and it can be duplicated if something cannot be completed with the timeline and it goes back to SQS and can be completed twice.**
+
+* SWF Domains: your workflow and activity types and the workflow execution itself are all scoped to a domain. Domains isolate a set of types, executions, and tasks lists from others within the same account.
+
+* You can register a domain by using the AWS Management Console or by using the RegisterDomain action in the Amazon SWF API.
+
+* The parameters are specified in JSON: name, description, duration
+
+* Max workflow can be 1 year and the value is always measured in seconds. In SQS only 12 hours (shorter timeframe).
+
+* Amazon SWF presents a task-oriented API whereas Amazon SQS offers a message-oriented API
+
+* Amazon SWF ensures that a task is assigne donly once and is never duplicated. With SQS you need to handle duplicated messages and may also need to ensure that a message is processed only once. 
+
+* SWF keeps track of all the tasks and events in an application. With SQS you need to implement your own application-level tracking, especially if your application uses multiple queues. 
+
+**Note:** Does it involve human interaction, or deliver time frames e.g. 1 year, look for SWF
+
+* Amazon SWF is useful for automating workflows that include long-running human tasks (e.g. approvals, reviews, investigations, etc.) Amazon SWF reliably tracks the status of processing steps that run up to several days or months.
