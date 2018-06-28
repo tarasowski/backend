@@ -1322,11 +1322,114 @@ t
 
 * S3 Transfer Acceleration utilises the CloudFront Edge Network to accelerate your uploads to S3. Instead of uploading directly to your S3 bucket, you can use a distinct URL to putload direclty to an edge location which will then transfer that file to S3. You willg et a distinct URL to upload to.
 
+[Summary S3 Section - Udemy Course](https://www.udemy.com/aws-certified-developer-associate/learn/v4/t/lecture/2329028?start=0)
+
+* Important:
+    + http://mybucketname.s3-website.eu-west-2.amazonaws.com (for website)
+    + https://s3.eu-west-2.amazonaws.com/mybucketname (for s3 bucket)
 
 
+* You can load files to S3 much faster by enabling multipart upload
+
+* A pre-signed URL gives you access to the object identified in the URL, provided that the creator of the pre-signed URL has permissions to access that object. That is, if you receive a pre-signed URL to upload an object, you can upload the object only if the creator of the pre-signed URL has the necessary permissions to upload that object. All objects and buckets by default are private. The pre-signed URLs are useful if you want your user/customer to be able to upload a specific object to your bucket, but you don't require them to have AWS security credentials or permissions. When you create a pre-signed URL, you must provide your security credentials and then specify a bucket name, an object key, an HTTP method (PUT for uploading objects), and an expiration date and time. [Source](https://docs.aws.amazon.com/AmazonS3/latest/dev/PresignedUrlUploadObject.html)
 
 
+### Databases 101
+
+* RDS: Relational Db -> OLTP
+    + PostgreSQL
+    + Aurora
+    + MariaDB
+    + Oracle
+    + SQL Server
+* DynamoDb: Non Relational Database (document oriented)
+    + Collection = Table
+        + Document = Row/Item
+            + Key Value Pairs = Fieds
+* ElastiCache: inMemory
+    + The service improves the performance of web applications by allowing you to retrieve information from fast, managed, in-memory caches, insted of relying entirely on slower disk-based databases. 
+    + Memchached
+    + Redis
+    + ElasticCache is going to chache the most consistent queries of your database e.g. if your web app is constantly requesting what are the top 10 deals today, you want cache that information in ElasticCache and if your app is going to query that information, it's going to get it from the cache and not from your database
+* Redshift: Data warehousing (copy of your production database, where you can run your complex queries) - OLAP
+    + Used for business intelligence. Tools like Cognos, Jaspersoft, SQL Server Reporting Services
+    + Used to pull in very large and complex data sets. Usually used by management to do queries on data
+    + OLTP: transactional and events
+    + OLAP: analytics of large volume of information
+* DMS: managed database migration service
+    + Allows you to migrate your production database to AWS. Once the migration has started, AWS managed all the coplexities of the igration process like data type transformation, compression, and parallel transfer while ensuring that data changes to the source database that occur during the migration process are automatically replicated to the target.
+    + AWS schema conversion tool automatically converts the source database schema and a majority of the custom code, including views, stored procedures, and functions, to a format compatible with the traget database.
+    + Move your legacy database to a free database
 
 
+**Note:** Read RDS FAQ section to prepare yourself better for the exam [here](https://aws.amazon.com/rds/faqs/)
 
+---
+
+### Simple Queue Service - SQS
+
+* The very first service that was launched at AWS
+* SQS is sequential processing
+
+* Amazon SQS is a web service that gives you access to a message queue that can be used to store messages while waiting for a computer to process them. Amazon SQS is a distributed queue system that enables web service applications to quickly and reliably queue messages that one component in the application generates to be consumed by another component. A queue is a temporary repository for messages that are awaiting processing.
+
+* E.g You have an application, a user uploads an image file and that application will alert SQS and store the message on the SQS system and potentially you have a service that will queue that SQS system and take the new job e.g. like process the image that is e.g. stored in S3 bucket and do a task on them like applying a watermark, once it's done the application service will update that queue and remove the message from the queue. It's a way decoupling your environment. If you lost the service the message is still in the queue.
+
+* Using Amazon SQS, you can decouple the components of an applicaiton so they run independently, with Amazon SQS easing message management between components. Any component of a distributed application can store messages in a fail-safe queue.
+
+* Messages can contain up to **256 KB** of text in any format. Any component can later retrieve the messages programmatically using the Amazon SQS API.
+
+* The queue acts as a buffer between the component producting and saving data, and the component receiving the data for processing. This means the queue resoles issues that arise if the producer is producing work faster than the consumer can process it, or if the producer or consuer are only intermittently connected to the network
+
+* Amazon SQS ensures delivery of each message at least once, and supports multiple readers and writer interacting with the same queue. A single queue can be used simultaneously by many distributed application components, with no need for those components to coordinate with each other to share the qeueue (great way to scale out your applications).
+
+* Amazon SQS is engineered to always be available and eliver messages. One of the resulting tradeoofs is that SQS doesn't guarantee first in, first out delivery of messages (it was changed, they have added this functionality). 
+
+#### SQS Use Case
+
+* Suppose you have a number of image files to encode. In an Amazon SQS woker queue, you create an Amazon SQS message for ach file specifying the command (jpeg-encode) and the location of the file in Amazon S3. A pool of Amazon EC2 instances running the needed image procesing software does the following:
+
+1. Asynchronously pulls the task messages from the queue (always pulls - SQS never pushes out and this is the difference between SNS )
+2. Retrieves the named file
+3. Processes the conversion
+4. Writes the image back to Amazon S3
+5. Writes a "task complete" message to another queue
+6. Deletes the original task message
+7. Check for more messages in the worker queue
+
+
+**Note:** SQS you need to pull and SNS is going to push the messages.
+
+**Important:** Visibility timeout period starts when the component has picked up the message. If the timeout period goes by and nothing happens, another application component (server) will pick up the message and process it. This is how Amazon guarantees that the messages will be processed at least once.
+
+* SQS can also do Autoscaling, if you hit 85% of CPU utilization you can add additional service. If the queue goes beyond a specific size it will start more application servers to deal with the loads. If yor queue is growing fast, it will spin up multiple application servers. If the loads will go down it will terminate the EC2 services.
+
+* Does not offer FIFO (but it has changed)
+* 12 hours visibility time out
+* Message will be delivered exactly once
+* 256kb message size now available
+* Billed at 64kb "chunks" 4 chunks per message
+* 1M request are free
+* 0,50$ per 1M requests
+* A single request can have from 1 to 10 messages up to a maximum total payload of 256KB
+* Each 64KB 'chunk' of payload is billed as 1 request. 256KB payload will be billed as four requests.
+
+**Note:** Anytime you see the word **decouple** think immediate about SQS
+
+* SQS Messages can be delivered multiple times and in any order
+    + If you need to process some messages faster than anothers, you simply create 2 queues: A (high priority) and B (lower priority)
+
+* Default Visibility Time Out is 30 Seconds and max 12 hours (**ChangeMessageVisibility**)
+    + Immediately after a message is received, it remains in the queue. To prevent other consumers from processing the message again, Amazon SQS sets a visibility timeout, a period of time during which Amazon SQS prevents other consumers from receiving and processing the message. 
+
+* How to save money? SQS long polling is a way to retrieve messages from your SQS queues. While the traditional SQS short polling return immediately, even if the qeueu being polled is empty, SQS long polling doesn't return a responce until a message arrives in the queue, or the long poll times out. SQS long polling makes it easy and inexpensive to retrieve messages from your SQS queue as soon as they are available. Max Long Poll Time Out = 20 seconds. 
+
+
+**Note:** Read FAQ for exam preparation [here](https://aws.amazon.com/sqs/faqs/)
+
+* Example Question: Polling in tight loops is burining company's money, how would you fix this? Enable long polling...
+
+##### SQS Fanning Out
+
+* Create an SNS topic first using SNS. Then create and subscribe multiple SQS queues to the SNS topic. Now whenever a message is sent to the SNS topic, the message will be fanned out to the SQS queues, i.e. SNS will deliver the message to all the SQS queues that are subscribed to the topic. 
 
