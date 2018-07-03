@@ -69,7 +69,9 @@ Microservice Challenges
 
 - Don’t use composite data service (a service that goes directly to each service and tries to get the data from each individual service) - It’s an anti-pattern. Use instead Pub/Sub, Pull model or Push model.
 
-===========/******* Scaling your apps with AWS relational databases
+----
+
+===========/******* Scaling your apps with AWS relational databases============
 
 - Aurora looks from the outside like MySQL or Postgress but under the hood it’s completely differnt, they try to make Aurora equal to commercial databases
 
@@ -82,12 +84,31 @@ Microservice Challenges
 - Amazon Aurora is fast:
 	+ 5x more throughput than MySQL
 	+ 3x more throughput then Postgress
+---
 
-=================DynamoDb
+=================DynamoDb Session ================================
 
 - If the data is not in LSI it do fetching, means it fetches the data from the original table
 
 
-Todo:
-[ ] - upload pictures
+![Pictures](./images/IMG_4553.JPG)
+![Pictures](./images/IMG_4554.JPG)
+![Pictures](./images/IMG_4555.JPG)
+![Pictures](./images/IMG_4556.JPG)
+![Pictures](./images/IMG_4557.JPG)
+![Pictures](./images/IMG_4558.JPG)
+![Pictures](./images/IMG_4559.JPG)
+![Pictures](./images/IMG_4560.JPG)
+![Pictures](./images/IMG_4561.JPG)
+![Pictures](./images/IMG_4562.JPG)
+![Pictures](./images/IMG_4563.JPG)
+![Pictures](./images/IMG_4564.JPG)
+![Pictures](./images/IMG_4565.JPG)
+![Pictures](./images/IMG_4566.JPG)
+![Pictures](./images/IMG_4567.JPG)
+![Pictures](./images/IMG_4568.JPG)
+![Pictures](./images/IMG_4573.JPG)
+![Pictures](./images/IMG_4574.JPG)
+
+
 
