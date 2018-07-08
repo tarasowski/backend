@@ -1,4 +1,4 @@
-# 30 Serverless Architecutres in 30 Days
+# 30 Serverless Architectures in 30 Days
 
 In the next 30 days I'm going to build and test 30 different servlerless architecture examples. I'm going to pick some random examples from the list below.
 
