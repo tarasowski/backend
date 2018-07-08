@@ -7,6 +7,7 @@ In the next 30 days I'm going to build and test 30 different servlerless archite
 * [ ] [Implementing safe AWS Lambda deployments with AWS CodeDeploy](https://aws.amazon.com/blogs/compute/implementing-safe-aws-lambda-deployments-with-aws-codedeploy/)
 * [ ] [Automating Deployment of Lambda-based Applications](https://docs.aws.amazon.com/lambda/latest/dg/automating-deployment.html)
 * [ ] [Serverless Framework Examples](https://github.com/serverless/examples)
+* [ ] [ClauidaJs examples](https://github.com/claudiajs/example-projects)
 * [ ] [AWS SAM Examples](https://github.com/awslabs/serverless-application-model/tree/master/examples/apps)
 * [ ] [Oreilly Live Training Examples](https://github.com/kevinold/serverless-tutorial-oreilly-live-training-2017)
 * [ ] [AWS re:Invent 2017: [REPEAT] Thirty Serverless Architectures in 30 Minutes (SRV213-R)](https://www.youtube.com/watch?v=xJcm9V2jagc)
