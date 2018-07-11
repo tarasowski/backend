@@ -2,6 +2,7 @@
 
 In the next 30 days I'm going to build and test 30 different servlerless architecture examples. I'm going to pick some random examples from the list below.
 
+* [ ] [Amazon my Architecture](https://aws.amazon.com/this-is-my-architecture/)
 * [ ] [Examples from Medium](https://medium.com/search?q=how%20to%20serverless)
 * [ ] [Servlerless AWS App Repository](https://serverlessrepo.aws.amazon.com/applications)
 * [ ] [Implementing safe AWS Lambda deployments with AWS CodeDeploy](https://aws.amazon.com/blogs/compute/implementing-safe-aws-lambda-deployments-with-aws-codedeploy/)
