@@ -4,18 +4,18 @@
 
 ### Working with Asyn() functions:
 
-* Async function always returns a resolved promise. If the return value is not a promise it will wrap it into a promise. So you can simply resurn a promise and it will be resolved. The return statement terminates the execution of a function and returns control to the calling function
+* Async function always returns a resolved promise. If the return value is not a promise it will wrap it into a promise. So you can simply return a promise and it will be resolved. In this case it can be used instead of `callback()` to return information back to the caller.
 
 * Lambda's execution context exits before waiting for any completion of backgroup processes or callbacks. In case of `async` everthing that is in the event loop is going to be lost. Things like setTimeout callbacks and event listeners are scheduled into the event queue. They will be lost!
 
 * You need to resolve the promises with `await` before your exit the execution context, or pass the promise to the `return statement` to be resolved. 
 
-* Everything that is not in the `job queue` is going to be lost. The job queue is a completely separate queue. More importantly, messages in this queue are processed immediately at the end of each tick before the beginning of the next tick. Success handlers for promises are scheduled into this job queue. They get executed before the next message in the event queue.
+* Everything that is not in the `job queue` is going to be lost. The job queue is a completely separate queue. More importantly, messages in this queue are processed immediately at the end of each tick before the beginning of the next tick. Success handlers for promises are scheduled into this job queue. They get executed before the next message in the event queue. To a promise into a queue use `await`
 
 **Summary**
 * Return a promise or a value out of the function
 * Promisify everything inside the function
-* Use `await` to resolve promises
+* Use `await` to resolve promises // you need to resolve a promise otherwise Lamba will exit with Promise {Pending}
 * Don't use the event loop, everything in it will get lost
 * Work only with promises or promisified functions
 
@@ -48,14 +48,49 @@ exports.lambda_handler = async(event) => {
 }
 
 // successfully saved
-// Im the first (call stack)
-// IM COMING FROM THE END OF THE TICK (at the end of this tick)
+// Im the first 
+// IM COMING FROM THE END OF THE TICK 
 // "Hello from Lambda"
 ``` 
 
 **Note:** If you want Lambda to process something you need that is asynchronous. First you need to promisify it and add `await` so it get's scheduled into the `job queue`. The job queue will be processed immediately at the end of each tick before the beginning of the next tick. Because there is only one tick, at the beginning of the next tick Lambda will exit the execution context.
 
 **Note:** any time you call process.nextTick() in a given phase, all callbacks passed to process.nextTick() will be resolved before the event loop continues
+
+Here is an example below of a function that would not work because `dynamodb.putItem` get pushed into the event loop / queue, that is not going to be processed with `async()` functions. So the data will not be saved into the database
+
+```js
+exports.lambda_handler = async(event, context, callback) => {
+    const id = Math.random().toString(36).substring(7)
+    const params = {
+        TableName: 'ServerlessWebTracker',
+        Item: {
+            website: {
+                "S": id
+            },
+            url: {
+                "S": 'test'
+            }
+        }
+    }
+
+    // data gets not saved into the database
+    dynamodb.putItem(params, (err, data) => {
+        if (err) console.log(err)
+        if (data) console.log('successfully saved')
+    })
+
+
+    process.nextTick(() => console.log('IM COMING FROM THE END OF THE TICK'))
+    console.log('Im the first')
+    setTimeout(() => console.log('From the event queue'), 0)
+    return 'Hello from Lambda'
+
+}
+
+//Im the first
+//IM COMING FROM THE END OF THE TICK
+``` 
 
 ---
 ### Working with Callback():
