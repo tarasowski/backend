@@ -17,6 +17,4 @@ Let me try to create a table for different use cases when to use use what.
 
 - [Source SNS](https://docs.aws.amazon.com/sns/latest/dg/SNS_Scenarios.html)
 
-
-1GB = 1.000.000
-1M request are 6.400.000kb = 0.40ct
+- [Source Pricing](https://stackoverflow.com/questions/26623673/why-should-i-use-amazon-kinesis-and-not-sns-sqs)
