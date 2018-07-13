@@ -18,6 +18,7 @@
 * Use `await` to resolve promises // you need to resolve a promise otherwise Lamba will exit with Promise {Pending}
 * Don't use the event loop, everything in it will get lost
 * Work only with promises or promisified functions
+* **Assumptions: Probably it doesn't even go into the next tick of the event loop. So there is no way to send something into the event loop for processing. That needs to be checked!!!**
 
 
 ```js
