@@ -122,3 +122,4 @@ Figure 2: Canary deployment
 Figure 2: Canary deployment with containers
 
 ![Canary](./images/canary-deployments-containers.png)
+
