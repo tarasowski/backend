@@ -65,7 +65,7 @@ test('Assertions with tape.', (assert) => {
 ## References & Tutorials
 * [Why I use Tape Instead of Mocha & So Should You Measuring Software Quality](https://medium.com/javascript-scene/why-i-use-tape-instead-of-mocha-so-should-you-6aa105d8eaf4)
 * [Testing JavaScript Modules with Tape](https://ponyfoo.com/articles/testing-javascript-modules-with-tape)
-* [Writing javascript tests with tape](http://www.catonmat.net/blog/writing-javascript-tests-with-tape/)
+* [Peter Krumins'- Writing javascript tests with tape](http://www.catonmat.net/blog/writing-javascript-tests-with-tape/)
 * [setup and teardown in tape](https://gist.github.com/substack/9561717)
 * [How should we be using `t.plan` and `t.end` in our tests?](https://github.com/dwyl/learn-tape/issues/12)
 * [Collection of Tape Tests from TheScienceMuseum/collectionsonline](https://github.com/TheScienceMuseum/collectionsonline/tree/master/test)
