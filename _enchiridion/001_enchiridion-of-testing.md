@@ -62,7 +62,7 @@ test('Assertions with tape.', (assert) => {
 
 * The goal is writing for close to 100% coverage.
 
-## Tutorials & Information:
+## References & Tutorials
 * [Why I use Tape Instead of Mocha & So Should You Measuring Software Quality](https://medium.com/javascript-scene/why-i-use-tape-instead-of-mocha-so-should-you-6aa105d8eaf4)
 * [Testing JavaScript Modules with Tape](https://ponyfoo.com/articles/testing-javascript-modules-with-tape)
 * [Writing javascript tests with tape](http://www.catonmat.net/blog/writing-javascript-tests-with-tape/)
