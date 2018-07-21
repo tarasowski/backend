@@ -1,7 +1,5 @@
 # Enchiridion Of Testing
 
-[Source](https://medium.com/javascript-scene/why-i-use-tape-instead-of-mocha-so-should-you-6aa105d8eaf4)
-
 * Use `tape` or `node-tap`
 
 * Unit tests exist to test individual units of software functionality. A unit is a module, component, or function. They’re bits of the program that can work independently of the rest of the program.
@@ -63,3 +61,10 @@ test('Assertions with tape.', (assert) => {
 * Mocha, Jasmine, Jest and the rest? Just say no to clutter. Simplify your life. Experience testing zen.
 
 * The goal is writing for close to 100% coverage.
+
+## Tutorials & Information:
+* [Why I use Tape Instead of Mocha & So Should You Measuring Software Quality](https://medium.com/javascript-scene/why-i-use-tape-instead-of-mocha-so-should-you-6aa105d8eaf4)
+* [Testing JavaScript Modules with Tape](https://ponyfoo.com/articles/testing-javascript-modules-with-tape)
+* [Writing javascript tests with tape](http://www.catonmat.net/blog/writing-javascript-tests-with-tape/)
+* [setup and teardown in tape](https://gist.github.com/substack/9561717)
+* [How should we be using `t.plan` and `t.end` in our tests?](https://github.com/dwyl/learn-tape/issues/12)
