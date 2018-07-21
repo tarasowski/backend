@@ -68,3 +68,4 @@ test('Assertions with tape.', (assert) => {
 * [Writing javascript tests with tape](http://www.catonmat.net/blog/writing-javascript-tests-with-tape/)
 * [setup and teardown in tape](https://gist.github.com/substack/9561717)
 * [How should we be using `t.plan` and `t.end` in our tests?](https://github.com/dwyl/learn-tape/issues/12)
+* [Collection of Tape Tests from TheScienceMuseum/collectionsonline](https://github.com/TheScienceMuseum/collectionsonline/tree/master/test)
