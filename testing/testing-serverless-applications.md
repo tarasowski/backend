@@ -1,4 +1,4 @@
-# Lambda & Co. Testing - Serverless 
+# Testing Serverless Applications
 
 [Source - Yan Chui](https://livevideo.manning.com/module/38_3_1/production-ready-serverless/testing/aws-lambda-requires-a-different-approach-to-testing)
 
