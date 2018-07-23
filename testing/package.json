@@ -1,0 +1,21 @@
+{
+  "name": "testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "config": {
+    "bucket": "8080"
+},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^16.2.2",
+    "concat-stream": "^1.6.2",
+    "coverify": "^1.5.0",
+    "tape": "^4.9.1"
+  }
+}
