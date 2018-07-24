@@ -7,8 +7,6 @@
 
 * Every module should have unit tests, and every application should be made up of modules.
 
-* Functions like `beforeEach` and `afterEach` actively encourage you to do something you definitely should not do: Share state between tests.
-
 * If you spend a lot of time on mocks and stubs, that’s a strong code-smell.
 
 * You can probably dramatically simplify both your tests and your application by breaking your app into more modular chunks.
