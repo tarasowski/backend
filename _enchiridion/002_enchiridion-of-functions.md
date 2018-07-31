@@ -9,7 +9,7 @@
 
 * The names accountAddress and customerAddress are fine names for instances of the class Address but could be poor names for classes. Address is a fine name for a class.
 
-* The first rule of functions is that they should be small. The second rule of functions is that they should be smaller than that.
+* The first rule of functions is that they should be small. The second rule of functions is that they should be smaller than that. Functions should not be 100 lines long. Functions should hardly ever be 20 lines long.
 
 * Every function should be just two, or three, or four lines long. Each is transparently obvious. Each tells a story. And each led you to the next in a compelling order.
 
@@ -24,7 +24,6 @@ if(isValidEvent(event)) {
 * Encapsulate Conditionals Boolean logic is hard enough to understand without having to see it in the context of an if or while statement. Extract functions that explain the intent of the conditional. For example:  if (shouldBeDeleted(timer)) is preferable to if (timer.hasExpired() && !timer.isRecurrent())
 
 * Avoid Negative Conditionals Negatives are just a bit harder to understand than positives. So, when possible, conditionals should be expressed as positives. if (buffer.shouldCompact()) is preferable to if (!something...)
-
 
 * This also implies that functions should not be large enough to hold nested structures. Therefore, the indent level of a function should not be greater than one or two. This, of course, makes the functions easier to read and understand.
 
