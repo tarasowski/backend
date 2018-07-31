@@ -1,6 +1,5 @@
 # Enchiridion of Functions
 
-[Source](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)
 
 * You should name a variable using the same care with which you name a first-born child.
 
@@ -133,7 +132,9 @@ public void pay() { for (Employee e : employees) payIfNecessary(e)} private void
 
 ``` 
 
+## References & Tutorials
 
+* [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)
 
 
 
