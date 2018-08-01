@@ -1,5 +1,4 @@
 # Enchiridion Of Testing 
-* Use `tape` or `node-tap`
 
 * Unit tests exist to test individual units of software functionality. A unit is a module, component, or function. They’re bits of the program that can work independently of the rest of the program.
 
