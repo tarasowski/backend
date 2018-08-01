@@ -129,12 +129,24 @@ public void pay() { for (Employee e : employees) { if (e.isPayday()) { Money pay
 ```
 public void pay() { for (Employee e : employees) payIfNecessary(e)} private void payIfNecessary(Employee e) { if (e.isPayday()) calculateAndDeliverPay(e);}private void calculateAndDeliverPay(Employee e) { Money pay = e.calculatePay(); e.deliverPay(pay); }
 
-
 ``` 
+
+* If you have to spend effort into looking at a fragment of code to figure out what it's doing, then you should extract it into a function and name the function after that “what”. That way when you read it again, the purpose of the function leaps right out at you, and most of the time you won't need to care about how the function fulfills its purpose - which is the body of the function.
+
+* Develop a habit of writing very small functions - typically only a few lines long. Any function more than half-a-dozen lines is code smell, and it's not unusual to have functions that are a single line of code.
+
+* The name of the method can be longer than its implementation - but that didn't matter because there is a big distance between the intention of the code and its implementation.
+
+* A good example is the `isEmpty` method for a list when the common idiom is to use `aList.length == 0`. Small functions like this only work if the names are good, so you need to pay good attention to naming.  
+
+![Martin Fowler's Functions](https://martinfowler.com/bliki/images/functionLength/my-method-counts.png)
+
+* As you see there's lots of small methods there - half of the methods of Martin Fowler's codebase are two lines or less. (lines here are non-comment, non-blank, and excluding the def and end lines.)
 
 ## References & Tutorials
 
 * [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)
+* [FunctionLength by Martin Fowler](https://martinfowler.com/bliki/FunctionLength.html)
 
 
 
