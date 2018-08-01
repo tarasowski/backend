@@ -1,5 +1,8 @@
 # Enchiridion of Functions
 
+> The art of programming is, and has always been, the art of language design. But never forget that your real goal is to tell the story of the system, and that the functions you write need to fit cleanly together into a clear and precise language to help you with that telling.
+
+
 
 * You should name a variable using the same care with which you name a first-born child.
 
