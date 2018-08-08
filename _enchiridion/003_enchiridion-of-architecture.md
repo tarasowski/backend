@@ -44,15 +44,35 @@
 
 > One of my most productive days was throwing away 1000 lines of code.   -- Ken Thompson
 
-* Rule of Modularity: Write simple parts connected by clean interfaces.
+* Rule of Composition: Design programs to be connected with other programs. It’s hard to avoid programming overcomplicated monoliths if none of your programs can talk to each other. To make programs composable, make them independent. A program on one end of a text stream should care as little as possible about the program on the other end. It should be made easy to replace one end with a completely different implementation without disturbing the other.
 
-* Because maintenance is so important and so expensive, write programs as if the most important communication they do is not to the computer that executes them but to the human beings who will read and maintain the source code in the future (including yourself).
+* Rule of Modularity: Write simple parts connected by clean interfaces. Write simple parts connected by clean interfaces. The only way to write complex software that won’t fall on its face is to hold its global complexity
+down — to build it out of simple parts connected by well-defined interfaces, so that most problems are local and you can have some hope of upgrading a part without breaking the whole.
 
-* Rule of Clarity: Clarity is better than cleverness.
+* Rule of Clarity: Clarity is better than cleverness. Because maintenance is so important and so expensive, write programs as if the most important communication they do is not to the computer that executes them but to the human beings who will
+read and maintain the source code in the future (including yourself).
 
-* Rule of Composition: Design programs to be connected with other programs.
+* Rule of Simplicity: Design for simplicity; add complexity only where you must. The only way to avoid these traps is to encourage a software culture that actively resists bloat and complexity — an engineering tradition that puts a high value on simple solutions, looks for ways to break program systems up into small cooperating pieces, and reflexively fights attempts to gussy up programs with a lot of chrome.
 
-* To make programs composable, make them independent. A program on one end of a text stream should care as little as possible about the program on the other end. It should be made easy to replace one end with a completely different implementation without disturbing the other.
+* Rule of Transparency: Design for visibility to make inspection and debugging easier. A software system is transparent when you can look at it and immediately understand what it is doing and how. It is discoverable when it has facilities for monitoring and display of internal state so that your program not only functions well but can be seen to function well.
+
+* Rule of Robustness: Robustness is the child of transparency and simplicity. We observed above that software is transparent when you can look at it and immediately see what is going on. It is simple when what is going on is uncomplicated enough for a human brain to reason about all the potential cases without strain. Modularity (simple parts, clean interfaces) is a way to organize programs to make them simpler. There are other ways to fight for simplicity. 
+
+* Rule of Least Surprise: In interface design, always do the least surprising thing. The easiest programs to use are those which demand the least new learning from the user — or, to put it another way, the easiest programs to use are those that connect to the user’s pre-existing knowledge most effectively. Therefore, avoid gratuitous novelty and excessive cleverness in interface design — if you’re writing a calculator program, ‘+’ should always mean addition! 
+
+* Rule of Repair: Repair what you can — but when you must fail, fail noisily and as soon as possible. Software should be transparent and in the way that it fails as well as in normal operation. It’s best when software can cope with unexpected conditions by adapting to them, but the worst kinds of bugs are those in which the repair doesn’t succeed and the problem quietly causes corruption that doesn’t show up until much later. Therefore, write your software to cope with incorrect inputs and its own execution errors as gracefully as possible — but when it cannot, make it fail in a way that makes diagnosis of the problem as easy as possible.
+
+* Rule of Economy: Programmer time is expensive; conserve it in preference to machine time.
+
+* Rule of Generation: Avoid hand-hacking; write programs to write programs when you can. In the Unix tradition, code generators are heavily used to automate error-prone detail work. Parser/lexer generators are the classic examples; makefile generators and GUI interface builders are newer ones.
+
+* Rule of Representation: Use smart data so program logic can be stupid and robust. Even the simplest procedural logic is hard for humans to verify, but quite complex data structures are fairly easy to model and reason about. Data is more tractable than program logic. It follows that where you see a choice between complexity in data structures and complexity in code, choose the former. More: in evolving a design, you should actively seek ways to shift complexity from code to data.
+
+* Rule of Optimization: Prototype before polishing. Get it working before you optimize it. The most basic argument for prototyping first is Kernighan & Plauger’s; “90% of the functionality delivered now is better than 100% of it delivered never.” Prototyping first may help keep you from investing far too much time for marginal gains. Rushing to optimize before the bottlenecks are known may be the only error to have ruined more designs than feature creep. The thrust of all these quotes is the same: get your design right with an un-optimized, slow, memory-intensive implementation before you try to tune. Then you tune systematically, looking for the places where you can buy big performance wins with the smallest possible increases in local complexity.
+
+* Rule of Diversity: Distrust all claims for “one true way”. Therefore, the Unix tradition includes a healthy mistrust of “one true way” approaches to software design or implementation. It embraces multiple languages, open extensible systems, and customization hooks everywhere.
+
+* Rule of Extensibility: Design for the future, because it will be here sooner than you think. Therefore, leave room for your code to grow. When you write protocols or file formats, make them sufficiently self-describing to be extensible. When you write code, organize it so future developers will be able to plug new functions into the architecture without having to scrap and rebuild the architecture. Make the joints flexible, and put “If you ever need to...” comments in your code. You owe this grace to people who will use and maintain your code after you
 
 * Even more often (at least in the commercial software world) excessive complexity comes from project requirements that are based on the marketing fad of the month rather than the reality of what customers want or software can actually deliver.
 
@@ -65,10 +85,6 @@
 * One very important tactic for being robust under odd inputs is to avoid having special cases in your code. Bugs often lurk in the code for handling special cases, and in the interactions among parts of the code intended to handle different special cases.
 
 * Data is more tractable than program logic. It follows that where you see a choice between complexity in data structures and complexity in code, choose the former. More: in evolving a design, you should actively seek ways to shift complexity from code to data.
-
-* The easiest programs to use are those that demand the least new learning from the user — or, to put it another way, the easiest programs to use are those that most effectively connect to the user's pre-existing knowledge.
-
-* Therefore, avoid gratuitous novelty and excessive cleverness in interface design. If you're writing a calculator program, ‘+’ should always mean addition!
 
 * Therefore, write your software to cope with incorrect inputs and its own execution errors as gracefully as possible. But when it cannot, make it fail in a way that makes diagnosis of the problem as easy as possible.
 
