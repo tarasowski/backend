@@ -2,13 +2,21 @@
 
 * Programs usually work with data in (at least) two different representations: In memory, data is kept in objects, structs, lists, arrays, hash tables, trees, and so on. These data structures are optimized for efficient access and manipulation by the CPU (typically using pointers). When you want to write data to a file or send it over the network, you have to encode it as some kind of self-contained sequence of bytes (for example, a JSON document). Since a pointer wouldn’t make sense to any other process, this sequence-of-bytes representation looks quite different from the data structures that are normally used in memory. Thus, we need some kind of translation between the two representations. The translation from the in-memory representation to a byte sequence is called encoding (also known as serialization or marshalling), and the reverse is called decoding (parsing, deserialization, unmarshalling).
 
-* When you have processes that need to communicate over a network, there are a few different ways of arranging that communication:
+* Whenever you want to send some data to another process with which you don’t share memory — for example, whenever you want to send data over the network or write it to a file — you need to encode it as a sequence of bytes. There are many ways data can flow from one process to another. Who encodes the data, and who decodes it? Some of the most common ways how data flows between processes: Via databases (see “Dataflow Through Databases”) Via service calls (see “Dataflow Through Services: REST and RPC”) Via asynchronous message passing (see “Message-Passing Dataflow”)
+   
+   * In a database, the process that writes to the database encodes the data, and the process that reads from the database decodes it.
 
-    * Databases, where the process writing to the database encodes the data and the process reading from the database decodes.
+   * When you have processes that need to communicate over a network, there are a few different ways of arranging that  communication.  The most common arrangement is to have two roles: clients and servers. The servers expose an API over the network, and the clients can connect to the servers to make requests to that API. The API exposed by the server is known as a service. **RPC and REST APIs**, where the client encodes a request, the server decodes the request and encodes a response, and the client finally decodes the response. When HTTP is used as the underlying protocol for talking to the service, it is called a web service. Moreover, a server can itself be a client to another service (for example, a typical web app server acts as client to a database). This approach is often used to decompose a large application into smaller services by area of functionality, such that one service makes a request to another when it requires some functionality or data from that other service. This way of building applications has traditionally been called a service-oriented architecture (SOA), more recently refined and rebranded as microservices architecture
 
-    * RPC and REST APIs, where the client encodes a request, the server decodes the request and encodes a response, and the client finally decodes the response
+    * **Asynchronous message passing** (using message brokers or actors), where nodes communicate by sending each other messages that are encoded by the sender and decoded by the recipient. However, a difference compared to RPC is that message-passing communication is usually one-way: a sender normally doesn’t expect to receive a reply to its messages. The detailed delivery semantics vary by implementation and configuration, but in general, message brokers are used as follows: one process sends a message to a named queue or topic, and the broker ensures that the message is delivered to one or more consumers of or subscribers to that queue or topic. There can be many producers and many consumers on the same topic. Message brokers typically don’t enforce any particular data model — a message is just a sequence of bytes with some metadata, so you can use any encoding format. If they are on different nodes, the message is transparently encoded into a byte sequence, sent over the network, and decoded on the other side.
 
-    * Asynchronous message passing (using message brokers or actors), where nodes communicate by sending each other messages that are encoded by the sender and decoded by the recipient
+
+
+
+
+
+
+
 
 ## References & Tutorials
 ——-
