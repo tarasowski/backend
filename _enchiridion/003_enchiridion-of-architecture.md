@@ -186,6 +186,8 @@ read and maintain the source code in the future (including yourself).
 
 * Enterprise Business Rules/Entities: An Entity is an object within our computer system that embodies a small set of critical business rules operating on Critical Business Data. The entity object either contains the Critical Business Data or has very easy access to that data. The interface of the Entity consists of the vunstions that implement the Critical Business Rules on the data. For example, Figure 20.1 shows what our Loan entity might look like as a class in UML. It has three pieces of Critical Business Data, and presents three related Critical Business Rules at its interface.
 
+![Figure](./images/figure20_1.JPG)
+
 * Application Business Rules/Use cases: A use case is a description of the way that an automated system is used. It specifies the iput to be provided by the user, the output to be returned to the user, and the processing steps involved in producing that output. A use case describes application-specific business rules as opposed to the Cirtical Business Rules within the Entities. Use case example: Gather contact info for new loan:
 	* Input: Name, Address, Birthdaate, DL, SSN etc.
 	* Output: Same info for readback + credit score
@@ -196,11 +198,16 @@ read and maintain the source code in the future (including yourself).
 		5. Else create customer
 	
 
+![Figure](./images/figure17_2.JPG)
+![Figure](./images/figure17_3.JPG)
+
 * Figure 17.3 The business rules and database components Note the direction of the arrow. The Database knows about the BusinessRules. The BusinessRules do not know about the Database. This implies that the DatabaseInterface classes live in the BusinessRules component, while the DatabaseAccess classes live in the Database component. The direction of this line is important. It shows that the Database does not matter to the BusinessRules, but the Database cannot exist without the BusinessRules. If that seems strange to you, just remember this point: The Database component contains the code that translates the calls made by the BusinessRules into the query language of the database. The Database component could be replaced with many different implementations—the BusinessRules don’t care. The database could be implemented with Oracle, or MySQL, or Couch, or Datomic, or even flat files. The business rules don’t care at all. And that means that the database decision can be deferred and you can focus on getting the business rules written and tested before you have to make the database decision.
 
+![Figure](./images/figure17_4.JPG)
 
 * The arrows show which component knows about the other and, therefore, which component cares about the other. The GUI cares about the BusinessRules. Figure 17.4 The boundary between GUI and BusinessRules components Having drawn this boundary and this arrow, we can now see that the GUI could be replaced with any other kind of interface—and the BusinessRules would not care.
 
+![Figure](./images/figure17_5.JPG)
 
 * The core business rules are kept separate from, and independent of, those components that are either optional or that can be implemented in many different forms (Figure 17.5). Figure 17.5 Plugging in to the business rules. GUIs change at different times and at different rates than business rules, so there should be a boundary between them. Business rules change at different times and for different reasons than dependency injection frameworks, so there should be a boundary between them. This is simply the Single Responsibility Principle again. The SRP tells us where to draw our boundaries.
 
@@ -214,19 +221,27 @@ read and maintain the source code in the future (including yourself).
 
 * A strict definition of “level” is “the distance from the inputs and outputs.” The farther a policy is from both the inputs and the outputs of the system, the higher its level. The policies that manage input and output are the lowest-level policies in the system.
 
+![Figure](./images/figure19_1.JPG)
+
 * The data flows are shown as curved solid arrows. The properly designed source code dependencies are shown as straight dashed lines. Figure 19.1 A simple encryption program The Translate component is the highest-level component in this system because it is the component that is farthest from the inputs and outputs.
 
 * Policies are grouped into components based on the way that they change. Policies that change for the same reasons and at the same times are grouped together by the SRP and CCP. Higher-level policies—those that are farthest from the inputs and outputs—tend to change less frequently, and for more important reasons, than lower-level policies.
 
 * Trivial but urgent changes at the lowest levels of the system have little or no impact on the higher, more important, levels.
 
+![Figure](./images/figure19_2.JPG)
+
 * For example, even in the trivial example of the encryption program, it is far more likely that the IO devices will change than that the encryption algorithm will change. If the encryption algorithm does change, it will likely be for a more substantive reason than a change to one of the IO devices.
+
+![Figure](./images/figure19_3.JPG)
 
 * Another way to look at this issue is to note that lower-level components should be plugins to the higher-level components. The component diagram in Figure 19.3 shows this arrangement. The Encryption component knows nothing of the IODevices component; the IODevices component depends on the Encryption component. Figure 19.3 Lower-level components should plug in to higher-level components
 
 > Strictly speaking, business rules are rules or procedures that make or save the business money. Very strictly speaking, these rules would make or save the business money, irrespective of whether they were implemented on a computer.
 
 * An Entity is an object within our computer system that embodies a small set of critical business rules operating on Critical Business Data.
+
+![Figure](./images/figure20_1.JPG)
 
 * Figure 20.1 Loan entity as a class in UML When we create this kind of class, we are gathering together the software that implements a concept that is critical to the business, and separating it from every other concern in the automated system we are building. This class stands alone as a representative of the business. It is unsullied with concerns about databases, user interfaces, or third-party frameworks.
 
