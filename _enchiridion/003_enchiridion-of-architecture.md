@@ -152,6 +152,87 @@ read and maintain the source code in the future (including yourself).
 
 * Good architects design the policy so that decisions about the details can be delayed and deferred for as long as possible.
 
+* Any organization that designs a system will produce a design whose structure is a copy of the organization’s communication structure.
+
+* By properly partitioning the system into well-isolated, independently developable components. Those components can then be allocated to teams that can work independently of each other.
+
+* The database, the query language, and even the schema are technical details that have nothing to do with the business rules or the UI. They will change at rates, and for reasons, that are independent of other aspects of the system. Consequently, the architecture should separate them from the rest of the system so that they can be independently changed.
+
+* We are dividing the system in to horizontal layers, we are also dividing the system into thin vertical use cases that cut through those layers. To achieve this decoupling, we separate the UI of the add-order use case from the UI of the delete-order use case. We do the same with the business rules, and with the database. We keep the use cases separate down the vertical height of the system.
+
+* If you decouple the elements of the system that change for different reasons, then you can continue to add new use cases without interfering with old ones.
+
+* If the UI and the database have been separated from the business rules, then they can run in different servers.
+
+* To run in separate servers, the separated components cannot depend on being together in the same address space of a processor. They must be independent services, which communicate over a network of some kind. Many architects call such components “services” or “micro-services,”.
+
+* When components are strongly decoupled, the interference between teams is mitigated. If the business rules don’t know about the UI, then a team that focuses on the UI cannot much affect a team that focuses on the business rules.
+
+> If the use cases themselves are decoupled from one another, then a team that focuses on the addOrder use case is not likely to interfere with a team that focuses on the deleteOrder use case.
+
+* Duplication is generally a bad thing in software. We don’t like duplicated code.
+
+> As the development, deployment, and operational issues increase, I carefully choose which deployable units to turn into services, and gradually shift the system in that direction.
+
+* The goal of an architect is to minimize the human resources required to build and maintain the required system. What it is that saps this kind of people-power? Coupling—and especially coupling to premature decisions. Which kinds of decisions are premature? Decisions that have nothing to do with the business requirements—the use cases—of the system. These include decisions about frameworks, databases, web servers, utility libraries, dependency injection, and the like.
+
+* Another early decision was to avoid thinking about a database. We had MySQL in the back of our minds, but we purposely delayed that decision by employing a design that made the decision irrelevant. That design was simply to put an interface between all data accesses and the data repository itself. We put the data access methods into an interface named WikiPage. Those methods provided all the functionality we needed to find, fetch, and save pages. Of course, we didn’t implement those methods at first; we simply stubbed them out while we worked on features that didn’t involve fetching and saving the data. The fact that we did not have a database running for 18 months of development meant that, for 18 months, we did not have schema issues, query issues, database server issues, password issues, connection time issues, and all the other nasty issues that raise their ugly heads when you fire up a database.
+
+* You draw lines between things that matter and things that don’t. The GUI doesn’t matter to the business rules, so there should be a line between them. The database doesn’t matter to the GUI, so there should be a line between them. The database doesn’t matter to the business rules, so there should be a line between them.
+
+* **The database is a tool that the business rules can use indirectly. The business rules don’t need to know about the schema, or the query language, or any of the other details about the database. All the business rules need to know is that there is a set of functions that can be used to fetch or save data. This allows us to put the database behind an interface.**
+
+![Layers](http://notes.lucida.me/images/clean_arc_android/layers.png)
+
+Note: An Entity is an object within our computer system that embodies a small set of critical business rules operating on Critical Business Data.
+
+* Figure 17.3 The business rules and database components Note the direction of the arrow. The Database knows about the BusinessRules. The BusinessRules do not know about the Database. This implies that the DatabaseInterface classes live in the BusinessRules component, while the DatabaseAccess classes live in the Database component. The direction of this line is important. It shows that the Database does not matter to the BusinessRules, but the Database cannot exist without the BusinessRules. If that seems strange to you, just remember this point: The Database component contains the code that translates the calls made by the BusinessRules into the query language of the database. The Database component could be replaced with many different implementations—the BusinessRules don’t care. The database could be implemented with Oracle, or MySQL, or Couch, or Datomic, or even flat files. The business rules don’t care at all. And that means that the database decision can be deferred and you can focus on getting the business rules written and tested before you have to make the database decision.
+
+
+* The arrows show which component knows about the other and, therefore, which component cares about the other. The GUI cares about the BusinessRules. Figure 17.4 The boundary between GUI and BusinessRules components Having drawn this boundary and this arrow, we can now see that the GUI could be replaced with any other kind of interface—and the BusinessRules would not care.
+
+
+* The core business rules are kept separate from, and independent of, those components that are either optional or that can be implemented in many different forms (Figure 17.5). Figure 17.5 Plugging in to the business rules. GUIs change at different times and at different rates than business rules, so there should be a boundary between them. Business rules change at different times and for different reasons than dependency injection frameworks, so there should be a boundary between them. This is simply the Single Responsibility Principle again. The SRP tells us where to draw our boundaries.
+
+* To draw boundary lines in a software architecture, you first partition the system into components. Some of those components are core business rules; others are plugins that contain necessary functions that are not directly related to the core business. Then you arrange the code in those components such that the arrows between them point in one direction—toward the core business.
+
+> A computer program is a detailed description of the policy by which inputs are transformed into outputs.
+
+* In most nontrivial systems, that policy can be broken down into many different smaller statements of policy. Some of those statements will describe how particular business rules are to be calculated. Others will describe how certain reports are to be formatted. Still others will describe how input data are to be validated.
+
+* In a good architecture, the direction of those dependencies is based on the level of the components that they connect. In every case, low-level components are designed so that they depend on high-level components.
+
+* A strict definition of “level” is “the distance from the inputs and outputs.” The farther a policy is from both the inputs and the outputs of the system, the higher its level. The policies that manage input and output are the lowest-level policies in the system.
+
+* The data flows are shown as curved solid arrows. The properly designed source code dependencies are shown as straight dashed lines. Figure 19.1 A simple encryption program The Translate component is the highest-level component in this system because it is the component that is farthest from the inputs and outputs.
+
+* Policies are grouped into components based on the way that they change. Policies that change for the same reasons and at the same times are grouped together by the SRP and CCP. Higher-level policies—those that are farthest from the inputs and outputs—tend to change less frequently, and for more important reasons, than lower-level policies.
+
+* Trivial but urgent changes at the lowest levels of the system have little or no impact on the higher, more important, levels.
+
+* For example, even in the trivial example of the encryption program, it is far more likely that the IO devices will change than that the encryption algorithm will change. If the encryption algorithm does change, it will likely be for a more substantive reason than a change to one of the IO devices.
+
+* Another way to look at this issue is to note that lower-level components should be plugins to the higher-level components. The component diagram in Figure 19.3 shows this arrangement. The Encryption component knows nothing of the IODevices component; the IODevices component depends on the Encryption component. Figure 19.3 Lower-level components should plug in to higher-level components
+
+> Strictly speaking, business rules are rules or procedures that make or save the business money. Very strictly speaking, these rules would make or save the business money, irrespective of whether they were implemented on a computer.
+
+* An Entity is an object within our computer system that embodies a small set of critical business rules operating on Critical Business Data.
+
+* Figure 20.1 Loan entity as a class in UML When we create this kind of class, we are gathering together the software that implements a concept that is critical to the business, and separating it from every other concern in the automated system we are building. This class stands alone as a representative of the business. It is unsullied with concerns about databases, user interfaces, or third-party frameworks.
+
+* Critical Business Rules usually require some data to work with. For example, our loan requires a loan balance, an interest rate, and a payment schedule. We shall call this data Critical Business Data. This is the data that would exist even if the system were not automated. That an automated system is used. It specifies the input to be provided by the user, the output to be returned to the user, and the processing steps involved in producing that output.
+
+* Business rules are the reason a software system exists. They are the core functionality. They carry the code that makes, or saves, money. They are the family jewels.
+
+* The business rules should remain pristine, unsullied by baser concerns such as the user interface or database used. Ideally, the code that represents the business rules should be the heart of the system, with lesser concerns being plugged in to them. The business rules should be the most independent and reusable code in the system.
+
+* So what does the architecture of your application scream? When you look at the top-level directory structure, and the source files in the highest-level package, do they scream “Health Care System,” or “Accounting System,” or “Inventory Management System”? Or do they scream “Rails,” or “Spring/Hibernate,” or “ASP”?
+
+* Software architectures are structures that support the use cases of the system. Just as the plans for a house or a library scream about the use cases of those buildings, so should the architecture of a software application scream about the use cases of the application.
+
+* A good software architecture allows decisions about frameworks, databases, web servers, and other environmental issues and tools to be deferred and delayed.
+
+
 ## References & Tutorials
 ---
 
