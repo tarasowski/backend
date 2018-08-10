@@ -196,6 +196,11 @@ read and maintain the source code in the future (including yourself).
 		3. Get credit score
 		4. If credit score < 500 activate Denial
 		5. Else create customer
+	* Some other examples of use cases: 
+		* Edit an article
+		* Add new contact
+		* Assign badge to a user
+		* Invite an user
 	
 
 ![Figure](./images/figure17_2.JPG)
