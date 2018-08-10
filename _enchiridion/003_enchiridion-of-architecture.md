@@ -184,7 +184,13 @@ read and maintain the source code in the future (including yourself).
 
 ![Layers](http://notes.lucida.me/images/clean_arc_android/layers.png)
 
-Note: An Entity is an object within our computer system that embodies a small set of critical business rules operating on Critical Business Data.
+* Enterprise Business Rules/Entities: An Entity is an object within our computer system that embodies a small set of critical business rules operating on Critical Business Data.
+
+* Application Business Rules/Use cases:
+	* Edit an article
+	* Add new contact
+	* Assign badge to a user
+	* Invite an user
 
 * Figure 17.3 The business rules and database components Note the direction of the arrow. The Database knows about the BusinessRules. The BusinessRules do not know about the Database. This implies that the DatabaseInterface classes live in the BusinessRules component, while the DatabaseAccess classes live in the Database component. The direction of this line is important. It shows that the Database does not matter to the BusinessRules, but the Database cannot exist without the BusinessRules. If that seems strange to you, just remember this point: The Database component contains the code that translates the calls made by the BusinessRules into the query language of the database. The Database component could be replaced with many different implementations—the BusinessRules don’t care. The database could be implemented with Oracle, or MySQL, or Couch, or Datomic, or even flat files. The business rules don’t care at all. And that means that the database decision can be deferred and you can focus on getting the business rules written and tested before you have to make the database decision.
 
