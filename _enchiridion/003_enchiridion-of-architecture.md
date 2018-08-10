@@ -184,13 +184,17 @@ read and maintain the source code in the future (including yourself).
 
 ![Layers](http://notes.lucida.me/images/clean_arc_android/layers.png)
 
-* Enterprise Business Rules/Entities: An Entity is an object within our computer system that embodies a small set of critical business rules operating on Critical Business Data.
+* Enterprise Business Rules/Entities: An Entity is an object within our computer system that embodies a small set of critical business rules operating on Critical Business Data. The entity object either contains the Critical Business Data or has very easy access to that data. The interface of the Entity consists of the vunstions that implement the Critical Business Rules on the data. For example, Figure 20.1 shows what our Loan entity might look like as a class in UML. It has three pieces of Critical Business Data, and presents three related Critical Business Rules at its interface.
 
-* Application Business Rules/Use cases:
-	* Edit an article
-	* Add new contact
-	* Assign badge to a user
-	* Invite an user
+* Application Business Rules/Use cases: A use case is a description of the way that an automated system is used. It specifies the iput to be provided by the user, the output to be returned to the user, and the processing steps involved in producing that output. A use case describes application-specific business rules as opposed to the Cirtical Business Rules within the Entities. Use case example: Gather contact info for new loan:
+	* Input: Name, Address, Birthdaate, DL, SSN etc.
+	* Output: Same info for readback + credit score
+		1. Accept and validate name
+		2. Validate address, birthday
+		3. Get credit score
+		4. If credit score < 500 activate Denial
+		5. Else create customer
+	
 
 * Figure 17.3 The business rules and database components Note the direction of the arrow. The Database knows about the BusinessRules. The BusinessRules do not know about the Database. This implies that the DatabaseInterface classes live in the BusinessRules component, while the DatabaseAccess classes live in the Database component. The direction of this line is important. It shows that the Database does not matter to the BusinessRules, but the Database cannot exist without the BusinessRules. If that seems strange to you, just remember this point: The Database component contains the code that translates the calls made by the BusinessRules into the query language of the database. The Database component could be replaced with many different implementations—the BusinessRules don’t care. The database could be implemented with Oracle, or MySQL, or Couch, or Datomic, or even flat files. The business rules don’t care at all. And that means that the database decision can be deferred and you can focus on getting the business rules written and tested before you have to make the database decision.
 
