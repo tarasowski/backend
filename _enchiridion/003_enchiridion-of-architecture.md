@@ -262,6 +262,59 @@ read and maintain the source code in the future (including yourself).
 
 * A good software architecture allows decisions about frameworks, databases, web servers, and other environmental issues and tools to be deferred and delayed.
 
+* The decision that your application will be delivered over the web is one that you should defer. Your system architecture should be as ignorant as possible about how it will be delivered. You should be able to deliver it as a console app, or a web app, or a thick client app, or even a web service app, without undue complication or change to the fundamental architecture.
+
+* If your system architecture is all about the use cases, and if you have kept your frameworks at arm’s length, then you should be able to unit-test all those use cases without any of the frameworks in place.
+
+* If you are building a health care system, then when new programmers look at the source repository, their first impression should be, “Oh, this is a heath care system.”
+
+* Testable. The business rules can be tested without the UI, database, web server, or any other external element.
+
+* Independent of the UI. The UI can change easily, without changing the rest of the system. A web UI could be replaced with a console UI, for example, without changing the business rules.
+
+* Independent of the database. You can swap out Oracle or SQL Server for Mongo, BigTable, CouchDB, or something else. Your business rules are not bound to the database.
+
+* Independent of any external agency. In fact, your business rules don’t know anything at all about the interfaces to the outside world.
+
+* The software in the interface adapters layer is a set of adapters that convert data from the format most convenient for the use cases and entities, to the format most convenient for some external agency such as the database or the web.
+
+* No code inward of this circle should know anything at all about the database. If the database is a SQL database, then all SQL should be restricted to this layer—and in particular to the parts of this layer that have to do with the database.
+
+* The outermost layer of the model in Figure 22.1 is generally composed of frameworks and tools such as the database and the web framework. Generally you don’t write much code in this layer, other than glue code that communicates to the next circle inward.
+
+* The frameworks and drivers layer is where all the details go. The web is a detail. The database is a detail. We keep these things on the outside where they can do little harm.
+
+* The Dependency Rule always applies. Source code dependencies always point inward.
+
+* Typically the data that crosses the boundaries consists of simple data structures. You can use basic structs or simple data transfer objects if you like. Or the data can simply be arguments in function calls. Or you can pack it into a hashmap, or construct it into an object. The important thing is that isolated, simple data structures are passed across the boundaries.
+
+* When we pass data across a boundary, it is always in the form that is most convenient for the inner circle.
+
+* Tests, by their very nature, follow the Dependency Rule; they are very detailed and concrete; and they always depend inward toward the code being tested. In fact, you can think of the tests as the outermost circle in the architecture. Nothing within the system depends on the tests, and the tests always depend inward on the components of the system.
+
+* Changes to common system components can cause hundreds, or even thousands, of tests to break. This is known as the Fragile Tests Problem.
+
+* The solution is to design for testability. The first rule of software design—whether for testability or for any other reason—is always the same: Don’t depend on volatile things. GUIs are volatile. Test suites that operate the system through the GUI must be fragile. Therefore design the system, and the tests, so that business rules can be tested without using the GUI.
+
+* Tests are not outside the system; rather, they are parts of the system that must be well designed if they are to provide the desired benefits of stability and regression.
+
+* From an architectural point of view, the database is a non-entity—it is a detail that does not rise to the level of an architectural element.
+
+* Many data access frameworks allow database rows and tables to be passed around the system as objects. Allowing this is an architectural error. It couples the use cases, business rules, and in some cases even the UI to the relational structure of the data.
+
+* Isn’t performance an architectural concern? Of course it is—but when it comes to data storage, it’s a concern that can be entirely encapsulated and separated from the business rules.
+
+* I certainly would have lobbied very hard to isolate the business rules from the GUI, because you never know what the marketing geniuses will do next.
+
+* The web is a GUI. So the web is a detail. And, as an architect, you want to put details like that behind boundaries that keep them separate from your core business logic. Think about it this way: The WEB is an IO device.
+
+* You can use the framework—just don’t couple to it. Keep it at arm’s length. Treat the framework as a detail that belongs in one of the outer circles of the architecture. Don’t let it into the inner circles. Don’t let frameworks into your core code. Instead, integrate them into components that plug in to your core code, following the Dependency Rule.
+
+* Dependency Rule. All dependencies cross the boundary lines in one direction, and they always point toward the components containing the higher-level policy.
+
+* Be aware of the potential trade-off. It’s what I call the “Périphérique anti-pattern of ports and adapters.” The city of Paris, France, has a ring road called the Boulevard Périphérique, which allows you to circumnavigate Paris without entering the complexities of the city. Having all of your infrastructure code in a single source code tree means that it’s potentially possible for infrastructure code in one area of your application (e.g., a web controller) to directly call code in another area of your application (e.g., a database repository), without navigating through the domain. This is especially true if you’ve forgotten to apply appropriate access modifiers to that code.
+
+
 
 ## References & Tutorials
 ---
