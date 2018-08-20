@@ -25,8 +25,12 @@
   7. Look for the 90 percent solution: Doing 100 percent of anything is difficult. Doing only 90 percent is far more efficient and cost effective. UNIX developers often look for solutions that satisfy 90 percent of the target user base, leaving the 10 percent to fend for itself.
   8. Worse is better: UNIX aficianados believe that a "least common denominator" system is the one most likey to survive. That which is cheap but effective is far more likely to proliferate thatn that which is high quality and expensive.
   9. This hierarchcally: UNIX uses and developers prefer to organize things hierarchically. For example, the UNIX directory structure was among the first tree-structured architectures applices to file systems.
+  
+## Small is beatiful
 
-Loc. 173
+* If you're going to write a program, start small and keep it small. Whether you're crafting a simple filter tool, a graphics package, or a gargantuan database, work to reduce it to the tiniest piece of software practicable. Resist the temptation to turn it into a monolith. Strive for simplicity.
+
+Loc 209
 
 
 * Whenever any radical idea comes along that seriously alters our view of the world, our natural tendency is to bash the bearer of new tidings.
