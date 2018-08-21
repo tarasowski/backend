@@ -30,7 +30,9 @@
 
 * If you're going to write a program, start small and keep it small. Whether you're crafting a simple filter tool, a graphics package, or a gargantuan database, work to reduce it to the tiniest piece of software practicable. Resist the temptation to turn it into a monolith. Strive for simplicity.
 
-Loc 209
+* A large portion of the code in any program is devoted to something other than ectually performing its stated task. Here is an example:
+
+
 
 
 * Whenever any radical idea comes along that seriously alters our view of the world, our natural tendency is to bash the bearer of new tidings.
