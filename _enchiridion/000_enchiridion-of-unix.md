@@ -140,6 +140,50 @@
 
 * The most efficient way is rarely portable. Any time a program takes advantage of special hardware capabilities, it becomes at once more efficient and less protable.
 
+* Software tightly coupled to a hardware platform holds its value only as long as that platform remains competitive. Once the platform’s adavantage fades, the software’s worh drops off dramatically. For it to retain its value, it must be ported from one platform to another as newer, faster models become available. 
+
+* Inability too port their software to the latest platforms has killed more software companies than all other reasons combined. One measure of an application’s success is the numbe rof system it runs on. in essence, portable software is more valuable than efficient software. Software conceived with portability in mind reduces the transfer cost associated with moving to a new platform.
+
+* Good programs never die - they are ported to new hardware platforms. Take EMACS-style text editor, for example.
+
+* The intelligent entity, recognizing an idea’s merit, should strive to iplement it on as many platforms as practical to gain the largest possible market share. The most effective way to achieve this end is to write portable software.
+
+* Code moved easily to a new platform is far more valuable than code that takes advantage of special hardware features. We have seen that this axiom can be measured in real terms, i.e., in dollars and cents. To preserve its profit base, a software company should strive for portability in its products, possibly foregoing efficiency in the process. 
+
+* All software consists of instruction and data. By making the instructions portable, you ensure that your code will be ready to run on next year’s machine. 
+
+* The UNIX programmer chooses to make not only the code portable but the data as well. How does one make one’s data portable? Store numberical data in flat ASCII files (A file that contains data made up of ASCII characters. It is essentially raw text just like the words you are reading now. Each byte in the file contains one character that conforms to the standard ASCII code). 
+
+* “Flat ASCII files” means that you tore all numerical data as ASCII set. ASCII text is a common interchange format. By using ASCII, you eliminate the difficulties of converting your data from one binary format to another. Binary format files are verboten.
+
+* Data files should consist of only a stream of bytes separated by line feed characters or “newlines”. 
+
+* While data is kept on whatever kind of storage media, eventually it must go somewhere. Data sitting on a disk diminishes in value. For data to remain alive and valuable, it must move occasionally. Otherwise it should be archived and deleted. **Data that goes nowhere is dead data**
+
+* If you expect to move your data easily, oyu must make it portable. The problem is, if your data is not in a format that is useful to its destination, it must be converted. That conversion process takes time. Every second spent in data conversion eats away at your data’s worth. 
+
+* ASCII text is easily read and edited. This makes it possible for you to examine the data wihout conversion tools. If the data doesn’t look right, you can use a standard text editor to modify it. 
+
+* The real power of ASCII text files becomes apparent when developing programs that use piples under UNIX. The piple is a mechanism for passing one program’s output to another’s input without using a temporary file. Many UNIX programs are little more than a collection of smaller programs joined by a series of pipes.
+
+* As developers prototype a program, the can easily check the data for accuracy at each point along the pipeline. If there is a problem, they can interrrup the flow through the pipeline and figure out whether the data or its manipulator is the problem. This greatly speeds up the develpment process.
+
+* UNIX may well be the friendliest system of all. Users can always look at their data without having to be system gurus skilled at interpreting complex binary file format. 
+
+> Eventually, every application program is ported to a new system or else it becomes extinct. The unrelenting progress of computer manufacturers assures us that what may have been prohibitively expensive today will be dirt cheap tomorrow.
+
+* The payoff in using ASCII text comes when you must port your application to a new architecture. If you had enough foresight to make your program portable, then with ASCII text it becomes a trivial matter to move your data to a new platform as well. 
+
+* The lack of speed is overcome by next year’s machine.
+
+* The computer business is a risky business. You must remain flexible to stay on top. To a software engineer, flexibility translates into protability. If your software does not port to the newest machine, it will die.
+
+* By making your programs and data easy to port, you bild long-lasting, tangible value into your software. It’s that simple. Code and data that opt for efficiency lock themselves into the architecture for which they were designed. Instead of watching the worth of your software invesement shrink to zero with each industry announcement, plan ahead. Design with portability in mind.
+
+## Use Software Leverage to Your Adavantage
+
+Loc 792
+
 
 
 > Whenever any radical idea comes along that seriously alters our view of the world, our natural tendency is to bash the bearer of new tidings.
