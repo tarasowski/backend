@@ -182,7 +182,94 @@
 
 ## Use Software Leverage to Your Adavantage
 
-Loc 792
+* Good programmers write good code; great programmers “borrow” good code. The best way to write lots of software we mean incorporating other people’s modules, programs, and configuration files into your application. 
+
+* Leveraging other people’s code can result in powerful advantages for the individual programmer, too. 
+
+* If you have to write every line of code used in an application, you will appear slow and inefficient. The real job security belongs to the software developer who can cut and paste modules together quickly and efficiently. 
+
+> I recall a lee-than-top-noth software engineer who couldn’t program his way out of a paper bag, as the saying goes. He had a knack, however, for knitting lots of little modules together. He hardly ever wrote any them himself, though. Oddly enough, it wasn’t long before management recognized him as an outstanding software engineer, someone who could delier projects on time and within budget. 
+
+* Avaoid the not-invented-here syndrome. Symptoms of NIH appear in the finest of organizations. When a group refuses to recognize the value of another group’s application,… when one wold prefer to write an application from scratch instead of using one “off the shelf”, … when software written elsewhere isn’t used simply because it was written elsewhere, … NIH is at work
+
+* If you start from scratch and redesign an existing application, you’re engaging in imitation, not creativity. By avoiding NIH, however, you open doors to new and exciting worlds of engineering design. Since less time is spent rewrting existing routines, you can devote more time to developing new capabilities. 
+
+* The most successful companies will be those that “borrow” the software, leaving them the opportunity to create enhancements or “added value” in industry jargon.
+
+> The only way to win will be to add glitter to the wheel, not reinvent it.
+
+* Allow other people to use your code to leverage their own work. First, software is no magic formula. Anyone with a reasonably logical mind can write the stuff. You can be clever or trite, but all software boild down to a series of calculated statement that cause the hardware to perform certain well-defined operations. 
+
+* The most successful software then becomes the one that appears on the most computers. 
+
+* One powerful way to use software leverage to your advantage is to make your machines work harder. Any process you do manually today that your computer can do is a waste of your time. Every time you automate a task you experience the same kind of leverage that my aunt enjoed when she found others to sell Tupperware for her.
+
+## Use Shell Scripts to Increase Leverage and Portability
+
+* If you want to take full advantage of software leverage you need to learn how to use shell scripts effectively. 
+
+```
+echo `who | awk `{print $1}`| sort | uniq`| sed `s//, /g`
+``` 
+
+* This shell script consists of a single line, it invokes six different executeables: echo, who, awk, sort, uniq, and sed. These commands are run simultaneously in a kind of series-parallel progression. Except for the who command, which starts the sequence, each command receives its data from the previous command in the series and sends its output ot the next command in the series. Several UNIX pipes, denoted by | characters, manage the data transfer. The final command in the sequence, sed, sends its output to the user’s terminal.
+
+* Shell scripts have an intrinsic advantage in that they are interpreted rather than compiled. In C “THINK-EDIT-COMPILE-TEST” in Sheel “THINK-EDIT-TEST”. 
+
+* In the UNIX environemnt, shell scripts generally represent the highest level of portability. Most scripts that work on one UNIX system are likely to work on another with little or no modification. 
+
+* Like any form of compounding, software leverage produces extensive effect for small amount of effort. Shell scripts remain an optimum choice for enhancing software leverage.
+
+* Albert Einstein once said “I have only seen two miracles in my life, nuclear fusion and compound interest” For all of his wonderful theories, these two ideas impressed him most. Evidently he understood that a small amount of something, multiplied repeatedly, can grow to miraculous proportions. 
+
+## Avoid Captive User Interfaces
+
+* Small things don’t interface well with people. While they do not interface well with people, they tend to interface well with each other. Their small size gives them tremendous flexibility. They are readily suited for integration in many situations. Unfortunaltely, as the modules gets smaller, the issues surfaces of interfacing with the user. The more modules there are, the greater the complexity in dealing with them.
+
+* This presents a dilemma for the software designer. He wants maximum flexibility for his application, so he constructs it from a collection of small modules. Yet he is also bound by the requirement that his software be easy to use. People have difficulty dealing with too many small modules. UNIX takes a different approach to solving this conflict. Instead of linking the user and the underlying modules via a mass of spaghetti code, they nibble at the gap in small chunks of layers. 
+
+* A captive user interface (CUI) is a style of interaction with an application that exists outside the scope of the highest-level command interpreter present on the system. Once you invoke an application from the command interpreter, it’s not posssible to communicate with the command interpreter until the application exits. You are, in effect, held captive within the user interface of the application until you take actions that cause it to realse you. 
+
+* Example: Suppose you had two programs, one which lists the contents of your mailbox an other which searches for text strings in files. If the main and search programs used CUI’s , your interaction might look something like this:
+
+```
+$ mail
+MAIL > dir
+MAIL > exit
+$ search 
+SEARCH > find jack *.txt
+SEARCH > exit
+``` 
+
+* Example: UNIX-style “noncaptive” interface:
+
+```
+sh>scan
+sh> grep jack *.txt
+```
+**Note:** UNIX user invokes all commands at the shell promt or main command interpreter level. Each command completes its taks, and control return to the shell prompt. It is not necessary to exit from each command individually by typing “exit”
+
+* Multiple command interaction is a key to UNIX. 
+
+* CUIs assume taht the user is human. Producres of CUIs base their design on the premise that a person is sitting at the keyboard. They expect the person to enter responses to promts provided by the application. The application then performs calculations or carries out various tasks. The problem, however is that even the fastest human being is slower than the average computer. Because of the limitations we humans impose on computers, any system that must wait for user input can operate only as fast as the person sitting at the keyboard. 
+
+* Typical UNIX commands strive to perform their tasks entirely wihtout human intervention. Most only promt th euser when they are about to take some potentially irreversible action such as repairing a file system or deleting files. As a result, UNIX commands always run at maximum speed. The wakest link, performancewise, in many man-machine interactions is not the machine. 
+
+* CUI ommand persers are often big and ugly to write. A parser readas the user’s input and translates it into a form that the application software can understand. It has to react correctly to everything a user might conceivalby (and inconceivably!) type. This causes the typical command parser to grwo to gargantuan proportions. Sometimes the command parser will require more programming than the application’s main task. 
+
+* Example: Suppose you had a program for formatting a hard disk.
+
+```
+$ Formatting will destroy all files on the disk! Begin format? <y | N>
+``` 
+
+* The numbe rof potential user response sto a promt like this one is taggering. First, if the user wants to go ahead with the format, he may enter Y, y, Yes, YES or various combinations in between. The same applies for N, n, NO, No. The complexity begins when the user isn’t quite sure what he wants to do. An unsophisticated user might enter `help` or `?`.
+
+* The UNIX programmer deals with the user interace by avoiding it, i.e., the typical UNIX application doesn’t have a command parser. Instead, it expects its operating parameters to be entered on the command line when nvoking the command. This eliminates most of the posibilities described above. This results in significantly smaller applicaiton programs.
+
+* One strenght of UNIX is how its programs interact with each other so effectively. Programs with CUIs, because of their assumption that the user is human, do not interface well with other programs. Software designed for communicationg with other software usually is moch more flexible than software designed to communicate with people. 
+
+Loc 1081
 
 
 
