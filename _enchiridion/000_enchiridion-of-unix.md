@@ -404,7 +404,7 @@ $ scan - produce a one-line-per-message scan listing
 
 * The program from above offers an excellent example of a specific way to build a complext applications under UNIX. The more general case can be illustrated by the following diagram:
 
-![Architecture](./images/unix-architecture)
+![Architecture](./images/unix-architecture.png)
 
 * The CSP (Collection of Small Programs) Layer consists of a set of UNIX commands or shell scripts, each of which carries out one function of the application. As new capabilities are needed, it is an easy matter to create other small programs to provide the desired functions. The Application Layer decides which functions are essential to the user. The functions themselves are carried out by the CSP Layer. The Application Layer operates primarily as a “liaison” (Verbindung) between the CSP Layer and the User Interface Layer. It also provides boundaries around the application. The User Interface Layer is the part that the user sees on the screen when the application is invoked.
 
