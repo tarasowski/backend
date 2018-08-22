@@ -362,7 +362,7 @@ The `-l` parameter instructs `ls` to produce a longer, comprehensive file listin
 
 * The UNIX approach to building intergrated applications is to construct them out of a collection of small components. This way you load and use only these functions you need.
 
-![Unix App](./images/-unix-a-b.png)
+![Unix App](./images/unix-a-b.png)
 
 
 
