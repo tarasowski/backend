@@ -364,11 +364,53 @@ The `-l` parameter instructs `ls` to produce a longer, comprehensive file listin
 
 ![Unix App](./images/unix-a-b.png)
 
+* Both Application A and B contain the same functions. In this respect they are equivalent. They work equally well in situations where all four functions are required. Whereas Application B is a lrage singular program, though, Application A is a collection of smaller programs, each of which provides part of Application B’s functions.
 
+* Let’s suppose, that you wanted a new application that required only functions one and two. With Application B, you’re stuck with all of B’s overhead, even if you’re using only half its functions. Application A, on the other hand, makes it easy to build the new application, since you need only “glue” portions one and two together.
 
-> Whenever any radical idea comes along that seriously alters our view of the world, our natural tendency is to bash the bearer of new tidings.
+* Suppose you wanted an application that contained function two, three and five. Application A gain makes it easy: you create a module having functions five and discard functions one and four. Application B involves a more complex situation that requires the software developer to perform “surgery” on Application B. 
+
+**Note:** Application B doesn’t allow the use of pipes between its functions, while Application A probably relies heavily on them. This eliminates the necessity of having to relink the entire application whenver one function changes. This speeds up development and testing, since programmers who maintain Application A can work on smaller components that are much easier to manage.
+
+* You may be wondering how the user interacts with the components of Application A. One solution is for Application A to incorporate a separate user interace module. Since Application A’s modules are desgiend to be interchangeable, it would then be possible to adapt the application for different kinds of users by changing its user interface module.
+
+### Look for the 90 Percent solution
+
+* Doing 90 percent of anything is always then doing 100 percent. In Federal Express’s case, they do not provide the same level of service out in the hinterlands as they do for an area near a major city.
+
+* The 90 percent solutonis one that results from deliberately ignoring those aspects of the problem that are costly, time-consuming, or difficult to implement. You can readily solve most problems in the world if you are given the opportunity to discard the thoughest 10 percent portion of them.
+
+* When UNIX software developers design an application, they strive for the solution that will give them the “biggest bang for their buck”. This means eliminating those functions that few people use and that are costly to implement. They rughlessly cut such function from the product requirements, often with an attitude of “if someone needs this capability badly enough, they can do it themselves”.
+
+* Obviously there are some sitations, such as heart transplants, where a 90 percent solution won’t suffice. These are rare int he computer world, though. Remember that most software is compromise in that it is never finished, only released. If, by definition software can never be finished, therefore one can never develop software that offers a 100 percent implementation By recognizing the 90 percent solution as a reasonable measure of completeness, it becomes easy to write applications that appeal to most of the user population.
+
+> That is part of the reason for UNIX’s success. While it avoids trying to be everything to everyone, it meets the needs of most. The rest can write their own operating system.
+
+## Do One Thing Well
+
+* An example of typcial UNIX application. The commands can be used within shell scripts and as filters. Theh output of e.g. `scan` can be piped into the UNIX `grep` text search command to quickly locate mail from a specific sender. If the user wanted to look at alisting of only the last five messages `scan | tail -5` does the trick.
+
+```
+$ ali - list meail aliases
+$ anno - annnotate message
+$ burst - explode digests into messages
+$ folders - list all folders
+$ forw - forward messages
+$ mark - mark messages
+$ mhmail - send or read mail
+$ msgchk - check for messages
+$ scan - produce a one-line-per-message scan listing
+```
+
+* The program from above offers an excellent example of a specific way to build a complext applications under UNIX. The more general case can be illustrated by the following diagram:
+
+![Architecture](./images/unix-architecture)
+
+* The CSP (Collection of Small Programs) Layer consists of a set of UNIX commands or shell scripts, each of which carries out one function of the application. As new capabilities are needed, it is an easy matter to create other small programs to provide the desired functions. The Application Layer decides which functions are essential to the user. The functions themselves are carried out by the CSP Layer. The Application Layer operates primarily as a “liaison” (Verbindung) between the CSP Layer and the User Interface Layer. It also provides boundaries around the application. The User Interface Layer is the part that the user sees on the screen when the application is invoked.
+
+* **A well-constructed Application Layer allows the user to choose from a variatety of user interace styles, implying that the User Interface Layer should almost never be “hardwired”. The user should be free to choose whatever user interface suits the particular circumstances**.
 
 # Sources
 ---
-
+* [The Unix Philosophy](https://www.amazon.com/UNIX-Philosophy-Mike-Gancarz/dp/1555581234)
 * [Unix Philosophy and Node.js](http://blog.izs.me/post/48281998870/unix-philosophy-and-nodejs)
