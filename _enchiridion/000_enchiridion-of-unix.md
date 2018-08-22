@@ -410,6 +410,19 @@ $ scan - produce a one-line-per-message scan listing
 
 * **A well-constructed Application Layer allows the user to choose from a variatety of user interace styles, implying that the User Interface Layer should almost never be “hardwired”. The user should be free to choose whatever user interface suits the particular circumstances**.
 
+### Unix Pipes
+
+* The UNIX pipe meachnism allows the output from one command to be fed directly into other commands’s input without the use of temporary files. A quick example:
+
+```
+du -a / | grep part
+```
+
+This command is realyl two commands, `du` and `grep`. The `du` comamnd outputs a list of the names of all files on the system. The `grep` command selects only those file names containing the string `part`. The pipe symbol `|` is the “pipeline” that allows the data to pass from the output of `du` to the input of `grep`. Both the `du` and `grep` commands are invoked simultaneously in a style of computing knows as “multitasking”. As data becomes available on teh output of `du`, it is passed directly to `grep`
+
+
+> Crawford (Founder of Atari Computers) emphasizes that the most important thing a piece of software can do is communicate with a human being, the highest priority a UNIX program has is to communicate with another program. That the UNIX program must eventually interact with a human being is secondary.
+
 # Sources
 ---
 * [The Unix Philosophy](https://www.amazon.com/UNIX-Philosophy-Mike-Gancarz/dp/1555581234)
