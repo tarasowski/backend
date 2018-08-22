@@ -269,7 +269,100 @@ $ Formatting will destroy all files on the disk! Begin format? <y | N>
 
 * One strenght of UNIX is how its programs interact with each other so effectively. Programs with CUIs, because of their assumption that the user is human, do not interface well with other programs. Software designed for communicationg with other software usually is moch more flexible than software designed to communicate with people. 
 
-Loc 1081
+* Large programs, like large pieces of furniture, are not very portable. Movers don’t say “hand me that piano” any more than programmers move complex, monolithic applications from one platform to another overnight.
+
+* The more features built into the CUI program, the larger it becomes. The larger it becomes, the greater the difficulty in interfacing it with other programs. 
+
+* Applications are much better if they are made of a collection of small components that communicate well with each other. It doesn’t matter much if they do not interact with human beings well. 
+
+* Programs that interact with each othe rare actually data filters. EAch gathers serveral bytes on its input stream, applies a filtering algorithm to the data, and usually produces serveral bytes on its output stream.
+
+* **The fact that programs filter data is significant. All computers and their programs filter data.** That’s why we call them “data processors”. To process data is to filter it.
+
+## Every program written since the dawn of computing is a filter
+
+* Every program - no matter how simple or complext - accepts data in some form as its input and produces data in some form as its output.
+
+* Take real-time data collection systems, for example. Typical one sample analog-to-digital converters at periodic intervals to gather data for their input streams. They then select appropriate portions of this data and pass it to their output streams to user interfaces, other applications, or files for storage.
+
+* Do graphical user interfaces act as filters too? Absolutely. GUIs normally process mouse button actions or keystrokes as “events”. These events from the data stream fed to the input of application on the screen under control of the window system. The applicatiions, as filters, repsond to these events, effecting changes on the display.
+
+* Programs do not create data - people do. People commonly believe that their applications  create data when applications are really incapable of manufacturing data. Data synthesis requres creativity. It requires an original source of information. A computer has no original source of information.
+
+* When a person uses a word procesor, the text being written comes from that person’s mind. The word processoer functions solely as a tool for gathering ideas and stroring them in format easily housed and manipulated by the computer. It cannot write anything any more than a hammer and a box of nails can build a house.
+
+* Real-time programs that gather information about the world around us do not create data either. The data already exists. By extracting reading from their environents, the progrmas perfomr a process of selection. Only important data pass through the programs’ filters so they can be stored.
+
+> If the world were full of computers without any people, there would be no data
+
+* Computers convert data from one from to another. For example, the actions of a person depressing keys on the keyboard are of no value to a piece of software. However, once these actions are converted to a series of electornic impulses representing binary data, they suddenly take a new life within the machince. Then the software can convert it into a multitude of forms to server any number of purposes.
+
+* The UNIX environemnt: using programs as filters. When a program is invoked under UNIX, it normally has three standard I/O channels open to it knows as `stdin, stdout and stderr`. Hende the name `stdio`. What is connected to the other ends of the I/O channels depends on how the program was invoked. In the default case, `stdin` collects user input when the program is invoked, and stdout sends any programs output to the user’s display screen. 
+
+* **An intersting feature of UNIX `stdio` is that the devices connected to the I/O channles are not “hardwired” to the program. At the time of invocation the user may specify that data will originate from or be sent to places other than the user’s terminal. For example, `stdin` may come from a file, another program via a UNIX pipe, or even a satellite link to a system on the other side of the world. Similarly, if the user wanted to save `stdout`in a file for later perusal, he could idrect the UNIX shell to place the output there. This provides for enourmous flexibility with respect to the source and destination of the data.**
+
+1. Use `stdin` for data input: Programs that obtaion their input from `stdin` assume that their data could come from anywhere. Indeed it could. By avoiding “hard-wiring” the input channel, you make it easy for the user to specify where the input will come from when invoking the program.
+
+2. Use `stdout` for data output: As `stdin`usage allows your program to accept input data from anywhere, the use of `stdout` allows your program’s output to be sent anywhere. “Anywhere” here may mean the user’s terminal, a file, a printer, or even a digital speech synthesizer. 
+
+3. Use `stderr`for out-of-band information: Error messages and other warnings should be sent to the user via stderr. They should never be part of the data stream sent to stdout. One reason for this is that the user may choose to capture error messages in a separate file or perhaps view them on the terminal immediately. Sending error messages on the same I/O channel as `stdout`can cause confusion further down the line. Remember that UNIX commands are seldom used alone. 
+
+* Hard-wiring the I/O implies that you know all possible uses for your program. This is sheer egotism. The best you can do is make the interface to your programs flexible enough to deal with as many eventualities as exist today.
+
+* You never know what people are going to do with your software. Never, ever assme that they will use it solely for the purpose you intended.
+
+* It’s easier to avoid developing programs with captive user interfaces if you keep in mind that all programs are filters. When you assume that the receptacle of a program’s data flow might be another program instead of human being, you eliminate those biases we all hae in trying to make an application user friendly. You stop thinking in terms of menu choices and start looking at the possible places your data may eventually wind up. Try not to focus inward on what your program can do. Look instead at where your program may go.
+
+* When regarding programs as filters, software designers break their applcations down into collection of smaller programs, each of which performas a function of the application. 
+
+## More UNIX Philosophy: Then Lesser Tenets (Grundsätze)
+
+### Use lower case and keep it short
+
+* One thing people first notice about the UNIX system is that everything is done with lower case letters. Instead of operating with the <CAPS LOCK> key on all the time, UNIX users enter everything in lower case.
+
+### Save trees
+
+* Data that doesn’t move is dead data. Paper poses a similar problem for your data. It’s ismply not possible to move paper data as fast as electronic bits stored on a comupter. Therefore, paper data will always be “stale” compared with data keps on a computer. Beware of paper. It is a death certificate for your data.
+
+### Silence is golden
+
+* Too many programmers believe that they’re being helpful by addressing the user in a conversational tone. UNIX is unusually “dry” in that it provides “just the facts, ma’am” nothing more, nothing less. Many UNIX commands ostensibly remain silent if they have received no input data or have no data to produce as output. 
+
+```
+$> DIR
+DIRECTORY: NO FILES FOUND
+$>
+```
+
+* Contrast the above responce with that of the UNIX ls command. Whn it doesn’t find any files in a directory, it simply returns to the command prompt see below. There is a more technical reason for that behaviour. Since most UNIX commands act as filters that are often combined using the UNIX pipe mechanism.
+
+```
+sh>ls
+sh>
+```
+
+* For example:
+
+```
+ls -l | aws `{print $4}`| sort
+```
+
+The `-l` parameter instructs `ls` to produce a longer, comprehensive file listing. The pipe symbol `|`connects the `ls`command’s output to the `awk` command’s input. The `{print $4}` part directs `awk` to print only the fourth field of each line of text produced by `ls` and discard the rest. This filed is passed to the sort command which sorts each field in alphabetical order. Since `ls` produces no output, the pipeline breaks immediately and no further processing by `awk` and `sort` occurs. If, however, `ls` produced “DIRECTORY: NO FILES FOUND” on its output to the pipleline, this would resul tin a strange “FOUND” mesage appearing as the final output from the `sort` command, since “FOUND” is the fourth field in the message. `Ls`may not seem very user friendly because it doesn’t warn explicitly of an empty directory, but its design both informas the user that the directory is empty and makes it possible for `ls` to be used in pipelines. 
+
+> Under UNIX it is important that you say what you mean. Nothing ore, nothing less.
+
+### Think parallel
+
+* The UNIX appraoch is to run multiple processes simultaneously, with each process scheduled to do part of th overall task. That way when any process becomes blocked while waiting for the peripheral devices, serveral other processes can still funciton. this results in enourmous efficiencies. Consequently, UNIX often outperfoms other operating systems on the saem hardware paltform in terms of the total work being done.
+
+* For example, UNIX allows a command to be run in the background by appending `&`to the command line. Commands invoked this way start a process running in parallel to the command interpreter or shell. It is possible to run several tasks simultaneously this way.
+
+### The sum of the parts is greater than the whole
+
+* The UNIX approach to building intergrated applications is to construct them out of a collection of small components. This way you load and use only these functions you need.
+
+![Unix App](./images/-unix-a-b.png)
 
 
 
