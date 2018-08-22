@@ -150,6 +150,7 @@ public void pay() { for (Employee e : employees) payIfNecessary(e)} private void
 
 * [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)
 * [FunctionLength by Martin Fowler](https://martinfowler.com/bliki/FunctionLength.html)
+* [Clean Code - Javascript](https://github.com/tarasowski/clean-code-javascript)
 
 
 
