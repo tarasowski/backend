@@ -11,6 +11,34 @@ Let me try to create a table for different use cases when to use use what.
 | Pricing | SQS charges $0.40 per million requests (64 KB each), so $0.00655 per GB. At 1 GB per day, this is just under $0.20 per month; at 1 TB per day, it comes to a little over $201 per month. | SNS charges $0.50 per million requests (64 KB each), so $0.0078 per GB. At 1 GB per day, this is just under $0.30 per month; at 1 TB per day, it comes to a little over $239 per month. | Kinesis charges $0.014 per million requests (25 KB each), so $0.00059 per GB. At 1 GB per day, this is less than $0.02 per month; at 1 TB per day, it is about $18 per month. However, Kinesis also charges $0.015 per shard-hour. You need at least 1 shard per 1 MB per second. At 1 GB per day, 1 shard will be plenty, so that will add another $0.36 per day, for a total cost of $10.82 per month. At 1 TB per day, you will need at least 13 shards, which adds another $4.68 per day, for a total cost of $158 per month.
 | **Summary** | **Service Decoupling & Buffering** | **Background Triggering & Messaging** | **Realtime Data Processing**
 
+---
+## Questions to ask when picking the right service?
+
+* How real time is your “real time” need?
+	* How synchronous is your synchronous workload? Would polling for pudates after an async invocation work?
+
+Note: When we talk about SNS, SQS, Kinesis all of these messags will deliver the messages in a very quick turnaround. We are talking about ms, seconds. 
+
+* Does order matter?
+
+Note: Some of these services give you data in order e.g. Kinesis in order of the given shard, SNS makes best effort to provide data in order. However SQS is not.
+
+* Do multiple services need to feed off of the same data?
+
+Note: Do you need fanout? If you do then you need Kinesis or SNS. If you don’t SQS could be just fine
+
+* What does breaking your Lambda function due to a bad code deploy have impact on?
+
+Note: Are you loosing data if bad code deploy happens? How does that impact your business?
+
+* Think about the downstream:
+	* What happens when a downstream service fails?
+	* Is there the potentially to overwhelm a database or other service?
+
+Note: What happens if the downstream service fails. Is there a potential for too many invokation, too much data to potentially overwhelm the downstream service. What kind of throttling you can use to prevent that?
+
+[Source - Webinar](https://pages.awscloud.com/Serverless-Streams-Topics-Queues-and-APIs-How-to-Pick-the-Right-Serverless-Application-Pattern_0806-SRV_OD.html)
+
 - [Source SQS](https://stackoverflow.com/questions/31752503/what-are-the-possible-use-cases-for-amazon-sqs-or-any-queue-service)
 
 - [Source Kinesis](https://sookocheff.com/post/aws/comparing-kinesis-and-sqs/)
