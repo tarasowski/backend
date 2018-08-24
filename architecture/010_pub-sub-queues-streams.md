@@ -37,7 +37,7 @@ Note: Are you loosing data if bad code deploy happens? How does that impact your
 
 Note: What happens if the downstream service fails. Is there a potential for too many invokation, too much data to potentially overwhelm the downstream service. What kind of throttling you can use to prevent that?
 
-[Source - Webinar](https://pages.awscloud.com/Serverless-Streams-Topics-Queues-and-APIs-How-to-Pick-the-Right-Serverless-Application-Pattern_0806-SRV_OD.html)
+- [Source - Webinar](https://pages.awscloud.com/Serverless-Streams-Topics-Queues-and-APIs-How-to-Pick-the-Right-Serverless-Application-Pattern_0806-SRV_OD.html)
 
 - [Source SQS](https://stackoverflow.com/questions/31752503/what-are-the-possible-use-cases-for-amazon-sqs-or-any-queue-service)
 
