@@ -2,7 +2,9 @@
 
 > The art of programming is, and has always been, the art of language design. But never forget that your real goal is to tell the story of the system, and that the functions you write need to fit cleanly together into a clear and precise language to help you with that telling.
 
+* Armstrong: Writing is. There’s some computer scientist that said, “Oh, if you’re no good at English you’ll never be a very good programmer.”
 
+* Bloch: My attempts to make my programs readable. As Knuth would say, a program is essentially a work of literature. 
 
 * You should name a variable using the same care with which you name a first-born child.
 
@@ -145,6 +147,8 @@ public void pay() { for (Employee e : employees) payIfNecessary(e)} private void
 ![Martin Fowler's Functions](https://martinfowler.com/bliki/images/functionLength/my-method-counts.png)
 
 * As you see there's lots of small methods there - half of the methods of Martin Fowler's codebase are two lines or less. (lines here are non-comment, non-blank, and excluding the def and end lines.)
+
+* Then there’s—I don’t know if I read it somewhere or if I invented it myself—Joe’s Law of Debugging, which is that all errors will be plus/minus three statements of the place you last changed the program. “Yeah, but it must be like software—the bug will be pretty near to the last change you made to the hardware.” And he went, “I changed a capacitor. You’re a genius!” He’d replaced one capacitor with a bigger capacitor and he unsoldered it and put the original one back and it worked. It’s the same everywhere. You fix your car and it goes wrong—it’s the last thing you did. You changed something—you just have to remember what it was. It’s true with everything.
 
 ## References & Tutorials
 
