@@ -120,6 +120,10 @@
 
 * While the traditionalist’s user wonders how the product will look, the UNIX developer’s user is already thinking of what to do with the working prototype. For the UNIX user, the iterative design process has begun. He and the developers are proceeding towards the Third System.
 
+* Seibel: Another phase of programming is optimization. Some people optimize things from the very beginning. Others like to write it one way and then worry about optimizing it later. What’s your approach? Thompson: I’ll do it as simply as possible the first time and very often that suffices for all time. To build a very complex algorithm for something that’s never run is just stupid. It’s just a waste of time. It’s a bug generator. And it makes it impossible to maintain because you’ve got to have 50 pages of math to tell the next guy what you’re actually doing. From Coders at Work, Ken Thompson
+
+* Seibel: Some people just like bumming code down to a jewel-like perfection, for it’s own sake. Thompson: Well, I do too, but part of that is sacrificing the algorithm for the code. I mean, typically a complex algorithm requires complex code. And I’d much rather have a simple algorithm and simple code than some big horror. And if there’s one thing that characterizes my code, it’s that it’s simple, choppy, and little. Nothing fancy. Anybody can read it. From Coders At Work, Ken Thompson
+
 > Unlike most systems planned in the traditional way, UNIX evolved from prototype. It grew out of a series of design iterations that have transformed it from a limited-use laboratory system into one called upon a tackle the most ardent tasks.
 
 ## Portability - Choose Portability over Efficiency
@@ -378,11 +382,13 @@ The `-l` parameter instructs `ls` to produce a longer, comprehensive file listin
 
 * Doing 90 percent of anything is always then doing 100 percent. In Federal Express’s case, they do not provide the same level of service out in the hinterlands as they do for an area near a major city.
 
-* The 90 percent solutonis one that results from deliberately ignoring those aspects of the problem that are costly, time-consuming, or difficult to implement. You can readily solve most problems in the world if you are given the opportunity to discard the thoughest 10 percent portion of them.
+* The 90 percent solutions one that results from deliberately ignoring those aspects of the problem that are costly, time-consuming, or difficult to implement. You can readily solve most problems in the world if you are given the opportunity to discard the thoughest 10 percent portion of them.
 
 * When UNIX software developers design an application, they strive for the solution that will give them the “biggest bang for their buck”. This means eliminating those functions that few people use and that are costly to implement. They rughlessly cut such function from the product requirements, often with an attitude of “if someone needs this capability badly enough, they can do it themselves”.
 
 * Obviously there are some sitations, such as heart transplants, where a 90 percent solution won’t suffice. These are rare int he computer world, though. Remember that most software is compromise in that it is never finished, only released. If, by definition software can never be finished, therefore one can never develop software that offers a 100 percent implementation By recognizing the 90 percent solution as a reasonable measure of completeness, it becomes easy to write applications that appeal to most of the user population.
+
+* There’s always this sort of S-shaped curve and by the time you get up to 80 or 90 percent completion, you’re starting to get diminishing returns. There are 100 other things you could be doing that are just at the bottom of the curve where you get much better returns. And at some point you have to say, “Enough is enough, let’s stop and go do something where we get a better return.” From Coders at Work
 
 > That is part of the reason for UNIX’s success. While it avoids trying to be everything to everyone, it meets the needs of most. The rest can write their own operating system.
 
