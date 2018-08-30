@@ -161,7 +161,7 @@ There are two dimension in DynamoDb on scaling:
 
 * Use a table or GSI with partition and sort key. Use Query API. Example given a device, find all readings between epoch X, Y
 
-![1:N](./dynamodb/images/1toN-relationships.png)
+![1:N](./images/1toN-relationships.png)
 
 * We want data structures in NoSQL that can be gathered and built into the application tier by doing a simple table select. If I have to start doing multiple selects and maintaining relational structure in the application tier, I'm defeating purpose of NoSQL. In NoSQL we want to put the data that it's already mapped to the way how our query looks like (our apps needs it)
 
