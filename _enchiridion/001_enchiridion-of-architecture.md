@@ -274,10 +274,73 @@
 
 * Be aware of the potential trade-off. It’s what I call the “Périphérique anti-pattern of ports and adapters.” The city of Paris, France, has a ring road called the Boulevard Périphérique, which allows you to circumnavigate Paris without entering the complexities of the city. Having all of your infrastructure code in a single source code tree means that it’s potentially possible for infrastructure code in one area of your application (e.g., a web controller) to directly call code in another area of your application (e.g., a database repository), without navigating through the domain. This is especially true if you’ve forgotten to apply appropriate access modifiers to that code.
 
+* Use descriptive names for globals, short names for locals. Global variables, by defi- nition, can crop up anywhere in a program, so they need names long enough and descriptive enough to remind the reader of their meaning.
 
+* By contrast, shorter names suffice for local variables; within a function. The use of i and j for loop indices, p and q for pointers, and s and t for strings is so frequent that there is little profit and perhaps some loss in longer names.
+
+* In computing, the term has come to signify a kind of independence or decoupling. Two or more things are orthogonal if changes in one do not affect any of the others. In a well-designed system, the database code will be orthogonal to the user interface: you can change the interface without affecting the database, and swap databases without changing the interface.
+
+* There is an easy test for orthogonal design. Once you have your components mapped out, ask yourself: IfI dramaticallychange the requirementsbehind a particular function, how many modules are affected?In an orthogonal system, the answer should be "one."
+
+* Layers, each providing a level of abstraction. This layered approach is a powerful way to design orthogonal systems. Because each layer uses only the abstractions provided by the layers below it, you have great flexibility in changing underlying implementations without affecting code.
+
+* Keep your code decoupled. Write shy code—modules that don't reveal anything unnecessary to other modules and that don't rely on other modules' implementations.
+
+* Avoid global data. Every time your code references global data, it ties itself into the other components that share that data. Even globals that you intend only to read can lead to trouble (for example, if you suddenly need to change your code to be multithreaded). In general, your code is easier to understand and maintain if you explicitly pass any required context into your modules.
+
+* An orthogonally designed and implemented system is easier to test. Because the interactions between the system's components are formalized and limited, more of the system testing can be performed at the individual module level.
+
+* While many people try to keep their code flexible, you also need to think about maintaining flexibility in the areas of architecture, deployment, and vendor integration.
+
+* A small body of code has low inertia—it is easy and quick to change. You'll be able to gather feedback on your application and generate a new, more accurate version faster and at less cost
+
+* What sorts of things might you choose to investigate with a prototype? Anything that carries risk. Anything that hasn't been tried before, or that is absolutely critical to the final system. Anything unproven, experimental, or doubtful. Anything you aren't comfortable with. You can prototype: Architecture • • New functionality in an existing system • • Structure or contents of external data • • Third-party tools or components • • Performance issues • • User interface design
+
+* You may want to implement prototypes using a very high-level language—higher than the rest of the project (maybe a language such as Perl, Python, or Tcl). A high-level scripting language lets you defer many details (including specifying data types) and still produce a functional (albeit incomplete or slow) piece of code.
+
+> You Can't Write Perfect Software Did that hurt? It shouldn't. Accept it as an axiom of life. Embrace it. Celebrate it. Because perfect software doesn't exist. No one in the brief history of computing has ever written a piece of perfect software.
+
+* However, the basic principle stays the same—when your code discovers that something that was supposed to be impossible just happened, your program is no longer viable. Anything it does from this point forward becomes suspect, so terminate it as soon as possible. A dead program normally does a lot less damage than a crippled one.
+
+* Fortunately, if the programming language supports exceptions, you can rewrite this code in a far neater way: retcode = OK; try { socket.read(name); process(name); socket.read(address); processAddress(address); socket.read(telNo); // etc, etc... } catch (IOException e) { retcode = BAD_READ; Logger.log("Error reading individual: " + e.getMessage()); } return retcode; The normal flow of control is now clear, with all the error handling moved off to a single place.
+
+* Good way to stay flexible is to write lesscode. Changing code leaves you open to the possibility of introducing new bugs. Metaprogramming will explain how to move details out of the code completely, where they can be changed more safely and easily.
+
+* Metadata describe configuration options for an application: tuning parameters, user preferences, the installation directory, and so on. What exactly is metadata? Strictly speaking, metadata is data about data. The most common example is probably a database schema or data dictionary. A schema contains data that describes fields (columns) in terms of names, storage lengths, and other attributes. You should be able to access and manipulate this information just as you would any other data in the database.
+
+* We use the term in its broadest sense. Metadata is any data that describes the application—how it should run, what resources it should use, and so on. Typically, metadata is accessed and used at runtime, not at compile time. You use metadata all the time—at least your programs do.
+
+* As mentioned in The power of plain Text, we recommend representing configuration metadata in plain text—it makes life that much easier. But when should a program read this configuration? Many programs will scan such things only at startup, which is unfortunate.
+
+* We feel that this is a good principle to apply to coding as well. Organize your code into cells (modules) and limit the interaction between them. If one module then gets compromised and has to be replaced, the other modules should be able to carry on.
+
+* Systems with many unnecessary dependencies are very hard (and expensive) to maintain, and tend to be highly unstable. In order to keep the dependencies to a minimum, we'll use the Law ofDemeter to design our methods and functions.
+
+* Once you separate a program into different modules based on responsibility, you have a new problem. At runtime, how do the objects talk to each other? How do you manage the logical dependencies between them? That is, how do you synchronize changes in state (or updates to data values) in these different objects? It needs to be done in a clean, flexible manner—we don't want them to know too much about each other. We want each module to be like the man in the song and just hear what it wants to hear. We'll start off with the concept of an event. An event is simply a special message that says "something interesting just happened" (interesting, of course, lies in the eye of the beholder). We can use events to signal changes in one object that some other object may be interested in.
+
+* Objects should be able to register to receive only the events they need, and should never be sent events they don't need. We don't want to spam our objects! Instead, we can use a publish/subscribeprotocol
+
+* For code you write that others will call, the basic principles of good modularization and of hiding implementation behind small, well-documented interfaces can all help. A well-specified contract (see Design by Contract) can help eliminate misunderstandings.
+
+* Rely only on reliable things. Don't depend on accidents or assumptions. If you can't tell the difference in particular circumstances, assume the worst.
+
+* Prioritize your effort. Spend time on the important aspects; more than likely, these are the hard parts. If you don't have fundamentals or infrastructure correct, brilliant bells and whistles will be irrelevant.
+
+* Also be wary of premature optimization.It's always a good idea to make sure an algorithm really is a bottleneck before investing your precious time trying to improve it.
+
+* A program evolves, it will become necessary to rethink earlier decisions and rework portions of the code. This process is perfectly natural. Code needs to evolve; it's not a static thing. Rewriting, reworking, and re-architecting code is collectively known as refactoring.
+
+* Because the code doesn't quite fit anymore, or you notice two things that should really be merged, or anything else at all strikes you as being "wrong," don't hesitate to change it There's no time like the present. Any number of things may cause code to qualify for refactoring: a) Duplication, b) Nonorthogonal design
+
+* At its heart, refactoring is redesign. Anything that you or others on your team designed can be redesigned in light of new facts, deeper understandings, changing requirements, and so on. But if you proceed to rip up vast quantities of code with wild abandon, you may find yourself in a worse position than when you started. Clearly, refactoring is an activity that needs to be undertaken slowly, deliberately, and carefully.
+
+* Martin Fowler offers the following simple tips on how to refactor without doing more harm than good (see the box on in [FS97]): 1. 1. Don't try to refactor and add functionality at the same time. 2. 2. Make sure you have good tests before you begin refactoring. Run the tests as often as possible.
+
+* So next time you see a piece of code that isn't quite as it should be, fix both it and everything that depends on it. Manage the pain: if it hurts now, but is going to hurt even more later, you might as well get it over with. Remember the lessons of Software Entropy, don't live with broken windows.
 
 ## References & Tutorials
 ---
 
-[The Art of UNIX Programming (The Addison-Wesley Professional Computng Series)](https://www.amazon.com/UNIX-Programming-Addison-Wesley-Professional-Computng/dp/0131429019)
-[Clean Architecture: A Craftsman's Guide to Software Structure and Design (Robert C. Martin Series) ](https://www.amazon.com/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164)
+* [The Art of UNIX Programming (The Addison-Wesley Professional Computng Series)](https://www.amazon.com/UNIX-Programming-Addison-Wesley-Professional-Computng/dp/0131429019)
+* [Clean Architecture: A Craftsman's Guide to Software Structure and Design (Robert C. Martin Series) ](https://www.amazon.com/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164)
+* [The Pragmatic Programmer: From Journeyman to Master](https://www.amazon.com/Pragmatic-Programmer-Journeyman-Master/dp/020161622X)
