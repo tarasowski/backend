@@ -78,11 +78,16 @@ test('Assertions with tape.', (assert) => {
 
 * Turning off failing tests and telling yourself you’ll get them to pass later is as bad as pretending your credit cards are free money.
 
+* We like to think of unit testing as testing against contract(see Design by Contract). We want to write test cases that ensure that a given unit honors its contract. This will tell us two things: whether the code meet the contract, and whether the contract means what we think it means. We want to test that the module delivers the functionality it promises, over a wide range of test cases and boundary conditions.
+
+* If a bug slips through the net of existing tests, you need to add a new test to trap it next time. Once a human tester finds a bug, it should be the lasttime a human tester finds that bug. The automated tests should be modified to check for that particular bug from then on, every time, with no exceptions, no matter how trivial, and no matter how much the developer complains and says, "Oh, that will never happen again."
+
 ## References & Tutorials
 * [Frontendmasters with Substack / James Halliday Workshop](https://github.com/tarasowski/serverless/blob/master/testing/001_testing-frontendmasters-james-halliday.md)
 * [Clean Code: A Handbook of Agile Software Craftsmanship (Robert C. Martin Series)](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship-ebook/dp/B001GSTOAM)
 * [Peter Krumins'- Writing javascript tests with tape](http://www.catonmat.net/blog/writing-javascript-tests-with-tape/)
 * [Why I use Tape Instead of Mocha & So Should You Measuring Software Quality](https://medium.com/javascript-scene/why-i-use-tape-instead-of-mocha-so-should-you-6aa105d8eaf4)
+* [The Pragmatic Programmer: From Journeyman to Master](https://www.amazon.com/Pragmatic-Programmer-Journeyman-Master/dp/020161622X)
 * [Testing JavaScript Modules with Tape](https://ponyfoo.com/articles/testing-javascript-modules-with-tape)
 * [setup and teardown in tape](https://gist.github.com/substack/9561717)
 * [How should we be using `t.plan` and `t.end` in our tests?](https://github.com/dwyl/learn-tape/issues/12)
