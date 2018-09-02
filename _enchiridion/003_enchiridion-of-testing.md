@@ -82,6 +82,16 @@ test('Assertions with tape.', (assert) => {
 
 * If a bug slips through the net of existing tests, you need to add a new test to trap it next time. Once a human tester finds a bug, it should be the lasttime a human tester finds that bug. The automated tests should be modified to check for that particular bug from then on, every time, with no exceptions, no matter how trivial, and no matter how much the developer complains and says, "Oh, that will never happen again."
 
+* Maximizing code coverage brings diminishing returns — the closer you get to 100% coverage, the more you have to complicate your application code to get even closer, which can subvert the important goal of reducing bugs in your application.
+
+* Additionally, different types of code need different levels (and different kinds) of mocks. Some code exists primarily to facilitate I/O, in which case, there is little to do other than test I/O, and reducing mocks might mean your unit test coverage would be close to 0.
+
+* If there is no logic in your code (just pipes and pure compositions), 0% unit test coverage might be acceptable, assuming your integration or functional test coverage is close to 100%.
+
+* If we’re mocking something, there may be an opportunity to make our code more flexible by reducing the coupling between units. Once that’s done, you won’t need the mocks anymore. Coupling is the degree to which a unit of code (module, function, class, etc…) depends upon other units of code. Mocking is required when the units used to break the large problem down into smaller parts depend on each other. Put another way, mocking is required when our supposed atomic units of composition are not really atomic.
+
+* If there’s no logic, there’s nothing meaningful to unit test. That means that the code you use to set up network requests and request handlers won’t need unit tests. Use integration tests for those, instead. Don’t unit test I/O. I/O is for integrations. Use integration tests, instead. It’s perfectly OK to mock and fake for integration tests.
+
 ## References & Tutorials
 * [Frontendmasters with Substack / James Halliday Workshop](https://github.com/tarasowski/serverless/blob/master/testing/001_testing-frontendmasters-james-halliday.md)
 * [Clean Code: A Handbook of Agile Software Craftsmanship (Robert C. Martin Series)](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship-ebook/dp/B001GSTOAM)
@@ -92,3 +102,4 @@ test('Assertions with tape.', (assert) => {
 * [setup and teardown in tape](https://gist.github.com/substack/9561717)
 * [How should we be using `t.plan` and `t.end` in our tests?](https://github.com/dwyl/learn-tape/issues/12)
 * [Collection of Tape Tests from TheScienceMuseum/collectionsonline](https://github.com/TheScienceMuseum/collectionsonline/tree/master/test)
+* [Mocking Code Is Code Smell](https://medium.com/javascript-scene/mocking-is-a-code-smell-944a70c90a6a)
