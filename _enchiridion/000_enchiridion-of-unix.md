@@ -4,7 +4,7 @@
 
 1. Short Product Requirement Document
 2. User Journey Wireframes (Step-by-Step Video Tutorial)
-2. Rapid Prototype (Code)
+2. Rapid Prototype (Coding)
 3. Prototype Demo 
 4. Level 2, 3 - Architecture
 5. Product Development
