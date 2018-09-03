@@ -1,5 +1,12 @@
 # Enchiridion of Unix
 
+##Steps:
+1. 1 Page Requirement Phase 
+2. Rapid Prototyping Phase 
+3. Prototype Demo Phase
+4. Level 2, 3 - Architecture
+5. Product Development
+
 * UNIX became The Enemy, not so much because it was intrinsically evil, but because it threatened the status quo.
 
 * By borrowing ideas from Multics, Thompson embarked upon a course of action that has become a well-worn path (no pun intended) for UNIX developers: good programmers write great software; great programmers "steal" great software.
