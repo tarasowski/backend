@@ -1,6 +1,7 @@
 # Enchiridion of Unix
 
-##Steps:
+## Steps
+
 1. 1 Page Requirement Phase 
 2. Rapid Prototyping Phase 
 3. Prototype Demo Phase
