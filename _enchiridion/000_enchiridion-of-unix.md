@@ -2,9 +2,9 @@
 
 ## Steps
 
-1. 1 Page Requirement Phase 
-2. Rapid Prototyping Phase 
-3. Prototype Demo Phase
+1. 1-Page Product Requirement Document
+2. Rapid Prototype
+3. Prototype Demo 
 4. Level 2, 3 - Architecture
 5. Product Development
 
