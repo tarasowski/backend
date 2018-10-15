@@ -48,7 +48,7 @@ c) below users, groups, roles you have policies = permisisons are codified in po
 
 * A role can be assumed by a user or a service. If the lambda function wants to read from s3 bucket it assumes a role. And the permission of the role defines what lambda can do or cannot do. A role needs to be assumed, a user needs to be logged in. 
 
-* In a production account you will only have 1 user. And this user is the user of cloudformation that provisions your resources. There should be no reason to log into your production account. If you need to log in you will have certain roles that can be assumed. You need always create different account that can assume the role to see specific things e.g. billing details. You just create bunch of accounts for different things like finance, security etc. 
+* In a production account you will only have 1 user. And this user is the user of cloudformation that provisions your resources. There should be no reason to log into your production account. If you need to log in you will have certain roles that can be assumed. You need always create different account that can assume the role to see specific things e.g. billing details. You just create bunch of accounts for different things like finance, security etc. [More Information here](https://aws.amazon.com/answers/account-management/aws-multi-account-security-strategy/)
 
 * You need a specific user that can deploy the cloudformation the resources and this user will have only the access key and this will be used by the user (cloudformation). 
 
@@ -74,6 +74,14 @@ c) below users, groups, roles you have policies = permisisons are codified in po
 
 * If there is trust relation ship `Principal: ....:root` eveyone in this account can assume this role. So you need to specify a specific accout who can assume this role. 
 
-* 
+* When we creates a CloudTrail, we have activated log file validation. This creates digest files, these are hashes for every log file that has been written. For every log file we have a fitting digest file, which contains a hash. If someone modifies a file after the fact, we can see it. We can do it by running a lambda function that checks the files every 24 hours. You need a TrailARN (every Amazon has an ARN) - `aws cloudtrail validate-logs --start-time 20180101 --trail-arn arn:aws:cloudtrail:.....`by running this command you can validate the logs to see if they are not modified by anyone. e.g. if you modify or delete a file, by running validation you can see that something was deleted.
+
+* Create a SNS topic `security` and put all security related things to that topic. You can put a message to a topic via Cloudwatch Event Rules. Event Pattern:
+
+- Service Name: S3
+- Event Type: LevelObjectOperation
+- Specific operation: DeleteObject, DeleteObject on the bucket where CloudTrail writes logs
+
+* I want to put a message on my security topic. If deletion happens, I'll get an email from SNS that someone deleted an object.
 
 
