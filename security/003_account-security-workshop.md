@@ -46,4 +46,11 @@ c) below users, groups, roles you have policies = permisisons are codified in po
 
 * You can apply many policies as you want to users, to groups and to roles. The difference between: a user is a person who is managed inside IAM can log into the console. A user is always a person, and a group is a collections of users.
 
+* A role can be assumed by a user or a service. If the lambda function wants to read from s3 bucket it assumes a role. And the permission of the role defines what lambda can do or cannot do. A role needs to be assumed, a user needs to be logged in. 
+
+* In a production account you will only have 1 user. And this user is the user of cloudformation that provisions your resources. There should be no reason to log into your production account. If you need to log in you will have certain roles that can be assumed. You need always create different account that can assume the role to see specific things e.g. billing details. You just create bunch of accounts for different things like finance, security etc. 
+
+* You need a specific user that can deploy the cloudformation the resources and this user will have only the access key and this will be used by the user (cloudformation). 
+
+* There is a subset of entities which are called principals, these all threee are entities, but onyl roles and users are principles. A group cannot be a principal, a user can be a principal and a role can be a principal. 
 
