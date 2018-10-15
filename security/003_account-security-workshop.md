@@ -94,4 +94,4 @@ c) below users, groups, roles you have policies = permisisons are codified in po
 
 * Every layer in security has holes, but the more layers I have the more tight are my security measures!
 
-
+* In order to save consts, you need to archive data after e.g. 31 days to Glacier. Use s3 lifecycle rules for this.
