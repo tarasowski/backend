@@ -3,7 +3,7 @@
 
 * The Swiss cheese model of accident causation illustrates that, although many layers of defense lie between hazards and accidents, there are flaws in each layer that, if aligned, can allow the accident to occur.
 
-![Source](https://en.wikipedia.org/wiki/Swiss_cheese_model)
+[Source](https://en.wikipedia.org/wiki/Swiss_cheese_model)
 
 * There will be no 100% of security, but we need to able to dectect, reat and recover from security leak. 
 
