@@ -19,7 +19,7 @@
 
 * If you use multi-account strategy, you need to aggregate all the logs in another account which has the rights to aggregate all the logs. We can call is a security account! A few people in the company have the sdecurity confiuration, and this account can onitor all other accounts. If someone breaks into an account they cannot turn off the logs from the security account.
 
-* 
+* We need to give a s3 bucket the right to write, other users the right to read, so no one can delete the logs
 
 
 
