@@ -54,3 +54,18 @@ c) below users, groups, roles you have policies = permisisons are codified in po
 
 * There is a subset of entities which are called principals, these all threee are entities, but onyl roles and users are principles. A group cannot be a principal, a user can be a principal and a role can be a principal. 
 
+* Deny always overwrites the allow rule! If there is no explicit allow it's also deny. Use the principle of least privilege and always allow what is necessary. 
+
+**Note:** Sid is the statement id, each statement has an id, if you have multiple statements you need an identfiier for statements. If you have only 1 statement you don't need sid if you have multiple statements you need a statement id
+
+* If there is a prinicpal inside a policy, it means we are giving a user or a role to do something on the specific resouerce we have defined in the policy. 
+
+* **AWS managed policies they SHOULDN'T be used.** For two reasons, because they could change at any time and if aws implements new features and changes the policy could break your application. Second reason, they most of the time they are to open, they are too broad. Default managed policies by AWS are way to broad, way to open. 
+
+* You always want to create customer based policies and they will never changed. You can also deny or allow the things you want to, they are more specific and times better in terms of security. You can create your own policy and can use conditions to narrow it down e.g. give access between 9am and 10pm, but not during the night. 
+
+* Don't use ACL in s3, use always bucket policy for giving access. Also use cloudfront and let people access everything through cloudfront. And Cloudfront then does the API call to s3. 
+
+* Simple urls are going through ACL and api calls are going through Policy. So you can mess up the rights if you use both they you can mess up everything. So always use only s3 bucket in conjunction with the bucket policy, not ACL!!!
+
+* 
