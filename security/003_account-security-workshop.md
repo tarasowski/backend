@@ -80,8 +80,18 @@ c) below users, groups, roles you have policies = permisisons are codified in po
 
 - Service Name: S3
 - Event Type: LevelObjectOperation
-- Specific operation: DeleteObject, DeleteObject on the bucket where CloudTrail writes logs
+- Specific operation: DeleteObject, DeleteObject, DeleteBucket on the bucket where CloudTrail writes logs
 
 * I want to put a message on my security topic. If deletion happens, I'll get an email from SNS that someone deleted an object.
+
+* You should subscribe a Lambda function to the `security` topic and if the user tries to delete something, the lambda function deletes all the rights and removes the access from the user that is trying to malicious your account. Most of the operöational work is about creating of monitoring and notifying people if something happens when it shouldn't. 
+
+* CIS Benchmark on AWS: Deploy a standardized architecture for the CIS AWS Foundations Benchmark [Source](https://aws.amazon.com/quickstart/architecture/compliance-cis-benchmark/)
+
+* Activate GuardDuty: Amazon GuardDuty is a threat detection service that continuously monitors for malicious or unauthorized behavior to help you protect your AWS accounts and workloads. It monitors for activity such as unusual API calls or potentially unauthorized deployments that indicate a possible account compromise. [Source](https://aws.amazon.com/guardduty/)
+
+* In the bucket policy we need explicitly to set `deny` deletion of any objects inside the bucket. Principal `*` everyone will be denied when they try to delete object version, deleteobject, deleteobject, deletebuckets. The resources are you bucket. Also one another rule, codition {Boolifexits: {aws: MultifactorAuthFalse} (means you cannot delete anything without MFA token). 
+
+* Every layer in security has holes, but the more layers I have the more tight are my security measures!
 
 
