@@ -1,5 +1,10 @@
 # Enchiridion Of Testing 
 
+> "At the end of the day, ship the fucking thing! It’s great to rewrite your code and make it cleaner and by the third time it’ll actually be pretty. But that’s not the point—you’re not here to write code; you’re here to ship products." by Jamie Zawinski at Coders at Work.
+
+> "If you are trying to work out if anyone will actually use your software, it may make much more sense to get something out now, to prove the idea or the business model before building robust software. In an environment where this is the case, testing may be overkill, as the impact of not knowing if your idea works is much higher than having a defect in pro‐ duction. In these situations, it can be quite sensible to avoid testing prior to production altogether." by Sam Newman at Building Microservices
+
+
 * Unit tests exist to test individual units of software functionality. A unit is a module, component, or function. They’re bits of the program that can work independently of the rest of the program.
 
 * If you find that it’s hard to write unit tests for your program without mocking lots of other things, that’s a sign that your program is not modular enough. 
