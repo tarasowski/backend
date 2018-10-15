@@ -69,3 +69,11 @@ c) below users, groups, roles you have policies = permisisons are codified in po
 * Simple urls are going through ACL and api calls are going through Policy. So you can mess up the rights if you use both they you can mess up everything. So always use only s3 bucket in conjunction with the bucket policy, not ACL!!!
 
 * Execution role what lambda is allowed to do and function role what resource can do with the lambda itself. [See more](https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html)
+
+* Execution role what lambda is allowed to do and function role what resource can do with the lambda itself. [See more](https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html)
+
+* If there is trust relation ship `Principal: ....:root` eveyone in this account can assume this role. So you need to specify a specific accout who can assume this role. 
+
+* 
+
+
