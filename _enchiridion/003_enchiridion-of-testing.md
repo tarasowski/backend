@@ -42,11 +42,11 @@ test('A passing test', (assert) => {
 });
 
 test('Assertions with tape.', (assert) => {
+  const msg = 'Given two mismatched values, .equal() should produce a nice bug report'
   const expected = 'something to test';
   const actual = 'sonething to test';
 
-  assert.equal(actual, expected,
-    'Given two mismatched values, .equal() should produce a nice bug report');
+  assert.equal(actual, expected, msg);
 
   assert.end();
 });
