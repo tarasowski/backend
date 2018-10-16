@@ -118,14 +118,14 @@ This list doesn't contain everything about serverless. Mainly this is my persona
     * [ ] AWS Certified SysOps Administrator Associate
     * [ ] AWS Certified Solutions Architect Professional
     * [ ] AWS Certified DevOps Engineer
-* [ ] Migration from Monolith to Serverless
+* [x] Migration from Monolith to Serverless
 * [ ] Computer Science 101
     * [ ] Data Structures
     * [ ] Algorithms
     * [ ] Network (Buffers/Streaming/TCP/UDP)
     * [ ] Engineering
 * [ ] Design Patterns 
-* [ ] Frontend (Vue/React)
+* [x] Frontend (React.js)
 
 ---
 
