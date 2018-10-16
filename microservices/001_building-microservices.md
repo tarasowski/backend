@@ -196,3 +196,259 @@
 ![Bff](./images/bff.png)
 
 * This pattern is sometimes referred to as backends for frontends (BFFs). It allows the team focusing on any given UI to also handle its own server-side components.
+
+* A Hybrid Approach Many of the aforementioned options don’t need to be one-size-fits-all. I could see an organization adopting the approach of fragment-based assembly to create a website, but using a backends-for-frontends approach when it comes to its mobile application.
+
+* Avoiding the trap of putting too much behavior into any intermediate layers is a tricky balancing act.
+
+* My clients often struggle with the question “Should I build, or should I buy?” In gen‐ eral, the advice I and my colleagues give when having this conversation with the aver‐ age enterprise organization boils down to **“Build if it is unique to what you do, and can be considered a strategic asset; buy if your use of the tool isn’t that special.”** For example, the average organization would not consider its payroll system to be a strategic asset.
+
+* I was involved early on in rebuilding the Guardian’s website, and there the decision was made to build a bespoke content management system, as it was core to the newspaper’s business.
+
+## Splitting the Monolith
+
+* When it comes to microservices, rather than having a single monolithic application intercepting all calls to the existing legacy system, you may instead use a series of microservices to perform this interception. Capturing and redirecting the original calls can become more complex in this situation, and you may require the use of a proxy to do this for you.
+
+* In his book Working Effectively with Legacy Code (Prentice-Hall), Michael Feathers defines the concept of a seam—that is, a portion of the code that can be treated in isolation and worked on without impacting the rest of the codebase. We also want to identify seams.
+
+* But rather than finding them for the purpose of cleaning up our code‐ base, we want to identify seams that can become service boundaries.
+
+* So what makes a good seam? Well, as we discussed previously, bounded contexts make excellent seams, because by definition they represent cohesive and yet loosely coupled boundaries in an organization. So the first step is to start identifying these boundaries in our code.
+
+* Breaking Apart MusicCorp Imagine we have a large backend monolithic service that represents a substantial amount of the behavior of MusicCorp’s online systems.
+
+* Let’s imagine that initially we identify four contexts we think our monolithic backend covers: Catalog Everything to do with metadata about the items we offer for sale Finance Reporting for accounts, payments, refunds, etc. Warehouse Dispatching and returning of customer orders, managing inventory levels, etc. Recommendation Our patent-pending, revolutionary recommendation system, which is highly complex code written by a team with more PhDs than the average science lab.
+
+* The first thing to do is to create packages representing these contexts, and then move the existing code into them.
+
+* If we spot things that look wrong—for example, the warehouse package depends on code in the finance package when no such dependency exists in the real organization—then we can investigate this problem and try to resolve it.
+
+* You may not need to sort all code into domain-oriented packages before splitting out your first service, and indeed it can be more valuable to concentrate your effort in one place. **There is no need for this to be a big-bang approach.**
+
+* Think of our monolith as a block of marble. We could blow the whole thing up, but that rarely ends well. It makes much more sense to just chip away at it incrementally. When you’ve identified a couple of seams to separate is how entangled that code is with the rest of the system. We want to pull out the seam that is least depended on if we can.
+
+* We need to find seams in our databases too so we can split them out cleanly. Databases, however, are tricky beasts.
+
+* The first step is to take a look at the code itself and see which parts of it read to and write from the database. A common practice is to have a repository layer. 
+
+* If you have been fol‐ lowing along so far, you’ll have grouped our code into packages representing our bounded contexts; we want to do the same for our database access code. To see these database-level constraints, which may be a stumbling block, we need to use another tool to visualize the data. A great place to start is to use a tool like the freely available SchemaSpy, which can gen‐ erate graphical representations of the relationships between tables.
+
+Figure 5-2. Foreign key relationship
+
+![Source](./images/table-relationship.png)
+
+* First, we need to stop the finance code from reaching into the line item table, as this table really belongs to the catalog code, and we don’t want database integration happening once catalog and finance are services in their own rights. The quickest way to address this is rather than having the code in finance reach into the line item table, we’ll expose the data via an API call in the catalog package that the finance code can call.
+
+* At this point it becomes clear that we may well end up having to make two database calls to generate the report. This is correct. And the same thing will happen if these are two separate services. Typically concerns around performance are now raised. I have a fairly easy answer to those: how fast does your system need to be?
+
+* **Example: Shared Static Data** I have seen perhaps as many country codes stored in databases. A second option is to instead treat this shared, static data as code. Perhaps it could be in a property file deployed as part of the service, or perhaps just as an enumeration. The problems around the consistency of data remain, although experience has shown that it is far easier to push out changes to configuration files than alter live database tables. Personally, in most situations I’d try to push for keeping this data in configuration files or directly in code.
+
+[Split](./images/service-separation.png)
+
+* Transactions are useful things. They allow us to say these events either all happen together, or none of them happen. They are very useful when we’re inserting data into a database; they let us update multiple tables at once, knowing that if anything fails, everything gets rolled back, ensuring our data doesn’t get into an inconsistent state.
+
+* But what happens if our compensating transaction fails? It’s certainly possible. Then we’d have an order in the order table with no matching pick instruction. In this situa‐ tion, you’d either need to retry the compensating transaction, or allow some backend process to clean up the inconsistency later on.
+
+* An alternative to manually orchestrating compensating transactions is to use a dis‐ tributed transaction. Distributed transactions try to span multiple transactions within them, using some overall governing process called a transaction manager to orches‐ trate the various transactions being done by underlying systems.
+
+* The most common algorithm for handling distributed transactions—especially shortlived transactions, as in the case of handling our customer order—is to use a twophase commit.
+
+* This is where each participant (also called a cohort in this context) in the distributed transaction tells the transaction manager whether it thinks its local transaction can go ahead.
+
+* This approach relies on all parties halting until the central coordinating process tells them to proceed. This means we are vulnerable to outages. If the transaction manager goes down, the pending transactions never complete. This coordination process also mean locks; that is, pending transactions can hold locks on resources.
+
+**Note:** you do encounter state that really, really wants to be kept consistent, do everything you can to avoid splitting it up in the first place. Try really hard. If you really need to go ahead with the split, think about moving from a purely technical view of the pro‐ cess (e.g., a database transaction) and actually create a concrete concept to represent the transaction itself.
+
+* In a standard, monolithic service architecture, all our data is stored in one big data‐ base. This means all the data is in one place, so reporting across all the information is actually pretty easy, as we can simply join across the data via SQL queries or the like. Typically we won’t run these reports on the main database for fear of the load gener‐ ated by our queries impacting the performance of the main system, so often these reporting systems hang on a read replica.
+
+Figure 5-12. Standard read replication
+
+![Source](./images/read-replica.png)
+
+* First, the schema of the database is now effectively a shared API between the running monolithic services and any reporting system.
+
+* Now if our information is stored in multiple different systems, what do we do? Is there a way for us to bring all the data together to run our reports?
+
+* **Data Retrieval:** via Service Calls There are many variants of this model, but they all rely on pulling the required data from the source systems via API calls. For a very simple reporting system, like a dash‐ board that might just want to show the number of orders placed in the last 15 minutes.
+
+* To report across data from two or more systems, you need to make multiple calls to assemble this data.
+
+* The calling system would POST a BatchRequest, perhaps passing in a location where a file can be placed with all the data. The customer service would return an HTTP 202 response code, indicating that the request was accepted but has not yet been processed. The calling system could then poll the resource waiting until it retrieves a 201 Created status, indicating that the request has been fulfilled, and then the calling system could go and fetch the data.
+
+* This would allow potentially large data files to be exported without the overhead of being sent over HTTP; instead, the system could simply save a CSV file to a shared location.
+
+* **Data Pumps** Rather than have the reporting system pull the data, we could instead have the data pushed to the reporting system. One of the downsides of retrieving the data by stan‐ dard HTTP calls is the overhead of HTTP when we’re making a large number of calls. In Chapter 4, we touched on the idea of microservices emitting events based on the state change of entities that they manage. For example, our customer service may emit an event when a given customer is created, or updated, or deleted. For those microservices that expose such event feeds, we have the option of writing our own event subscriber that pumps data into the reporting database. The coupling on the underlying database of the source microservice is now avoided. Instead, we are just binding to the events emitted by the service, which are designed to be exposed to external consumers.
+
+* We have dashboards, alerting, financial reports, user analytics—all of these use cases have different tolerances for accuracy and timeliness, which may result in different technical options coming to bear.
+
+> There are many reasons why, throughout the book, I promote the need to make small, incremental changes. This allows us to better miti‐ gate the cost of mistakes, but doesn’t remove the chance of mistakes entirely. **We can—and will—make mistakes, and we should embrace that.**
+
+* As we have seen, the cost involved in moving code around within a codebase is pretty small. We have lots of tools that support us, and if we cause a problem, the fix is gen‐ erally quick. Splitting apart a database, however, is much more work, and rolling back a database change is just as complex.
+
+* Likewise, untangling an overly coupled integra‐ tion between services, or having to completely rewrite an API that is used by multiple consumers, can be a sizeable undertaking.
+
+## Deployments
+
+> Do you see two services that are overly chatty, which might indicate they should be one thing? The first thing to understand is that growing a service to the point that it needs to be split is completely OK. We want the architecture of our system to change over time in an incremental fashion. The key is knowing it needs to be split before the split becomes too expensive.
+
+* Microservices, with their interdependence, are a different kettle of fish altogether. If you don’t approach deployment right, it’s one of those areas where the complexity can make your life a misery.
+
+* With CI, the core goal is to keep everyone in sync with each other, which we achieve by making sure that newly checked-in code properly integrates with existing code. To do this, a CI server detects that the code has been committed, checks it out, and car‐ ries out some verification like making sure the code compiles and that tests pass.
+
+**I really like Jez Humble’s three questions he asks people to test if they really under‐ stand what CI is about:**
+
+1) **Do you check in to mainline once per day?** 
+- You need to make sure your code integrates.
+
+2) **Do you have a suite of tests to validate your changes?** 
+- Without tests, we just know that syntactically our integration has worked.
+
+3) **When the build is broken, is it the #1 priority of the team to fix it?**
+A passing green build means our changes have safely been integrated. A passing green build means our changes have safely been integrated. A red build means the last change possibly did not integrate. You need to stop all further check-ins that aren’t involved in fixing the builds to get it passing again. If you let more changes pile up, the time it takes to fix the build will increase drastically.
+
+**Note:** Lock-step releases, where you don’t mind deploying multiple services at once. In general, this is abso‐ lutely a pattern to avoid, but very early on in a project, especially if only one team is working on everything, this might make sense for short periods of time.
+
+* The approach I prefer is to have a single CI build per microservice, to allow us to quickly make and validate a change prior to deployment into production, as shown in Figure 6-3. Here each microservice has its own source code repository, mapped to its own CI build. When making a change, I run only the build and tests I need.
+
+![Repo](.images/repo-microservice.png)
+
+* The tests for a given microservice should live in source control with the microservi‐ ce’s source code too, to ensure we always know what tests should be run against a given service.
+
+* To get fast feed‐ back when our fast tests fail if we’re waiting for our long-scoped slow tests to finally finish. And if the fast tests fail, there probably isn’t much sense in running the slower tests anyway! A solution to this problem is to have different stages in our build, creat‐ ing what is known as a build pipeline. One stage for the faster tests, one for the slower tests.
+
+* Continuous delivery (CD) builds on this concept, and then some. As outlined in Jez Humble and Dave Farley’s book of the same name, continuous delivery is the approach whereby we get constant feedback on the production readiness of each and every check-in, and furthermore treat each and every check-in as a release candidate. Figure 6-4. A standard release process modeled as a build pipeline
+
+![Pipeline](./images/pipeline.png) 
+
+* By modeling the entire path to production for our software, we greatly improve visi‐ bility of the quality of our software, and can also greatly reduce the time taken between releases, as we have one place to observe our build and release process, and an obvious focal point for introducing improvements.
+
+* In a microservices world, where we want to ensure we can release our services inde‐ pendently of each other, it follows that as with CI, we’ll want one pipeline per service.
+
+* When a team is starting out with a new project, especially a greenfield one where they are working with a blank sheet of paper, it is quite likely that there will be a large amount of churn in terms of working out where the service boundaries lie. This is a good reason, in fact, for keeping your initial services on the larger side until your understanding of the domain stabilizes.
+
+* Packer is a tool designed to make creation of images much easier. Using configuration scripts of your choice (Chef, Ansible, Puppet, and more are supported), it allows us to create images for different platforms from the same configuration. At the time of writing, it has support for VMWare, AWS, Rackspace Cloud, Digital Ocean, and Vagrant, and I’ve seen teams use it successfully for building Linux and Windows images. This means you could create an image for deployment on your production AWS environment and a matching Vagrant image for local development and test
+
+* **Immutable Servers:** By storing all our configuration in source control, we are trying to ensure that we can automatically reproduce services and hopefully entire environments at will.
+
+* **Environments:** As our software moves through our CD pipeline stages, it will also be deployed into different types of environments. One environment where we run our slow tests, another for UAT, another for performance, and a final one for production.
+
+* You move from your laptop to build server to UAT environment all the way to production, you’ll want to ensure that your environments are more and more production-like to catch any problems associated with these environmental differ‐ ences sooner.
+
+* Remember the concept of continuous delivery. We want to create an artifact that represents our release candi‐ date, and move it through our pipeline, confirming that it is good enough to go into production.
+
+> Gilt’s monolithic Rails application was starting to become difficult to scale, and the company decided in 2009 to start decomposing the system into microservices. Again automation, especially tooling to help developers, was given as a key reason to drive Gilt’s explosion in the use of microservices. A year later, Gilt had around 10 microservices live; by 2012, over 100; and in 2014, over 450 microservices by Gilt’s own count
+
+**Note:** After many years of working in this space, I am convinced that the most sensible way to trigger any deployment is via a single, parameterizable command-line call. This can be triggered by scripts, launched by your CI tool, or typed in by hand.
+
+## Testing
+
+* Tests can be important to support refactoring of code, allowing us to restructure our code as we go, knowing that our small-scoped tests will catch us if we make a mistake.
+
+* **Unit tests:** These are tests that typically test a single function or method call. The tests generated as a side effect of test-driven design (TDD) will fall into this category, as do the sorts of tests generated by techniques such as property-based testing. We’re not launching services here, and are limiting the use of external files or network connections. In general, you want a large number of these sorts of tests. Done right, they are very, very fast, and on modern hardware you could expect to run many thousands of these in less than a minute.
+
+Figure 7-4. Scope of unit tests on our example system
+
+![Unit](./images/unit-tests.png)
+
+* For a system comprising a number of services, a service test would test an individual service’s capabilities.
+
+* For a system comprising a number of services, a service test would test an individual service’s capabilities. The reason we want to test a single service by itself is to improve the isolation of the test to make finding and fixing problems faster. To achieve this isolation, we need to stub out all external collaborators so only the service itself is in scope, as Figure 7-5 shows.
+
+![Service](./images/service-test.png)
+
+* **Service tests** are designed to bypass the user interface and test services directly. In a monolithic application, we might just be testing a collection of classes that provide a service to the UI. For a system comprising a number of services, a service test would test an individual service’s capabilities. The reason we want to test a single service by itself is to improve the isolation of the test to make finding and fixing problems faster. To achieve this isolation, we need to stub out all external collaborators so only the service itself is in scope, as Figure 7-5 shows.
+
+* Some of these tests could be as fast as small tests, but if you decide to test against a real database, or go over networks to stubbed downstream collaborators, test times can increase.
+
+* **End-to-end tests** are tests run against your entire system. Often they will be driving a GUI through a browser, but could easily be mimicking other sorts of user interaction, like uploading a file.
+
+![End](./images/end-to-end.png)
+
+* When you’re reading the pyramid, the key thing to take away is that as you go up the pyramid, the test scope increases, as does our confidence that the functionality being tested works. On the other hand, the feedback cycle time increases as the tests take longer to run, and when a test fails it can be harder to determine which functionality has broken. As you go down the pyramid, in general the tests become much faster, so we get much faster feedback cycles.
+
+![Pyramid](./images/pyramid.png)
+
+* I worked on one monolithic system, for example, where we had 4,000 unit tests, 1,000 service tests, and 60 end-to-end tests. We decided that from a feedback point of view we had way too many service and end-to-end tests (the latter of which were the worst offenders in impacting feedback loops), so we worked hard to replace the test cover‐ age with smaller-scoped tests.
+
+* A common anti-pattern is what is often referred to as a test snow cone, or inverted pyramid. Here, there are little to no small-scoped tests, with all the coverage in largescoped tests. These projects often have glacially slow test runs, and very long feed‐ back cycles. If these tests are run as part of continuous integration, you won’t get many builds, and the nature of the build times means that the build can stay broken for a long period when something does break.
+
+* Our service tests want to test a slice of functionality across the whole service, but to isolate ourselves from other services we need to find some way to stub out all of our collaborators. We would want to stub out any downstream services. Our service test suite needs to launch stub services for any downstream collaborators (or ensure they are running), and configure the service under test to connect to the stub services. We then need to configure the stubs to send responses back to mimic the real-world services. For example, we might configure the stub for the loyalty points bank to return known points balances for certain customers. When I talk about stubbing downstream collaborators, I mean that we create a stub service that responds with canned responses to known requests from the service under test. For example, I might tell my stub points bank that when asked for the bal‐ ance of customer 123, it should return 15,000. The test doesn’t care if the stub is called 0, 1, or 100 times.
+
+* When using a mock, I actually go further and make sure the call was made. If the expected call is not made, the test fails. Implementing this approach requires more smarts in the fake collaborators that we create, and if overused can cause tests to become brittle.
+
+* Sometimes, though, mocks can be very useful to ensure that the expected side effects happen. For example, I might want to check that when I create a customer, a new points balance is set up for that customer. The balance between stubbing and mock‐ ing calls is a delicate one, and is just as fraught in service tests as in unit tests. In gen‐ eral, though, I use stubs far more than mocks for service tests.
+
+* [Mountebank](https://github.com/bbyars/mountebank) as a small software appliance that is programmable via HTTP. The fact that it happens to be written in NodeJS is completely opaque to any calling service. When it launches, you send it commands telling it what port to stub on, what protocol to handle (currently TCP, HTTP, and HTTPS are supported, with more planned), and what responses it should send when requests are sent.
+
+* So, if we want to run our service tests for just our customer service we can launch the customer service, and a Mountebank instance that acts as our loyalty points bank. And if those tests pass, I can deploy the customer service straightaway!
+
+* To implement an end-to-end test we need to deploy multiple services together, then run a test against all of them. Obviously, this test has much more scope, result‐ ing in more confidence that our system works! On the other hand, these tests are lia‐ ble to be slower and make it harder to diagnose failure.
+
+* The more moving parts, the more brittle our tests may be, and the less deterministic they are. If you have tests that sometimes fail, but everyone just re-runs them because they may pass again later, then you have flaky tests. **When we detect flaky tests, it is essential that we do our best to remove them. Other‐ wise, we start to lose faith in a test suite that “always fails like that.”** The idea that over time we can become so accustomed to things being wrong that we start to accept them as being normal and not a problem.
+
+* Sometimes organizations react by having a dedicated team write these tests. This can be disastrous. The team developing the software becomes increasingly distant from the tests for its code. Cycle times increase, as service owners end up waiting for the test team to write end-to-end tests for the functionality they just wrote. Although it is unfortunately still a common organizational pattern, I see significant harm done whenever a team is distanced from writing tests for the code it wrote in the first place.
+
+**Note:** Understanding what needs to be tested and actively removing tests that are no longer needed. 
+
+* The larger the scope of a deployment and the higher the risk of a release, the more likely we are to break something. A key driver to ensuring we can release our soft‐ ware frequently is based on the idea that we release small changes as soon as they are ready.
+
+* There are, unfortunately, many disadvantages to end-to-end testing. End-to-end tests have a large number of disadvantages that grow significantly as you add more moving parts under test. From speaking to people who have been implementing microservices at scale for a while now, I have learned that most of them over time remove the need entirely for end-toend tests in favor of tools like CDCs (consumer-driven-contact) and improved monitoring.
+
+* Consumer Driven Contract approach is nothing more than an agreement between the Consumer and Provider about the format of data that they transfer between each other. Normally, the format of the contract is defined by the Consumer and shared with the corresponding Provider. Afterwards, tests are being implemented in order to verify that the contract is being kept. One of the prerequisites of CDC Testing is the possibility to have a good, at best case close communication with the Provider service team (for example when you are the owner of the Consumer and Provider). Sharing those contracts and communication on test results is important part of implementing proper CDC tests. [Source](https://blog.novatec-gmbh.de/introduction-microservices-testing-consumer-driven-contract-testing-pact/)
+
+* With blue/green, we have two copies of our software deployed at a time, but only one version of it is receiving real requests.
+
+* In production, we have v123 of the customer service live. We want to deploy a new version, v456. We deploy this alongside v123, but do not direct any traffic to it. Instead, we perform some testing in siut against the newly deployed version. Once the tests have worked, we direct the production load to the new v456 version of the customer service. It is common to keep the old version around for a short period of time, allowing for a fast fallback if you detect any errors.
+
+* Using blue/green deployments allows you to reduce the risk of deployment, as well as gives you the chance to revert should you encounter a problem.
+
+* With canary releasing, we are verifying our newly deployed software by directing amounts of production traffic against the system to see if it performs as expected. “Performing as expected” can cover a number of things, both functional and non‐ functional.
+
+* If the new release is bad, you get to revert quickly. If it is good, you can push increas‐ ing amounts of traffic through the new version. Canary releasing differs from blue/ green in that you can expect versions to coexist for longer, and you’ll often vary the amounts of traffic. Netflix uses this approach extensively.
+
+* If you are trying to work out if anyone will actually use your software, it may make much more sense to get something out now, to prove the idea or the business model before building robust software. In an environment where this is the case, testing may be overkill, as the impact of not knowing if your idea works is much higher than having a defect in pro‐ duction. In these situations, it can be quite sensible to avoid testing prior to produc‐ tion altogether.
+
+* **Performance tests** are worth calling out explicitly as a way of ensuring that some of our cross-functional requirements can be met. When decomposing systems into smaller microservices, we increase the number of calls that will be made across net‐ work boundaries. Where previously an operation might have involved one database call, it may now involve three or four calls across network boundaries to other serv‐ ices, with a matching number of database calls. All of this can decrease the speed at which our systems operate. Tracking down sources of latency is especially important. When you have a call chain of multiple synchronous calls, if any part of the chain starts acting slowly, everything is affected, potentially leading to a significant impact. This makes having some way to performance test your applications even more important than it might be with a more monolithic system.
+
+* Due to the time it takes to run performance tests, it isn’t always feasible to run them on every check-in. It is a common practice to run a subset every day, and a larger set every week.
+
+* Make sure you run them as regularly as you can. The longer you go without running performance tests, the harder it can be to track down the culprit. Performance problems are especially difficult to resolve, so if you can reduce the number of commits you need to look at in order to see a newly introduced problem, your life will be much easier.
+
+* Having a single point of failure also makes failure investigation somewhat simpler!
+
+## Monitoring
+
+* The capabilities we offer our users are served from multiple small services, some of which communicate with yet more services to accomplish their tasks.
+
+* We now have multiple servers to monitor, multiple logfiles to sift through, and multi‐ ple places where network latency could cause problems.
+
+* The answer here is pretty straightforward: monitor the small things, and use aggrega‐ tion to see the bigger picture.
+
+* At a bare minimum, moni‐ toring the response time of the service is a good idea.
+
+* We’re looking to use specialized subsystems to grab our logs and make them available centrally. One example of this is logstash, which can parse multiple logfile formats and can send them to downstream systems for further investigation. Kibana is an ElasticSearch-backed system for viewing logs, illustrated in Figure 8-4. You can use a query syntax to search through logs, allowing you to do things like restrict time and date ranges or use regular expressions to find matching strings.
+
+* Our website is seeing nearly 50 4XX HTTP error codes per second. Is that bad? The CPU load on the cata‐ log service has increased by 20% since lunch; has something gone wrong? The secret to knowing when to panic and when to relax is to gather metrics about how your sys‐ tem behaves over a long-enough period of time that clear patterns emerge.
+
+* Graphite is one such system that makes this very easy. It exposes a very simple API and allows you to send metrics in real time. It then allows you to query those metrics to produce charts and other displays to see what is happening.
+
+* I would strongly suggest having your services expose basic metrics themselves. At a bare minimum, for a web service you should probably expose metrics like response times and error rates. For example, our accounts service may want to expose the number of times customers view their past orders, or your web shop might want to capture how much money has been made during the last day.
+
+> There is an old adage that 80% of software features are never used. Now I can’t comment on how accurate that figure is, but as someone who has been developing software for nearly 20 years, I know that I have spent a lot of time on features that never actually get used.
+
+* A friend told me a story about an ecommerce company that accidentally ran its tests against its production ordering systems. It didn’t realize its mistake until a large num‐ ber of washing machines arrived at the head office. 
+
+* Correlation IDs With a large number of services interacting to provide any given end-user capability, a single initiating call can end up generating multiple more downstream service calls.
+
+* One approach that can be useful here is to use correlation IDs. When the first call is made, you generate a GUID for the call. This is then passed along to all subsequent calls, as seen in Figure 8-5, and can be put into your logs in a structured way, much as you’ll already do with components like the log level or date.
+
+![Correlation](./images/correlation-ids.png)
+
+* Software such as Zipkin can also trace calls across multiple system boundaries. Based on the ideas from Google’s own tracing system, Dapper, Zipkin can provide very detailed tracing of interservice calls, along with a UI to help present the data.
+
+* Needing to handle tasks like consistently passing through correlation IDs can be a strong argument for the use of thin shared client wrapper libraries. **You are using HTTP as the underlying protocol for communica‐ tion, just wrap a standard HTTP client library, adding in code to make sure you propogate the correlation IDs in the headers.**
+
+
+
+
+
