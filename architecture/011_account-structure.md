@@ -7,7 +7,10 @@
 4) Data Bunker (push Backup data from Shared/Ops/Tools and Dev/Prod Account)
 5) Security/Audit (push CloudWatch/Logs)
 
-![5](./images/5ish-account.JPG)
+![5](./images/5onit-1.png)
+![5](./images/5onit-2.png)
+
+[Source](https://www.slideshare.net/aaronpwalker/meetup-aws-berlin-october-2018-account-management-and-aws-organizations)
 
 ## Remarks from other AWS Workshop
 * Use AWS Organizations to manage your account: AWS Organizations offers policy-based management for multiple AWS accounts. With Organizations, you can create groups of accounts, automate account creation, apply and manage policies for those groups. Organizations enables you to centrally manage policies across multiple accounts, without requiring custom scripts and manual processes.
