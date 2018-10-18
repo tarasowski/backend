@@ -12,7 +12,7 @@
     * [x] Relational Databases
     * [x] NoSQL Databases (document storage)
     * [x] Migration from NoSQL to MySQL/Postgres
-    * [x] File storage (S3, AWS KMS)
+    * [x] File storage (S3)
 * [x] Deployments
     * [x] CodeStar
     * [x] CodePipeline
