@@ -20,6 +20,8 @@ Source: Amazon Pop Up Loft Event 2018 by Stefan Hausmann AWS
 
 * Firehouse scales on your behalf, you don't need to manage shards.
 
+* It's important to monitor read/write of your Kinesis stream, so you don't throttle the producers. WriteProvisionedThrougputExceeded (amount of shards should be enough for the amount of producers / ReadProvisionedThroughputExceeded (amount of destinations should not exceed the throughput)
+
 1) You start with creating the shards / Kinesis stream first
 
 2) Once the shard is established you can inject into this shard (he is replying the data from a open source of AWS)
@@ -38,7 +40,11 @@ Source: Amazon Pop Up Loft Event 2018 by Stefan Hausmann AWS
 
 9) He is connecting the new Kinesis stream with filtered data to the Kinesis Firehouse to store the data on s3 bucket for historical data analysis. You can then query the data with Athena and visualize the data with Amazon Quicksight. In this step you can also convert record format to Apache Parquet or ORC so you can get converted data that is ready to be queried by Presto, Athena or Redshift. You need to specify the schema at this step.
 
-10) 
+10) In s3 the data has been arrvied, the compression is very good from 180mb to 15mb in his example. Now all filtered events are persistent in s3, now we can run sql queries agains historical data sitting in s3.
+
+11) Now he is using AWS Glue to create a central data catalog that contains information about the data. You can run a crawler to create a schema, the crawler will run through the s3 bucket to create a schema for Athena, so we query the data from the bucket. You can create a centralized data store with AWS Glue, so all the tools can use it to analyse the data. The crawler does create a schema for you, it's all done by the crawler itself.
+
+12) Now it's time to querying the data through Athena to start quering the data set. 
 
 This is an example architecture for Kinesis Stream & Analytics
 ![Example](https://image.slidesharecdn.com/bdm304-161217191656/95/aws-reinvent-2016-analyzing-streaming-data-in-realtime-with-amazon-kinesis-analytics-bdm304-25-638.jpg?cb=1482002262)
