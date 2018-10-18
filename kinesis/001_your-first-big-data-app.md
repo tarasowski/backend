@@ -46,7 +46,7 @@ Source: Amazon Pop Up Loft Event 2018 by Stefan Hausmann AWS
 
 12) Now it's time to querying the data through Athena to start quering the data set. If you want to query large files, you need to find the right format Parquet / ORC etc. so you can save money on running queries.
 
-13) Now you can create a dashboard with QuickSight, the data is coming for the database and visualize the data through AWS Quicksight. You have two options: 1) Visualize the data from the source, 2) Or import the data into memory data structure (low latency of reading data)
+13) Now you can create a dashboard with QuickSight, the data is coming for the database and visualize the data through AWS Quicksight. You have two options: 1) Visualize the data from the source, 2) Or import the data into memory data structure (low latency of reading data). The difference to CloudWatch is that in CloudWatch we want to see the realtime data and in Quicksight we want to analyse historical data.
 
 This is an example architecture for Kinesis Stream & Analytics
 ![Example](https://image.slidesharecdn.com/bdm304-161217191656/95/aws-reinvent-2016-analyzing-streaming-data-in-realtime-with-amazon-kinesis-analytics-bdm304-25-638.jpg?cb=1482002262)
