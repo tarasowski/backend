@@ -448,6 +448,123 @@ Figure 7-4. Scope of unit tests on our example system
 
 * Needing to handle tasks like consistently passing through correlation IDs can be a strong argument for the use of thin shared client wrapper libraries. **You are using HTTP as the underlying protocol for communica‐ tion, just wrap a standard HTTP client library, adding in code to make sure you propogate the correlation IDs in the headers.**
 
+* Monitoring the integration points between systems is key. Each service instance should track and expose the health of its downstream dependencies, from the database to other collaborating services.
+
+* You should try to write your logs out in a standard format. You definitely want to have all your metrics in one place, and you may want to have a list of standard names for your metrics too;
+
+* One of the ongoing balancing acts you’ll need to pull off is where to allow for decisions to be made narrowly for a single service versus where you need to standardize across your system. In my opinion, monitoring is one area where standardization is incredibly important.
+
+* Historically, the idea that we can find out about key business metrics a day or two later was fine, as typically we were unable to react fast enough to this data to do any‐ thing about it anyway. Now, though, we operate in a world in which many of us can and do push out multiple releases per day. Teams now measure themselves not in terms of how many points they complete, but instead optimize for how long it takes for code to get from laptop to live.
+
+> So, if we can unify the systems we use to gather, aggregate, and store these events, and make them available for reporting, we end up with a much simpler architecture.
+
+* Suro is Netflix’s data pipeline and oper‐ ates in a similar space. Suro is explicitly used to handle both metrics associated with user behavior, and more operational data like application logs. This data can then be dispatched to a variety of systems, like Storm for real-time analysis, Hadoop for off‐ line batch processing, or Kibana for log analysis.
+
+* Monitoring is moving: away from systems specialized to do just one thing, and toward generic event processing systems that allow you to look at your system in a more holistic way.
+
+## Security
+
+* We need to think about what protection our data needs while in transit from one point to another, and what protection it needs at rest.
+
+* The terms used here are from SAML. When a principal tries to access a resource (like a web-based interface), she is direc‐ ted to authenticate with an identity provider. This may ask her to provide a username and password, or might use something more advanced like two-factor authentication. Once the identity provider is satisfied that the principal has been authenticated, it gives information to the service provider, allowing it to decide whether to grant her access to the resource.
+
+* OpenID Connect is a standard that has emerged as a specific implementation of OAuth 2.0, based on the way Google and others handle SSO. It uses simpler REST calls, and in my opinion is likely to make inroads into enterprises due to its improved ease of use. Its biggest stumbling block right now is the lack of identity providers that support it.
+
+* This identity provider could be an externally hosted system, or something inside your own organization. Google, for example, provides an OpenID Connect identity pro‐ vider. (Cognito is identity provider and federated identites are giving IAM permissions to principals to access specific resources. The permissions can be also given to principals that are not authorizer, means no identity / password etc.)
+
+* Data lying about is a liability, especially if it is sensitive. Hopefully we’ve done every‐ thing we can to ensure attackers cannot breach our network, and also that they can‐ not breach our applications or operating systems to get access to the underlying close up
+
+* The easiest way you can mess up data encryption is to try to implement your own encryption algorithms, or even try to implement someone else’s. Whatever program‐ ming language you use, you’ll have access to reviewed, regularly patched implementa‐ tions of well-regarded encryption algorithms. Use those!
+
+* For encryption at rest, unless you have a very good reason for picking something else, pick a well-known implementation of AES-128 or AES-256 for your platform.
+
+* **Encrypt Backups:** Backups are good. We want to back up our important data, and almost by definition data we are worried enough about that we want to encrypt it is important enough to back up!
+
+* External Verification With security, I think there is great value in having an external assessment done. Exercises like penetration testing, when done by an outside party, really do mimic real-world attempts. They also sidestep the issue that teams aren’t always able to see the mistakes they have made themselves, as they are too close to the problem.
+
+# Conway's Law and System Design
+
+* One law that I have found to be almost universally true, and far more useful in my day-to-day work, is Conway’s law.
+
+* Any organization that designs a system (defined more broadly here than just informa‐ tion systems) will inevitably produce a design whose structure is a copy of the organi‐ zation’s communication structure. This statement is often quoted, in various forms, as Conway’s law. Eric S. Raymond summarized this phenomenon in The New Hacker’s Dictionary (MIT Press) by stating “If you have four groups working on a compiler, you’ll get a 4-pass compiler.”
+
+* The authors found that the more loosely coupled organizations actually created more modular, less coupled systems, whereas the more tightly focused organization’s software was less modularized.
+
+* Probably the two poster children for the idea that organizations and architecture should be aligned are Amazon and Netflix. Early on, Amazon started to understand the benefits of teams owning the whole lifecycle of the systems they managed. It wanted teams to own and operate the systems they looked after, managing the entire lifecycle. But Amazon also knew that small teams can work faster than large teams. This led famously to its two-pizza teams, where no team should be so big that it could not be fed with two pizzas. This driver for small teams owning the whole lifecycle of their services is a major reason why Amazon developed Amazon Web Services.
+
+* Netflix learned from this example, and ensured that from the beginning it structured itself around small, independent teams, so that the services they created would also be independent from each other. This ensured that the architecture of the system was optimized for speed of change. Effectively, Netflix designed the organizational struc‐ ture for the system architecture it wanted.
+
+* Now let’s imagine a different scenario. Instead of a single, geolocated team owning our catalog service, suppose that teams in the UK and India both are actively involved in changing a service—effectively having joint ownership of the service. Geographical and time zone boundaries here make fine-grained communication between those teams difficult. Instead, they rely on more coarse-grained communication via video conferencing and email. How easy is it for a team member in the UK to make a sim‐ ple refactoring with confidence? The cost of communications in a geographically dis‐ tributed team is higher, and therefore the cost of coordinating changes is higher. When the cost of coordinating change increases, one of two things happen. Either people find ways to reduce the coordination/communication costs, or they stop mak‐ ing changes. The latter is exactly how we end up with large, hard-to-maintain codebases.
+
+* I would suggest that geographical boundaries between people involved with the development of a system can be a great way to drive when services should be decom‐ posed, and that in general, you should look to assign ownership of a service to a sin‐ gle, colocated team who can keep the cost of change low.
+
+* If the organization building the system is more loosely coupled (e.g., consisting of geographically distributed teams), the systems being built tend toward the more modular, and therefore hopefully less coupled. The tendency of a single team that owns many services to lean toward tighter integration is very hard to maintain in a more distributed organization.
+
+* **Service Ownership** What do I mean by service ownership? In general, it means that the team owning a service is responsible for making changes to that service. The team should feel free to restructure the code however it wants, as long as that change doesn’t break consum‐ ing services. For many teams, ownership extends to all aspects of the service, from sourcing requirements to building, deploying, and maintaining the application. This increased level of ownership leads to increased autonomy and speed of delivery. Having one team responsible for deploying and maintaining the application means it has an incentive to create services that are easy to deploy; This model is certainly one I favor. It pushes the decisions to the people best able to make them, giving the team both increased power and autonomy, but also making it accountable for its work. I’ve seen far too many developers hand their system over for testing or deployment phases and think that their work is done at that point.
+
+**Note:** Microservices are: services modeled after a business domain, not a technical one.
+
+* Internal Open Source So what if we’ve tried our hardest, but we just can’t find a way past having a few shared services? At this point, properly embracing the internal open source model can make a lot of sense. With normal open source, a small group of people are considered core committers. They are the custodians of the code. If you want a change to an open source project, you either ask one of the committers to make the change for you, or else you make the change yourself and send them a pull request. The core committers are still in charge of the codebase; they are the owners.
+
+* As we move toward finer-grained architectures, the services themselves become smaller. One of the goals of smaller services, as we have discussed, is the fact that they are simpler. Simpler services with less functionality may not need to change for a while.
+
+* Consider the humble cart service, which provides some fairly modest capabilities: Add to Cart, Remove from Cart, and so on. It is quite conceivable that this service may not have to change for months after first being written, even if active development is still going on. What happens here?
+
+* Each squad inside a line of business is expected to own the entire lifecycle of the serv‐ ices it creates, including building, testing and releasing, supporting, and even decom‐ missioning.
+
+> No matter how it looks at first, it’s always a people problem. —Gerry Weinberg, The Second Law of Consulting
+
+* Likewise, pushing power into development teams to increase autonomy can be fraught. People who have in the past thrown work over the wall to someone else are accustomed to having someone else to blame, and may not feel comfortable being fully accountable for their work. You may even find contractual barriers to having your developers carry support pagers for the systems they support!
+
+* Although this book has mostly been about technology, people are not just a side issue to be considered; they are the people who built what you have now, and will build what happens next.
+
+**Note:** Each organization has its own set of dynamics around this topic. Understand your staff ’s appetite to change. Don’t push them too fast! For many people, this will be a pretty scary journey. Just remember that without people on board, any change you might want to make could be doomed from the start.
+
+## Microservices at Scale (Failure is everywhere)
+
+> Baking in the assumption that everything can and will fail leads you to think differ‐ ently about how you solve problems.
+
+* Everything will go wrong, hard disks will fail, our software will crash, the network is unreliable [Understanding the 8 Fallacies of Distributed Systems](https://dzone.com/articles/understanding-the-8-fallacies-of-distributed-syste)
+
+* **Degrading Functionality:** An essential part of building a resilient system, especially when your functionality is spread over a number of different microservices that may be up or down, is the ability to safely degrade functionality.
+
+* What we need to do is understand the impact of each outage, and work out how to properly degrade functionality. If the shopping cart service is unavailable, we’re prob‐ ably in a lot of trouble, but we could still show the web page with the listing. Perhaps we just hide the shopping cart or replace it with an icon saying “Be Back Soon!”
+
+* With a single, monolithic application, we don’t have many decisions to make. System health is binary. But with a microservice architecture, we need to consider a much more nuanced situation.
+
+* But for every customer-facing interface that uses multiple microservices, or every microservice that depends on multiple downstream collaborators, you need to ask yourself, “What happens if this is down?” and know what to do.
+
+* There are a few patterns, which collectively I refer to as architectural safety measures, that we can make use of to ensure that if something does go wrong.
+
+* Responding very slowly is one of the worst failure modes you can experience. If a system is just not there, you find out pretty quickly. When it’s just slow, you end up waiting around for a while before giving up.
+
+* Downstream service, over which we had little control, was able to take down our whole system. When you get down to it, we discovered the hard way that systems that just act slow are much harder to deal with than systems that just fail fast. In a distributed system, latency kills.
+
+* One of the patterns is to implement a circuit breaker to avoid sending calls to an unhealthy system in the first place. 
+
+* The scale at which Netflix operates is well known, as is the fact that Netflix is based entirely on the AWS infrastructure. These two factors mean that it has to embrace failure well. Netflix goes beyond that by actually inciting failure to ensure that its sys‐ tems are tolerant of failure.
+
+* During my time at Google, this was a fairly common occurrence for various systems, and I certainly think that many organizations could benefit from having these sorts of exercises reg‐ ularly. Google goes beyond simple tests to mimic server failure, and as part of its annual DiRT (Disaster Recovery Test) exercises it has simulated large-scale disasters such as earthquakes.
+
+* Netflix also takes a more aggressive approach, by writing pro‐ grams that cause failure and running them in production on a daily basis. The most famous of these programs is the Chaos Monkey, which during certain hours of the day will turn off random machines. Knowing that this can and will hap‐ pen in production means that the developers who create the systems really have to be prepared for it. The Chaos Monkey is just one part of Netflix’s Simian Army of failure bots. The Chaos Gorilla is used to take out an entire availability center (the AWS equivalent of a data center), whereas the Latency Monkey simulates slow network connectivity between machines.
+
+* **Embracing and inciting failure through software, and building systems that can han‐ dle it,** is only part of what Netflix does. It also understands the importance of learning from the failure when it occurs, and adopting a blameless culture when mistakes do happen. Developers are further empowered to be part of this learning and evolving process, as each developer is also responsible for managing his or her production services.
+
+* Not everyone needs to go to the sorts of extremes that Google or Netflix do, but it is important to understand the mindset shift that is required with distributed systems. **Things will fail.**
+
+* **Circuit Breakers** In your own home, circuit breakers exist to protect your electrical devices from spikes in the power. If a spike occurs, the circuit breaker gets blown, protecting your expen‐ sive home appliances. You can also manually disable a circuit breaker to cut the power to part of your home, allowing you to work safely on the electrics. Michael Nygard’s book Release It! (Pragmatic Programmers) shows how the same idea can work wonders as a protection mechanism for our software.
+
+* Consider the story I shared just a moment ago. The downstream legacy ad applica‐ tion was responding very slowly, before eventually returning an error. Even if we’d got the timeouts right, we’d be waiting a long time before we got the error. And then we’d try it again the next time a request came in, and wait. It’s bad enough that the down‐ stream service is malfunctioning, but it’s making us go slow too. With a circuit breaker, after a certain number of requests to the downstream resource have failed, the circuit breaker is blown. All further requests fail fast while the circuit breaker is in its blown state. After a certain period of time, the client sends a few requests through to see if the downstream service has recovered, and if it gets enough healthy responses it resets the circuit breaker.
+
+* I’ve implemented them for HTTP connections I’ve taken failure to mean either a timeout or a 5XX HTTP return code. In this way, when a downstream resource is down, or timing out, or returning errors, after a certain threshold is reached we auto‐ matically stop sending traffic and start failing fast. And we can automatically start again when things are healthy.
+
+* **Spreading Your Risk:** One way to scale for resilience is to ensure that you don’t put all your eggs in one basket. A simplistic example of this is making sure that you don’t have multiple serv‐ ices on one host, where an outage would impact multiple services. But let’s consider what host means. In most situations nowadays, a host is actually a virtual concept. So what if I have all of my services on different hosts, but all those hosts are actually vir‐ tual hosts, running on the same physical box? If that box goes down, I could lose mul‐ tiple services. Some virtualization platforms enable you to ensure that your hosts are distributed across multiple different physical boxes to reduce this chance.
+
+* AWS, for example, is split into regions, which you can think of as distinct clouds. Each region is in turn split into two or more availability zones (AZs). AZs are AWS’s equivalent of a data center. It is essential to have services distributed across multiple availability zones, as AWS does not offer any guarantees about the availability of a single node, or even an entire availability zone. Distribute your workloads across multiple availability zones inside a single region.
+
+* When you need your service to be resilient, you want to avoid single points of failure. For a typical microservice that exposes a synchronous HTTP endpoint, the easiest way to achieve this is to have multiple hosts running your microservice instance, sit‐ ting behind a load balancer, as shown in Figure 11-4.
+
+![Load](./images/load-balancer.png)
 
 
 
