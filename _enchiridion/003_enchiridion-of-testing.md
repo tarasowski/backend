@@ -27,6 +27,8 @@ const combine = () => {
   return (...)
 ```
 
+* Think before you act: 1) write the whole logic, 2) Than start with writing the stuff with side-effects (DON'T MIX LOGIC WITH SIDE-EFFECTS)
+
 * Unit tests exist to test individual units of software functionality. A unit is a module, component, or function. They’re bits of the program that can work independently of the rest of the program.
 
 * If you find that it’s hard to write unit tests for your program without mocking lots of other things, that’s a sign that your program is not modular enough. 
