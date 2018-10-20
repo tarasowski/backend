@@ -1,9 +1,31 @@
 # Enchiridion Of Testing 
 
+> "Other than that, learning how to test well is really all about learning better software architecture." by Eric Elliot at JSMentorship
+
+
 > "At the end of the day, ship the fucking thing! It’s great to rewrite your code and make it cleaner and by the third time it’ll actually be pretty. But that’s not the point—you’re not here to write code; you’re here to ship products." by Jamie Zawinski at Coders at Work.
 
 > "If you are trying to work out if anyone will actually use your software, it may make much more sense to get something out now, to prove the idea or the business model before building robust software. In an environment where this is the case, testing may be overkill, as the impact of not knowing if your idea works is much higher than having a defect in pro‐ duction. In these situations, it can be quite sensible to avoid testing prior to production altogether." by Sam Newman at Building Microservices.
 
+* TDD for Serverless (side-effects): Use testing libraray to write functions that hit the endpoint, posts messages to SNS or save data to database. Actually you are writing and automating the integrations tests. So instead test it manually you do it via testing tool by writing asserts that test the functionality. 
+
+* Isolate side-effects from logic so there's more pure logic to test easily. (Eric Elliot)
+
+* Don't try to unit-test side-effects, instead use functional or integration tests, and you won't need to mock. (Eric Elliot)
+
+* Use better/more functional abstraction around side-effects to make them easier to isolate. (Generators e.g., redux-saga, or Tasks - like lazy promises) (Eirc Elliot)
+
+**ISOLATE THE SIDE-EFFECTS!**
+```js
+const logic = () => (....) // logic is isolated from the rest -> unit testable
+const dbCall = () => (....) // database call (side effect) is isolated from the rest -> integration / functional tests
+
+// combine logic and dabase call -> integration / functional tests
+const combine = () => {
+  const output = logic()
+  const response = dbCall()
+  return (...)
+```
 
 * Unit tests exist to test individual units of software functionality. A unit is a module, component, or function. They’re bits of the program that can work independently of the rest of the program.
 
