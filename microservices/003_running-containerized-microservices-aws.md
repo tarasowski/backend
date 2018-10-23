@@ -48,4 +48,4 @@
 
 * In the diagram that follows, a canary release can easily be implemented with containers using AWS primitives. As a container announces its health via a health check API, the canary directs more traffic to it. The state of the canary and the execution is maintained -using Amazon DynamoDB, Amazon Route 53, Amazon CloudWatch, Amazon Elastic Container Service (Amazon ECS), and AWS Step Functions. Figure 2: Canary deployment with containers Finally, usage monitoring mechanisms ensure that development teams can evolve the design as the usage patterns change with variables.
 
-
+![Canary](./images/canary.png)
