@@ -124,9 +124,61 @@ test('Assertions with tape.', (assert) => {
 
 * If there is no logic in your code (just pipes and pure compositions), 0% unit test coverage might be acceptable, assuming your integration or functional test coverage is close to 100%.
 
+**Note:** functional tests are a subset of integration tests, because they test all of the units of an application. They test the application from the point of view of the user, including complete user interactionworkflows from smiluated UI manipulation.
+
 * If we’re mocking something, there may be an opportunity to make our code more flexible by reducing the coupling between units. Once that’s done, you won’t need the mocks anymore. Coupling is the degree to which a unit of code (module, function, class, etc…) depends upon other units of code. Mocking is required when the units used to break the large problem down into smaller parts depend on each other. Put another way, mocking is required when our supposed atomic units of composition are not really atomic.
 
+* In general, units are tests using only the public interface of the unit (public API aka module.exports). This is referred to as black box testing. Black box testing leads to less brittle tests, because the implementation details of a unit tend to change more over time than the public API of the unit. 
+
+* Increasing coverage beyond ~90% seems to have little continued correlation with lower bug density. Code coverage starts to deliver diminishing returns as it gets closer to 100%.
+
+* The need to mock in order to achieve unit isolation for the purpose of unit tests is caused by coupling between units. Tight coupling makes code more rigid and brittle: more likely to break when changes are required. From this we can deduce that if we're mocking something, there may be an opportunity to make our code more flexible by reducing the coupling between units. **Once it's done, you won't need the mocks anymore!** Coupling is the degree to which a unit of code (module, function, class etc..) depends uplon other units of code. IMPURE FUNCTIONS LEAD TO COUPLING!.
+
 * If there’s no logic, there’s nothing meaningful to unit test. That means that the code you use to set up network requests and request handlers won’t need unit tests. Use integration tests for those, instead. Don’t unit test I/O. I/O is for integrations. Use integration tests, instead. It’s perfectly OK to mock and fake for integration tests.
+
+> Mocking is required when our decomposition strategy has failed. Mocking is required when our supposed atomic units of composition are not really atomic. The essence of all software development is the process of breaking a large problem down into smaller, independet pieces (decomposition) and composing the solutions together to form an application that solves the large problem (composition).
+
+**Note:** If you can use function composition `lodash/fp/compose` means you have done it right. When you use generic composition utilities, each element of the composition can be unit tested in isolation without mocking the others.
+
+* Can the unit be tested without mocking dependencies? If it can't, it's tightly coupled to the mocked dependencies. The more dependencies your unit has, the more it is that there may be problematic coupling. 
+
+* How to avoid coupling?
+1) Use pure functions: as the amotic unit of composition, as apposed to classes, imperative procedures, or mutating functions.
+
+```js
+// Not pure
+const signInUser = user => user.isSignedIn = true;
+const foo = {
+  name: 'Foo',
+  isSignedIn: false
+};
+// Foo was mutated
+console.log(
+  signInUser(foo), // true
+  foo              // { name: "Foo", isSignedIn: true }
+);
+
+vs.
+
+// Pure
+const signInUser = user => ({...user, isSignedIn: true });
+const foo = {
+  name: 'Foo',
+  isSignedIn: false
+};
+// Foo was not mutated
+console.log(
+  signInUser(foo), // { name: "Foo", isSignedIn: true }
+  foo              // { name: "Foo", isSignedIn: false }
+);
+``` 
+
+2) Isolate side-effect: from the rest of your porgram logic. That means don't mix logic with I/O.
+- Use pub/sub to decouple I/O from views and programming logic. Rathen than directly triggering side-effects in UI views or program logic, emit an event or action object describing an event or intent. Pub/sub is bakedinto the DOM. Any component in your app can listed to events disptached from DOM elements, such as mouse clicks. 
+
+3) Remove dependent logic from imperative compositions so that they can become declararitve compositions, which don't need their own unit tests.
+
+> The code you use to set up network request and request handlers won't need unit tests. Use integration tests for those, instead. Don't unit test I/O. I/O is for integrations. Use integration tests, instead.
 
 ## References & Tutorials
 * [Frontendmasters with Substack / James Halliday Workshop](https://github.com/tarasowski/serverless/blob/master/testing/001_testing-frontendmasters-james-halliday.md)
