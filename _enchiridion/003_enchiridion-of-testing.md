@@ -176,6 +176,47 @@ console.log(
 2) Isolate side-effect: from the rest of your porgram logic. That means don't mix logic with I/O.
 - Use pub/sub to decouple I/O from views and programming logic. Rathen than directly triggering side-effects in UI views or program logic, emit an event or action object describing an event or intent. Pub/sub is bakedinto the DOM. Any component in your app can listed to events disptached from DOM elements, such as mouse clicks. 
 
+- Isolate logic from I/O. It's trivial to test each of these functions in isolation form each other without mocking. 
+```js
+const log = (...args) => console.log(...args)
+
+const readUser = () => Promise.resolve(true)
+const getFolderInfo = () => Promise.resolve(true)
+const haveWriteAccess = () => Promise.resolve(true)
+const uploadToFolder = () => Promise.resolve('Success!')
+
+const user = '123'
+const folder = '456'
+const files = ['a', 'b', 'c']
+
+async function uploadFiles({ user, folder, files }) {
+    const dbUser = await readUser({ user })
+    const folderInfo = await getFolderInfo({ folder })
+    if (await haveWriteAccess({ dbUser, folderInfo })) {
+        return uploadToFolder({ dbUser, folderInfo, files })
+    } else {
+        throw new Error('No write access to that folder')
+    }
+}
+
+uploadFiles({ user, folder, files })
+    .then(log)
+
+
+const asyncPipe = (...fns) => x => (
+    fns.reduce(async (y, f) => f(await y), x)
+)
+
+const uploadFilesPipe = asyncPipe(
+    readUser,
+    getFolderInfo,
+    haveWriteAccess,
+    uploadToFolder
+)
+
+uploadFilesPipe({ user, folder, files })
+    .then(log)```
+
 3) Remove dependent logic from imperative compositions so that they can become declararitve compositions, which don't need their own unit tests.
 
 > The code you use to set up network request and request handlers won't need unit tests. Use integration tests for those, instead. Don't unit test I/O. I/O is for integrations. Use integration tests, instead.
