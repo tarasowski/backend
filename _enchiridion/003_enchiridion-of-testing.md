@@ -23,8 +23,15 @@ const dbCall = () => (....) // database call (side effect) is isolated from the 
 // combine logic and dabase call -> integration / functional tests
 const combine = () => {
   const output = logic()
-  const response = dbCall()
+  const response = dbCall(output)
   return (...)
+  
+// Another version of combine  
+const combine = (logic, dbCall, data) => {
+  return R.pipe(
+          logic,
+          dbCall
+        )(data)
 ```
 
 * Think before you act: 1) write the whole logic, 2) Than start with writing the stuff with side-effects (DON'T MIX LOGIC WITH SIDE-EFFECTS)
