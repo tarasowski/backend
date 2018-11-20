@@ -276,9 +276,12 @@ selector {
 
 * First, just make it work. Second, make it work better. The design manual also explains why: If you build pages with the idea that parts other than HTML are optional, you’ll create a better and stronger web page.
 
+---
 
-
-
+### Resources:
+* [How to Code in HTML5 and CSS3](http://howtocodeinhtml.com/)
+* [Resilient Web Design](https://resilientwebdesign.com/)
+* [Responseive Web Design](https://abookapart.com/products/responsive-web-design)
 
 
 
