@@ -274,7 +274,7 @@ selector {
 
 * It’s worth remembering that building with progressive enhancement doesn’t mean that everything needs to be made available to everyone. Instead it’s the core functionality that counts. If every single feature needed to be available to every browser on every device, that would indeed be an impossibly arduous process. This is why prioritisation is so important. As long as the core functionality is available using the simplest possible technology, you can—with a clear conscience—layer on more advanced features.
 
-* 
+* First, just make it work. Second, make it work better. The design manual also explains why: If you build pages with the idea that parts other than HTML are optional, you’ll create a better and stronger web page.
 
 
 
