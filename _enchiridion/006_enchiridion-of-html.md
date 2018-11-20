@@ -3,9 +3,9 @@
 
 > HTML is about dividing content into blocks (`<div>, <main>, <aside>`), giving these blocks meaning (`<p>,<h1>, <article>`) and using browser API to perform some actions (`<form>, <input>, <textarea>`). CSS is about styling these blocks! HTML markups the text and CSS styles the text.
   
-> Use progressive enhancement while designing for web: 1) Identify core functionality. 2) Make that functionality available using the simplest possible technology. Enhance!
+> Use progressive enhancement while designing for web: 1) Identify core functionality. 2) Make that functionality available using the simplest possible technology. Enhance! [Pogressive Enhancement](#progressive-enhancement)
 
-[Pogressive Enhancement](#progressive-enhancement)
+---
 
 [Source](http://howtocodeinhtml.com/)
 
