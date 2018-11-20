@@ -113,15 +113,15 @@ selector {
 * When it comes to the display of tags, the browser recognizes three groups of elements: inline block-level inline block-level Inline elements do not cause transitions to a new line, but will be displayed one next to the other horizontally. Block elements are set like blocks that stack on top of each other and will never display next to one another horizontally, unless we use magic tricks in CSS (which we’ll learn in the next chapter). Inline blocks will act as inline elements (elements are displayed next to each other), but differ in that they can be for instance resized.
     * **inline** – <span>, <em>, <strong> block-level – <div>, <p>, <article> 
     * **inline block-level** – <input>, <textarea>
-    * **block** - <div>, <p>, <h1>, <pre>, <blockquote>, <ol>, <ul>
+    * **block** - `<div>, <p>, <h1>, <pre>, <blockquote>, <ol>, <ul>`
 
 * By default, inline elements have CSS display property set to inline. For block-level elements, its value is “block”, and for inline block elements it’s “inline-block”. So you can explain that <span> tag doesn’t cause breaking the text to the new line, because it’s an inline element which means in CSS it has property “display” set to “inline”.
 
-* <span>one</span> <span>two</span> <span>three</span> The browser will display above code in one line: one two three However, it’s possible to change this behavior by adding one line of CSS: `span {   display: block; }` Now, our <span> tags display differently, each one in a new line, since we have set their display property to block: one two three
+* `<span>one</span> <span>two</span> <span>three</span>` The browser will display above code in one line: one two three However, it’s possible to change this behavior by adding one line of CSS: `span {   display: block; }` Now, our <span> tags display differently, each one in a new line, since we have set their display property to block: one two three
 
 * For this example, we use <div>. You may wonder what this tag describes within the document. The short answer is nothing. We use the <div> tag in cases where all other tags do not find a use for what we’ve put in the document.
 
-* Another very useful attribute is required, which is added to the form elements without any value. For example, an e-mail will look like this: <input type="email" id="user-email" name="user-email" required>
+* Another very useful attribute is required, which is added to the form elements without any value. For example, an e-mail will look like this: `<input type="email" id="user-email" name="user-email" required>`
 
 * In the previous example, we learned, among other things, the <div> tag. You know that they have no semantic meaning and serve primarily as a container for other blocks. Usually you add them to apply various visual changes through CSS for larger parts of the website that resemble boxes or rectangles.
 
