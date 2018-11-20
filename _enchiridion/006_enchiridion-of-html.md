@@ -278,6 +278,27 @@ selector {
 
 ---
 
+[Source](http://hesketh.com/publications/inclusive_web_design_for_the_future/)
+
+* Progressive Enhancement Strategies:
+  * start with lowest common denominator (baseline e.g. mobile device)
+  * design for semantics and structure
+  * add features appropriate for baseline devices
+    * warnings about dsiplay, to be hidden with CSS
+    * skip nav link
+  * add features appropriate for accesssiblity
+    * alt, longdesc, title
+  * add layout markup and stylesheets for structural layout
+  * add baseline presentational stylesheets using link
+    * use semantic markup, add more if necessary/desired
+    * determine targets for stylesheets
+    * determine necessary workarounds/hacks
+  * add behavior (scripts, css hover, etc.)
+    * ensure all behavior has fallback cases
+    * href fallsback for onclick
+    * server-side fallback for client-side form validation
+  * define styles for modern graphical browsers
+
 ### Resources:
 * [How to Code in HTML5 and CSS3](http://howtocodeinhtml.com/)
 * [Resilient Web Design](https://resilientwebdesign.com/)
