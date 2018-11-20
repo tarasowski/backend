@@ -303,6 +303,7 @@ selector {
 * [How to Code in HTML5 and CSS3](http://howtocodeinhtml.com/)
 * [Resilient Web Design](https://resilientwebdesign.com/)
 * [Responseive Web Design](https://abookapart.com/products/responsive-web-design)
+* [Inclusive web design for the future](http://hesketh.com/publications/inclusive_web_design_for_the_future/)
 
 
 
