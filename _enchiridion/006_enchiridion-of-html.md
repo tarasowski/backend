@@ -387,3 +387,4 @@ body {
 6) Add behavior (scripts, css hover, onclick(), oninput() etc.)
 7) Add presentational stylesheets for other devices
 
+* If you want to stretch your content to the whole width you don't need to specify a container, since the container is just another utility to e.g. center the content or limit the width of the content.
