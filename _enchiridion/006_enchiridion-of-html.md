@@ -18,7 +18,7 @@
 7) Add presentational stylesheets for other devices
 
 
-## Progressive Enhancement for Creating New Products
+## Progressive Enhancement for Building Products
 1) Identify core functionality. 
 2) Make that functionality available using the simplest possible technology. 
 3) Enhance!
