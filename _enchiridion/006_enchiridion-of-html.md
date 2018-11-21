@@ -338,7 +338,22 @@ body {
 * How to calculate `em`? Assume our base `font-size: 100%`on the body element equals to `16px`. And we need to express our `h1` target font size `24px`relative to its context (16px): `24 / 16 = 1.5`. The formula is the following one: target / context = result
 
 
+* For better readability use class name and comment so you can see where the `div` container ends.
 
+```html
+<body>
+  <div class="page">
+    <div class="blog section">
+      <h1 class="lede">Recently in <a href="#">The bot >> Blog</a></h1>
+      <div class="main">
+
+      </div> <!-- /end .main-->
+      <div class="other">
+
+      </div><!-- /end .other-->
+    </div><!-- /end .blog.section-->
+  </div> <!-- /end .page-->
+</body>```
 
 
 
