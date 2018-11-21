@@ -7,6 +7,23 @@
 
 ---
 
+## Progressive Enhancement for Building Websites
+
+1) Define the lowest common denominator a baseline device (e.g. mobile, tablet, desktop, kindle, alexa)
+2) Define a data model and make it visible `<pre>JSON.stringify()</pre>`
+3) Design basic structure with `<div>`'s and HTML5 sematic blocks for a baseline device
+4) Add layout markup and stylesheeets for structural layout `.container` with breakpoints
+5) Add presentational stylesheets for a baseline device
+6) Add behavior (scripts, css hover, onclick(), oninput() etc.)
+7) Add presentational stylesheets for other devices
+
+
+## Progressive Enhancement for Creating New Products
+1) Identify core functionality. 
+2) Make that functionality available using the simplest possible technology. 
+3) Enhance!
+
+
 [Source](http://howtocodeinhtml.com/)
 
 * It’s our job to tell the browser, in a way that it can understand, what each of these elements mean and how they fit together semantically. If this is not done, then our site will appear as a clump of single text.
@@ -360,4 +377,13 @@ body {
 
 > The essence of responsive design is that you need to use relative sizes instead of fixed pixels. By doing so you can create fully responsive and fluent designs. Paddings, margins, widths, heights, images and grids they all must have relative sizes.
 
+* When you start creating HTML from scratch, you need to do:
+
+1) Define the lowest common denominator a baseline device (e.g. mobile, tablet, desktop, kindle, alexa)
+2) Define a data model and make it visible `<pre>JSON.stringify()</pre>`
+3) Design basic structure with `<div>`'s and HTML5 sematic blocks for a baseline device
+4) Add layout markup and stylesheeets for structural layout `.container` with breakpoints
+5) Add presentational stylesheets for a baseline device
+6) Add behavior (scripts, css hover, onclick(), oninput() etc.)
+7) Add presentational stylesheets for other devices
 
