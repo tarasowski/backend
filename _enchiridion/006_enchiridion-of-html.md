@@ -306,9 +306,36 @@ selector {
 * [Inclusive web design for the future](http://hesketh.com/publications/inclusive_web_design_for_the_future/)
 
 
+---
+[Source](https://abookapart.com/products/responsive-web-design)
 
+* The core ingredients of responsive design:
 
+1. A flexible, grid-based layout
+2. Flexible images and media, and
+3. Media queries, a module from the CSS3 specification
 
+* The old way of creating design was with creating an element in the markup, give it a fixed width in CSS and center it in the page
+
+```css
+.page {
+  width: 960px;
+  margin: 0 auto;
+}
+```
+
+* Instead we should reset e.g. the font to 100% base = 16px. We can do that by adding some css properties to the `<body>`. By doing so we can start using em for relative sizes instead of pixels. 
+
+```css
+body {
+  font: 100%
+  /*...*/
+}
+```
+
+> If you want to create responsive designs, don't thinnk in pixel, think in relative sizes! 
+
+* How to calculate `em`? Assume our base `font-size: 100%`on the body element equals to `16px`. And we need to express our `h1` target font size `24px`relative to its context (16px): `24 / 16 = 1.5`. The formula is the following one: target / context = result
 
 
 
