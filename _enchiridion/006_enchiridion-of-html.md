@@ -353,8 +353,11 @@ body {
       </div><!-- /end .other-->
     </div><!-- /end .blog.section-->
   </div> <!-- /end .page-->
-</body>```
+</body>
+```
 
+* In the example above we have created a generic container for the entire page `.page`, which in turn contains our `.blog` module.  And within `.blog`module, we have created two more containers: a `div`classed as `.main`for our main article content, and another `div`classed as `.other`for other stuff.
 
+> The essence of responsive design is that you need to use relative sizes instead of fixed pixels. By doing so you can create fully responsive and fluent designs. Paddings, margins, widths, heights, images and grids they all must have relative sizes.
 
 
