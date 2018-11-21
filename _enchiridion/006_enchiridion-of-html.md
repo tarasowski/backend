@@ -23,7 +23,7 @@
 2) Make that functionality available using the simplest possible technology. 
 3) Enhance!
 
-
+---
 [Source](http://howtocodeinhtml.com/)
 
 * It’s our job to tell the browser, in a way that it can understand, what each of these elements mean and how they fit together semantically. If this is not done, then our site will appear as a clump of single text.
