@@ -7,16 +7,33 @@
 
 ---
 
-## Progressive Enhancement for Building Websites
+## Progressive Enhancement for Building Web Apps
 
-1) Define the lowest common denominator a baseline device (e.g. mobile, tablet, desktop, kindle, alexa)
-2) Define a data model and make it visible `<pre>JSON.stringify()</pre>`
-3) Design basic structure with `<div>`'s and HTML5 sematic blocks for a baseline device
-4) Add layout markup and stylesheeets for structural layout `.container` with breakpoints
-5) Add presentational stylesheets for a baseline device
-6) Add behavior (scripts, css hover, onclick(), oninput() etc.)
-7) Add presentational stylesheets for other devices
+### Identify core functionality 
 
+* Define the core functionality e.g. slack - display/send/receive a message [More examples](#progressive-enhancement)
+
+* Define the lowest common denominator a baseline device (e.g. mobile, tablet, desktop, kindle, alexa)
+
+* Define the initial data model and make it visible `<pre>JSON.stringify()</pre>`
+
+* Design basic structure with `<div>`'s and HTML5 sematic blocks for a baseline device
+
+### Make the core functionality available using the **SIMPLEST BEHAVIOUR POSSIBLE**. 
+
+* Add behavior (scripts, css hover, onclick(), oninput() etc.)
+
+* Add backend (lambda, database, gateway, queues etc.)
+
+### Enhance
+
+* Add layout markup and stylesheeets for structural layout `.container` with breakpoints
+
+* Add presentational stylesheets for a baseline device
+
+* Add presentational stylesheets for other devices
+
+---
 
 ## Progressive Enhancement for Building Products
 1) Identify core functionality. 
