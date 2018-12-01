@@ -19,7 +19,7 @@
 
 * Design basic structure with `<div>`'s and HTML5 sematic blocks for a baseline device
 
-### 2. Make the core functionality available using the <span style="color:blue">__SIMPLEST POSSIBLE TECHNOLOGY__</span>. 
+### 2. Make the core functionality available using the _SIMPLEST POSSIBLE TECHNOLOGY_. 
 
 * Add behavior (scripts, css hover, onclick(), oninput() etc.)
 
