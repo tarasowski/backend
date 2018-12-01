@@ -9,7 +9,7 @@
 
 ## Progressive Enhancement for Building Web Apps
 
-### Identify core functionality 
+### 1. Identify core functionality 
 
 * Define the core functionality e.g. slack - display/send/receive a message [More examples](#progressive-enhancement)
 
@@ -19,13 +19,13 @@
 
 * Design basic structure with `<div>`'s and HTML5 sematic blocks for a baseline device
 
-### Make the core functionality available using the **SIMPLEST BEHAVIOUR POSSIBLE**. 
+### 2. Make the core functionality available using the **SIMPLEST BEHAVIOUR POSSIBLE**. 
 
 * Add behavior (scripts, css hover, onclick(), oninput() etc.)
 
 * Add backend (lambda, database, gateway, queues etc.)
 
-### Enhance
+### 3. Enhance
 
 * Add layout markup and stylesheeets for structural layout `.container` with breakpoints
 
