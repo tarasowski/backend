@@ -20,7 +20,11 @@
 1) Associate new information with already known things
 2) Write the flashcards in your own words
 
-![Curve](http://ol.scc.spokane.edu/jroth/Courses/English%2094-study%20skills/MASTER%20DOCS%20and%20TESTS/Curve%20of%20Forgetting_files/image003.gif)
+![Curve](./images/the-curve-of-forgetting.png)
+
+* Here’s what the graph demonstrates: Assume that we hear ten new terms in class on Monday.  Our immediate recall, Point A of the graph, is 100%--we can repeat the terms and definitions at the point where we first encounter them.
+
+* However, if we do not repeatedly return our attention to these terms and definitions, we will forget about 40% over the first 24 hours (Point B).  If we wait another 24 hours before reviewing the information, we have lost 60% (Point C).   So we can go from a grade of ‘A’ (100%) to ‘D’ (60%), to ‘F’ (40%) in just 48 hours.
 
 # Sources
 * [Spaced Repetition](https://knowthen.com/spaced-repetition/)
