@@ -24,4 +24,4 @@
 
 # Sources
 * [Spaced Repetition](https://knowthen.com/spaced-repetition/)
-* [THE CURVE OF FORGETTING](http://ol.scc.spokane.edu/jroth/Courses/English%2094-study%20skills/MASTER%20DOCS%20and%20TESTS/Curve%20of%20Forgetting.htm)
+* [THE CURVE OF FORGETTING](http://ol.scc.spokane.edu/jroth/Courses/English%2094-study%20skills/MASTER%20DOCS%20and%20TESTS/Curve%20of%20Forgetting_files/image003.gif)
