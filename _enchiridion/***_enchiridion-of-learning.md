@@ -20,8 +20,8 @@
 1) Associate new information with already known things
 2) Write the flashcards in your own words
 
-![Curve](http://ol.scc.spokane.edu/jroth/Courses/English%2094-study%20skills/MASTER%20DOCS%20and%20TESTS/Curve%20of%20Forgetting.htm)
+![Curve](http://ol.scc.spokane.edu/jroth/Courses/English%2094-study%20skills/MASTER%20DOCS%20and%20TESTS/Curve%20of%20Forgetting_files/image003.gif)
 
 # Sources
 * [Spaced Repetition](https://knowthen.com/spaced-repetition/)
-* [THE CURVE OF FORGETTING](http://ol.scc.spokane.edu/jroth/Courses/English%2094-study%20skills/MASTER%20DOCS%20and%20TESTS/Curve%20of%20Forgetting_files/image003.gif)
+* [THE CURVE OF FORGETTING](http://ol.scc.spokane.edu/jroth/Courses/English%2094-study%20skills/MASTER%20DOCS%20and%20TESTS/Curve%20of%20Forgetting.htm)
