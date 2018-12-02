@@ -1,3 +1,7 @@
+# Enchiridion of Learning
+
+[Source](https://github.com/tarasowski/javascript-pocketguide/blob/master/html/003_responsible-design.md)
+
 * The idea to learn everything (e.g. all features of JavaScript) asap is the wrong approach. You should concentrate yourself on the pareto rule. In JavaScript 80% of the code is written using only 20% of the JavaScript features. Concentrate yourself on the 20% of JS that is used 80% of the time. Master it! The rest that you need just learn it to know it enough.
 
 * How to find the 20% that you need to learn? Code if free, it's eassy to discover by reading and studying open source code. If you read code of a season develper is the best shortcuts you can take.
