@@ -1,5 +1,9 @@
 # Fanout Pattern
 
+# Applying the pub-sub and push-pull messaging patterns with AWS Lambda
+
+[Source](https://hackernoon.com/applying-the-pub-sub-and-push-pull-messaging-patterns-with-aws-lambda-73d5ee346faa)
+
 ## pub / sub
 
 * pub / sub is a pattern where often publishers and subscribers are decoupled through an intermediary broker (SNS, RabbitMQ)
@@ -107,13 +111,6 @@
 * In the center of the architecture is the 'event mainfold' similar to a mechanical manifold, which intakes an event notification at one end (S3), transforms it to a message, and distributes it to all subscribers (data processing elements). This architecture allows customers to build an event-driven parallel data processing architecture that is fast, flexible, and easy to maintain over time. 
 
 
-
-Todo:
-- [ ] Need to write a summary
-[Applying the pub-sub and push-pull messaging patterns with AWS Lambda](https://hackernoon.com/applying-the-pub-sub-and-push-pull-messaging-patterns-with-aws-lambda-73d5ee346faa)
-[Messaging Fanout Pattern for Serverless Architectures Using Amazon SNS](https://aws.amazon.com/blogs/compute/messaging-fanout-pattern-for-serverless-architectures-using-amazon-sns/)
-[Lambda Fanout, What is it Good For?](https://www.trek10.com/blog/lambda-fanout/)
-[Examples](https://github.com/aws-samples/aws-lambda-fanout)
 
 Other patterns:
 https://read.acloud.guru/applying-the-decoupled-invocation-pattern-with-aws-lambda-2f5f7e78d18
