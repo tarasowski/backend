@@ -49,6 +49,33 @@
 * Note that in both cases we're prone to experience hot partitions - large no.of writes agains the same DynamoDB hash key or S3 prefix. To mitigate this negative effect, be sure to use a GUID for the job ID.
 
 
+# Messaging Fanout Pattern for Serverless Architectures Using Amazon SNS
+
+[Source](https://aws.amazon.com/blogs/compute/messaging-fanout-pattern-for-serverless-architectures-using-amazon-sns/)
+
+* When using Lambda in a serverless architecture, the goal should be to design tightly focused functions that do one thing and do it well.
+
+* When these functions are composed to accomplish larger goals in microservice architectures, the complexity shifts fromt he internal components to the external communcation between components. Solutions builder can address this architectural challenge by using messaging patterns.
+
+![fanout](https://d2908q01vomqb2.cloudfront.net/1b6453892473a467d07372d45eb05abc2031647a/2017/07/25/messaging-fanout-for-serverless-with-sns-diagram1-1024x615.png)
+
+* In the architecture, a laptop in the field captures the video from a camera source and diviced it into small fragments accroding to the HLS protocol. The fragments are published to Amazon S3, through an Amazon CloudFront distribution for accelerated upload. When the file has been written to S3, it triggers a Lambda function to initiate the video segment processing.
+
+* Each Lambda function is invoked asynchronously, injecting the same S3 event that triggered the original Lambda function. 
+
+## Refactoring fanout implementation using SNS
+
+* When invoking a Lambda function, SNS wraps the original event with SNSEvent. The lambda function can be refactored by adding a function to parse the S3 event from SNSEvent.
+
+* The Lambda function invocation can now be transferred from the fanout Lambda function to SNS without disruption to S3 processing. 
+
+* As the diagram below shows, the resulting architecutre is similar to the original. The exception is that objects written to S3 now trigger a message to be published to an SNS topic. This sends the S3 event to multiple Lambda functions to be processed independently. 
+
+![SNS fanout](https://d2908q01vomqb2.cloudfront.net/1b6453892473a467d07372d45eb05abc2031647a/2017/07/25/messaging-fanout-for-serverless-with-sns-diagram2-1024x615.png)
+
+
+
+
 Todo:
 - [ ] Need to write a summary
 [Applying the pub-sub and push-pull messaging patterns with AWS Lambda](https://hackernoon.com/applying-the-pub-sub-and-push-pull-messaging-patterns-with-aws-lambda-73d5ee346faa)
