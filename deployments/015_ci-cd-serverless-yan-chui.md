@@ -14,3 +14,4 @@
   5. Production (blue/green OR canary deployment, feature flags)
 
 
+![CI](./images/ci-cd-steps.png)
