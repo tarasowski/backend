@@ -58,3 +58,6 @@ let restaurants = $('.restaurant', '#restaurantsUl');
 expect(restaurants.length).to.equal(8);
 
 ```
+## Integration tests
+* [ ] interaction with downstream is correct
+* [ ] downstream system works as expected
