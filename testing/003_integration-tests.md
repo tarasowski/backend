@@ -1,7 +1,10 @@
 # Integration Tests
 
 [Source](https://livevideo.manning.com/module/38_3_2/production-ready-serverless/testing/writing-integration-tests?)
-
+---
+* [ ] interaction with downstream is correct
+* [ ] downstream system works as expected
+---
 * Integration tests exercise our code agains intended downstream systems so we can test multiple components in one go.
 
 > Integration tests exercise system's **Integration** with its external dependencies.
@@ -59,9 +62,6 @@ let restaurants = $('.restaurant', '#restaurantsUl');
 expect(restaurants.length).to.equal(8);
 
 ```
-## Integration tests
-* [ ] interaction with downstream is correct
-* [ ] downstream system works as expected
 
 * steps/when/index.js
 ```js
