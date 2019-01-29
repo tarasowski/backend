@@ -50,3 +50,11 @@ process.env.AWS_REGION = 'us-east-1'
 process.env.cognito_client_id = 'test_cognito_client_id'
 process.env.cognito_user_pool_id = 'tst_cognito_user_pool_id'
 ```
+* If you are testing an html, you can use cheerio that can parse the html body.
+
+```js
+const $ = cheerio.load(res.body);
+let restaurants = $('.restaurant', '#restaurantsUl');  
+expect(restaurants.length).to.equal(8);
+
+```
