@@ -6,7 +6,7 @@
 
 > Integration tests exercise system's **Integration** with its external dependencies.
 
-[Integration](./images/integration-test.png)
+![Integration](./images/integration-test.png)
 
 * **Important**: The purpose of this test is to test the integration points with other systems, so when we are running these integration tests, the function should be configured to talk to **the real thing**. 
 
