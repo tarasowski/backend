@@ -48,5 +48,5 @@ process.env.restaurants_api = 'http://3303495sdkfsdsdfsdf.execute-api.us-east-1.
 process.env.restaurants_table = 'restaurants'
 process.env.AWS_REGION = 'us-east-1'
 process.env.cognito_client_id = 'test_cognito_client_id'
-process.env.cognito_user_pool_id = 'tst_cognito_user_pool_id
+process.env.cognito_user_pool_id = 'tst_cognito_user_pool_id'
 ```
