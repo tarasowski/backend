@@ -1,6 +1,7 @@
 # Integration Tests
 
 [Source](https://livevideo.manning.com/module/38_3_2/production-ready-serverless/testing/writing-integration-tests?)
+
 ---
 * [ ] interaction with downstream is correct
 * [ ] downstream system works as expected
