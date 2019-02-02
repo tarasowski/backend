@@ -17,7 +17,7 @@
     * [x] CodeStar
     * [x] CodePipeline
     * [x] CodeDeploy
-* [ ] Architecture (how do you start building a system - which topics come first)
+* [x] Architecture (how do you start building a system - which topics come first)
     * [x] Data flow diagram 
     * [x] AWS Architecture  
     * [ ] UML Diagrams (not required)
@@ -30,7 +30,7 @@
     * [ ] AWS Certified DevOps Engineer
 * [x] Migration from Monolith to Serverless
 * [ ] Computer Science 101
-    * [ ] Data Structures
+    * [x] Data Structures
     * [ ] Algorithms
     * [ ] Network (Buffers/Streaming/TCP/UDP)
     * [ ] Engineering
