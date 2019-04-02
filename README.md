@@ -34,10 +34,13 @@
     * [ ] Algorithms
     * [ ] Network (Buffers/Streaming/TCP/UDP)
     * [ ] Engineering
-* [ ] Design Patterns 
+* [x] Serverless Software Patterns 
 * [x] Frontend (React.js)
 
 ---
+
+## Serverless Design Patterns
+* [x] [Serverless Microservice Patterns](https://www.jeremydaly.com/serverless-microservice-patterns-for-aws/)
 
 ## Additional Information: Sources &Links
 * [ ] **Deployments & Going Live**
